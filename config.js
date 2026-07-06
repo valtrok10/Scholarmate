@@ -1,0 +1,14 @@
+window.CONFIG = {
+
+FIREBASE_API_KEY:"AIzaSyCs7_XGz3r-4VqbRUfTkVYDD1fId4BAL5c",
+
+FIREBASE_AUTH_DOMAIN:"scholarmate-bce64.firebaseapp.com",
+
+FIREBASE_PROJECT_ID:"scholarmate-bce64",
+
+FIREBASE_STORAGE_BUCKET:"scholarmate-bce64.firebasestorage.app",
+
+FIREBASE_MESSAGING_SENDER_ID:"638444780528",
+
+FIREBASE_APP_ID:"1:638444780528:web:12055062fac955c6653b35"
+};
