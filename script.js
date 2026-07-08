@@ -717,7 +717,7 @@ async function sendMessage(){
   chat.scrollTop=chat.scrollHeight; if(inp)inp.value="";
   
  try {
-    const res = await fetch("http://localhost:3000/chat", {
+    const res = await fetch("https://scholarmate-bops.onrender.com/chat", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
