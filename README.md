@@ -27,7 +27,7 @@ AI-Powered Student Productivity & Scholarship Management Platform
 
 ## 🌐 Live Demo
 
- 🔗 [ScholarMate Live Website](https://scholarmate-ai.netlify.app)
+ 🔗 [ScholarMate Live Website](https://scholarmatelive.netlify.app)
 
 ---
 
