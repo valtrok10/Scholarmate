@@ -1,569 +1,390 @@
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>ScholarMate AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<button class="hamburger" onclick="toggleSidebar()">☰</button>
-<div class="overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-<!-- ===== LOADING ===== -->
+
+<!-- HAMBURGER + OVERLAY (mobile) -->
+<button class="hamburger" id="hamburger" onclick="toggleSidebar()">☰</button>
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<!-- ═══════════════════ LOADING ═══════════════════ -->
 <div id="loadingScreen">
-  <div class="loaderCard">
-    <div class="loaderIcon">🎓</div>
-    <h2>ScholarMate</h2>
-    <p>Loading your workspace...</p>
-    <div class="loaderBar"><div class="loaderFill"></div></div>
+  <div class="loaderWrap">
+    <div class="loaderRing"></div>
+    <div class="loaderLogo">🎓</div>
   </div>
+  <p class="loaderText">ScholarMate AI</p>
+  <div class="loaderBar"><div class="loaderFill"></div></div>
 </div>
 
-<!-- ===== LOGIN ===== -->
+<!-- ═══════════════════ LOGIN ═══════════════════ -->
 <div id="loginScreen" class="loginScreen">
+  <div class="loginBg"></div>
   <div class="loginCard">
-    <div class="loginLogo">🎓</div>
-    <h1>ScholarMate AI</h1>
-    <p class="loginSub">Your AI companion for learning</p>
+    <div class="loginBrand">🎓 <span>ScholarMate</span></div>
+    <h1>Welcome back</h1>
+    <p class="loginSub">Your AI-powered study companion</p>
 
-    <!-- error / success message -->
-    <div id="authError" class="authError" style="display:none"></div>
+    <div id="authMsg" class="authMsg" style="display:none"></div>
 
-    <!-- ── LOGIN FORM ── -->
+    <!-- Login form -->
     <div id="loginForm">
-      <input id="loginIdentifier" type="text" placeholder="Username or Email" autocomplete="username">
-      <input id="loginPassword"   type="password" placeholder="Password" autocomplete="current-password">
-      <button class="btnPrimary" onclick="login()">Login</button>
-      <button class="linkButton" onclick="resetPassword()">Forgot Password?</button>
-      <p class="authSwitch">
-        Don't have an account?
-        <button class="linkButton" onclick="showSignupForm()">Create one</button>
-      </p>
+      <div class="inputGroup">
+        <span class="inputIcon">👤</span>
+        <input id="loginIdentifier" type="text" placeholder="Username or email" autocomplete="username">
+      </div>
+      <div class="inputGroup">
+        <span class="inputIcon">🔒</span>
+        <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">
+      </div>
+      <button class="btnAuth" onclick="login()">Login →</button>
+      <button class="btnForgot" onclick="resetPassword()">Forgot password?</button>
+      <p class="authToggle">No account? <button class="btnLink" onclick="showSignup()">Sign up free</button></p>
     </div>
 
-    <!-- ── SIGNUP FORM ── -->
+    <!-- Signup form -->
     <div id="signupForm" style="display:none">
-      <input id="signupUsername" type="text"     placeholder="Choose a username" autocomplete="username">
-      <input id="signupEmail"    type="email"    placeholder="Email address"     autocomplete="email">
-      <input id="signupPassword" type="password" placeholder="Password (min 6 chars)" autocomplete="new-password">
-      <button class="btnPrimary" onclick="signup()">Create Account</button>
-      <p class="authSwitch">
-        Already have an account?
-        <button class="linkButton" onclick="showLoginForm()">Login</button>
-      </p>
+      <div class="inputGroup">
+        <span class="inputIcon">✨</span>
+        <input id="signupUsername" type="text" placeholder="Choose username (a-z, 0-9, _)" autocomplete="username">
+      </div>
+      <div class="inputGroup">
+        <span class="inputIcon">📧</span>
+        <input id="signupEmail" type="email" placeholder="Email address" autocomplete="email">
+      </div>
+      <div class="inputGroup">
+        <span class="inputIcon">🔒</span>
+        <input id="signupPassword" type="password" placeholder="Password (min 6 chars)" autocomplete="new-password">
+      </div>
+      <button class="btnAuth" onclick="signup()">Create Account →</button>
+      <p class="authToggle">Have an account? <button class="btnLink" onclick="showLogin()">Login</button></p>
     </div>
-
   </div>
 </div>
 
-<!-- ===== MAIN APP ===== -->
-<div id="mainWebsite" style="display:none;">
+<!-- ═══════════════════ MAIN APP ═══════════════════ -->
+<div id="mainWebsite" style="display:none">
 
   <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="sidebarLogo">
-      <span class="logoIcon">🎓</span>
-      <span class="logoText">ScholarMate</span>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebarBrand">
+      <span class="brandIcon">🎓</span>
+      <span class="brandName">ScholarMate</span>
     </div>
     <nav class="sidebarNav">
-      <div class="navItem active" onclick="showPage('dashboardPage', this)">
-        <span class="navIcon">🏠</span><span class="navLabel">Dashboard</span>
-      </div>
-      <div class="navItem" onclick="showPage('taskPage', this)">
-        <span class="navIcon">✅</span><span class="navLabel">Today's Tasks</span>
-      </div>
-      <div class="navItem" onclick="showPage('coursePage', this)">
-        <span class="navIcon">📚</span><span class="navLabel">Courses</span>
-      </div>
-      <div class="navItem" onclick="showPage('scholarPage', this)">
-        <span class="navIcon">🎓</span><span class="navLabel">Scholarships</span>
-      </div>
-      <div class="navItem" onclick="showPage('productivityPage', this)">
-        <span class="navIcon">📊</span><span class="navLabel">Productivity</span>
-      </div>
-      <div class="navItem" onclick="showPage('aiPage', this)">
-        <span class="navIcon">🤖</span><span class="navLabel">AI Assistant</span>
-      </div>
-      <div class="navItem" onclick="showPage('settingsPage', this)">
-        <span class="navIcon">⚙️</span><span class="navLabel">Settings</span>
-      </div>
+      <div class="navItem active" onclick="showPage('dashboardPage',this)"><span class="ni">🏠</span>Dashboard</div>
+      <div class="navItem" onclick="showPage('taskPage',this)"><span class="ni">✅</span>Tasks</div>
+      <div class="navItem" onclick="showPage('coursePage',this)"><span class="ni">📚</span>Courses</div>
+      <div class="navItem" onclick="showPage('scholarPage',this)"><span class="ni">🎓</span>Scholarships</div>
+      <div class="navItem" onclick="showPage('productivityPage',this)"><span class="ni">📊</span>Productivity</div>
+      <div class="navItem" onclick="showPage('aiPage',this)"><span class="ni">🤖</span>AI Assistant</div>
+      <div class="navItem" onclick="showPage('settingsPage',this)"><span class="ni">⚙️</span>Settings</div>
     </nav>
-    <button class="logoutBtn" onclick="logout()">
-      <span>🚪</span> Logout
-    </button>
-  </div>
+    <button class="logoutBtn" onclick="logout()">🚪 Logout</button>
+  </aside>
 
-  <!-- MAIN CONTENT -->
-  <div class="mainContent">
+  <!-- MAIN -->
+  <main class="mainContent">
 
-    <!-- ===== DASHBOARD PAGE ===== -->
+    <!-- ══════════ DASHBOARD ══════════ -->
     <div class="page activePage" id="dashboardPage">
 
-      <!-- Row 0: Profile Bar -->
+      <!-- Profile strip -->
       <div class="profileStrip">
         <div class="profileLeft">
-          <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="profileAvatar">
-          <div class="profileInfo">
-            <div class="profileGreeting">Welcome back,</div>
+          <div class="avatarWrap">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="avatar" id="profileAvatar">
+            <div class="avatarRing" id="avatarRing"></div>
+          </div>
+          <div>
+            <div class="profileGreet">Welcome back,</div>
             <div class="profileName" id="userName">User</div>
-            <div class="profileLevel" id="topUserLevel">
-              <span class="levelDot"></span> Level 1
-            </div>
+            <div class="profileLvl"><span class="lvlBadge" id="topUserLevel">Lv 1</span></div>
           </div>
         </div>
         <div class="profileStats">
-          <div class="statPill">
-            <div class="statPillLabel">XP</div>
-            <div class="statPillValue" id="xpDisplay">0</div>
-            <div class="xpMiniBar">
-              <div class="xpMiniBarFill" id="xpMiniBar"></div>
-            </div>
+          <div class="pStat xpStat">
+            <div class="pStatTop"><span class="pStatLabel">XP</span></div>
+            <div class="pStatVal" id="xpDisplay">0</div>
+            <div class="xpBar"><div class="xpBarFill" id="xpBarFill"></div></div>
           </div>
-          <div class="statPill streakPill">
-            <div class="statPillIcon">🔥</div>
-            <div class="statPillValue" id="streakCount">0</div>
-            <div class="statPillLabel">Streak</div>
+          <div class="pStat">
+            <div class="pStatLabel">🔥 Streak</div>
+            <div class="pStatVal fire" id="streakCount">0</div>
+            <div class="pStatSub">days</div>
           </div>
-          <div class="statPill notifPill">
-            <div class="statPillIcon">🔔</div>
-            <div class="statPillValue" id="notificationCount">0</div>
-            <div class="statPillLabel">Notifications</div>
+          <div class="pStat">
+            <div class="pStatLabel">🔔 Alerts</div>
+            <div class="pStatVal purple" id="notificationCount">0</div>
+            <div class="pStatSub">pending</div>
           </div>
         </div>
       </div>
 
-      <!-- Row 1: Today's Focus + Quick Status -->
-      <div class="dashRow row2col focusRow">
-        <div class="card focusCard">
-          <div class="cardHeader">
-            <span class="cardIcon">🎯</span>
-            <h2>Today's Focus</h2>
-          </div>
+      <!-- Row 1: Focus + Quick Status -->
+      <div class="dRow two">
+        <div class="card glowCard">
+          <div class="cHead"><span>🎯</span><h3>Today's Focus</h3></div>
           <div id="todayFocus" class="focusList"></div>
         </div>
-        <div class="card quickCard">
-          <div class="cardHeader">
-            <span class="cardIcon">⚡</span>
-            <h2>Quick Status</h2>
-          </div>
+        <div class="card">
+          <div class="cHead"><span>⚡</span><h3>Quick Status</h3></div>
           <div id="quickStatus" class="quickGrid"></div>
         </div>
       </div>
 
-      <!-- Row 2: AI Suggestion + Course Snapshot + Eligibility + Task Snapshot -->
-      <div class="dashRow row4col">
+      <!-- Row 2: AI + Course Snap + Eligibility + Task Snap -->
+      <div class="dRow four">
         <div class="card">
-          <div class="cardHeader">
-            <span class="cardIcon">🤖</span>
-            <h2>AI Suggestion</h2>
-          </div>
+          <div class="cHead"><span>🤖</span><h3>AI Tip</h3></div>
           <div id="aiSuggestionDashboard"></div>
         </div>
         <div class="card">
-          <div class="cardHeader">
-            <span class="cardIcon">📚</span>
-            <h2>Course Snapshot</h2>
-          </div>
+          <div class="cHead"><span>📚</span><h3>Courses</h3></div>
           <div id="courseDashboard"></div>
         </div>
-        <div class="card eligibilityCard">
-          <div class="cardHeader">
-            <span class="cardIcon">🎯</span>
-            <h2>Eligibility</h2>
-          </div>
-          <div id="eligibilityDashboard" class="eligibilityWrap"></div>
+        <div class="card">
+          <div class="cHead"><span>🎯</span><h3>Eligibility</h3></div>
+          <div id="eligibilityDashboard" class="eligWrap"></div>
         </div>
         <div class="card">
-          <div class="cardHeader">
-            <span class="cardIcon">✅</span>
-            <h2>Task Snapshot</h2>
-          </div>
+          <div class="cHead"><span>✅</span><h3>Tasks</h3></div>
           <div id="taskSnapshotDash"></div>
         </div>
       </div>
 
-      <!-- Row 3: Deadline Alert (full width) -->
-      <div class="dashRow row1col">
-        <div class="card deadlineAlertCard">
-          <div class="cardHeader">
-            <span class="cardIcon">⏳</span>
-            <h2>Deadline Alert</h2>
-          </div>
-          <div id="deadlineDashboard" class="deadlineAlertList"></div>
-        </div>
+      <!-- Row 3: Deadlines full width -->
+      <div class="card">
+        <div class="cHead"><span>⏳</span><h3>Deadline Alerts</h3></div>
+        <div id="deadlineDashboard" class="deadlineChips"></div>
       </div>
 
     </div>
 
-    <!-- ===== TASK PAGE ===== -->
+    <!-- ══════════ TASKS ══════════ -->
     <div class="page" id="taskPage">
-      <div class="pageHeader">
-        <h1>✅ Today's Tasks</h1>
-      </div>
-
-      <!-- Top: reminder bar -->
+      <div class="pageHdr"><h1>✅ Today's Tasks</h1></div>
       <div class="reminderBar">
-        <span class="reminderIcon">📌</span>
-        <span id="taskProgressSummary">Loading tasks...</span>
-        <div class="reminderProgress">
-          <div class="reminderProgressFill" id="reminderProgressFill"></div>
-        </div>
+        <span>📌</span>
+        <span id="taskProgressSummary">Loading...</span>
+        <div class="rBarTrack"><div class="rBarFill" id="rBarFill"></div></div>
       </div>
-
-      <!-- Two columns: Pending | Completed -->
-      <div class="taskColumns">
-        <div class="card taskColCard pendingCol">
-          <div class="cardHeader">
-            <span class="cardIcon">⏳</span>
-            <h2>Pending Tasks</h2>
-            <span class="taskBadge" id="pendingCount">0</span>
-          </div>
+      <div class="twoCol">
+        <div class="card">
+          <div class="cHead"><span>⏳</span><h3>Pending</h3><span class="badge red" id="pendingCount">0</span></div>
           <div id="pendingTasks" class="taskList"></div>
         </div>
-        <div class="card taskColCard completedCol">
-          <div class="cardHeader">
-            <span class="cardIcon">✅</span>
-            <h2>Completed Tasks</h2>
-            <span class="taskBadge done" id="completedCount">0</span>
-          </div>
+        <div class="card">
+          <div class="cHead"><span>✅</span><h3>Completed</h3><span class="badge green" id="completedCount">0</span></div>
           <div id="completedTasks" class="taskList"></div>
         </div>
       </div>
     </div>
 
-    <!-- ===== COURSE PAGE ===== -->
+    <!-- ══════════ COURSES ══════════ -->
     <div class="page" id="coursePage">
-      <div class="pageHeader">
-        <h1>📚 Courses</h1>
-      </div>
-
-      <!-- Add course: compact top bar -->
-      <div class="addBar card">
-        <div class="cardHeader">
-          <span class="cardIcon">➕</span>
-          <h2>Add Course</h2>
-        </div>
-        <div class="addBarInputs">
-          <input id="courseName" placeholder="Course Name">
-          <input id="courseLink" placeholder="Paste any URL — YouTube playlists get auto-tracked">
-          <input id="courseTotal" type="number" placeholder="Total Lessons (auto for YouTube)">
+      <div class="pageHdr"><h1>📚 Courses</h1></div>
+      <!-- Add Course -->
+      <div class="card addCard">
+        <div class="cHead"><span>➕</span><h3>Add Course</h3></div>
+        <div class="addRow">
+          <input id="courseName"  placeholder="Course name">
+          <input id="courseLink"  placeholder="URL — YouTube playlists auto-extract lessons">
+          <input id="courseTotal" type="number" placeholder="Total lessons">
           <button class="btnPrimary" onclick="addCourseWithTracking()">Add Course</button>
         </div>
-      </div>
-
-      <!-- YouTube API key notice -->
-      <div class="card ytKeyCard" id="ytKeyCard">
-        <div class="cardHeader"><span class="cardIcon">▶</span><h2>YouTube Auto-Tracking</h2>
-          <button class="btnSmall btnGhost" onclick="document.getElementById('ytKeyCard').style.display='none'">✕</button>
-        </div>
-        <p style="font-size:13px;color:var(--textSub);margin-bottom:12px">
-          Paste a YouTube playlist URL and all lessons are loaded automatically. Add your free API key to enable this.
-        </p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-          <input id="ytApiKeyInput" placeholder="AIzaSy... (YouTube Data API v3 key)" style="flex:1;min-width:200px">
-          <button class="btnSmall btnBlue" onclick="saveYtKey()">Save Key</button>
-          <a href="https://console.cloud.google.com" target="_blank" style="font-size:12px;color:var(--accentCyan)">Get free key →</a>
+        <div class="ytKeyRow" id="ytKeyRow">
+          <span class="ytLabel">▶ YouTube API key (optional — enables auto-tracking):</span>
+          <input id="ytApiKeyInput" placeholder="AIzaSy..." style="flex:1;min-width:180px">
+          <button class="btnSm btnBlue" onclick="saveYtKey()">Save</button>
+          <a href="https://console.cloud.google.com" target="_blank" class="ytLink">Get free key →</a>
         </div>
       </div>
-
-      <!-- Course Progress Meters -->
-      <div class="card metersCard">
-        <div class="cardHeader">
-          <span class="cardIcon">📈</span>
-          <h2>Course Progress Meters</h2>
-        </div>
-        <div id="courseMeters" class="courseMeterGrid"></div>
-      </div>
-
-      <!-- Course Cards Grid -->
+      <!-- Meters -->
       <div class="card">
-        <div class="cardHeader">
-          <span class="cardIcon">🗂</span>
-          <h2>My Courses</h2>
-        </div>
+        <div class="cHead"><span>📈</span><h3>Progress Meters</h3></div>
+        <div id="courseMeters" class="metersWrap"></div>
+      </div>
+      <!-- Cards -->
+      <div class="card">
+        <div class="cHead"><span>🗂</span><h3>My Courses</h3></div>
         <div id="courseContainer" class="courseGrid"></div>
       </div>
     </div>
 
-    <!-- ===== SCHOLARSHIP PAGE ===== -->
+    <!-- ══════════ SCHOLARSHIPS ══════════ -->
     <div class="page" id="scholarPage">
-      <div class="pageHeader">
-        <h1>🎓 Scholarships</h1>
-      </div>
-
-      <!-- Search top -->
-      <div class="card searchCard">
-        <div class="cardHeader">
-          <span class="cardIcon">🔍</span>
-          <h2>Search Scholarship Database</h2>
-          <span class="dbCount">50+ scholarships</span>
-        </div>
+      <div class="pageHdr"><h1>🎓 Scholarships</h1></div>
+      <!-- Search -->
+      <div class="card">
+        <div class="cHead"><span>🔍</span><h3>Search Database</h3><span class="pill">50+ scholarships</span></div>
         <div class="searchRow">
-          <input id="scholarSearch" placeholder="Search by name, country, keyword..." oninput="applyScholarshipSearch()">
-          <button class="btnPrimary" onclick="applyScholarshipSearch()">Search</button>
+          <input id="scholarSearch" placeholder="Country, name, degree..." oninput="applyScholarSearch()">
+          <button class="btnPrimary" onclick="applyScholarSearch()">Search</button>
         </div>
         <div class="filterRow">
-          <select id="filterDegree" onchange="applyScholarshipSearch()">
+          <select id="fDegree" onchange="applyScholarSearch()">
             <option value="">All Degrees</option>
-            <option value="Bachelor">Bachelor</option>
-            <option value="Master">Master</option>
-            <option value="PhD">PhD</option>
+            <option>Bachelor</option><option>Master</option><option>PhD</option>
           </select>
-          <select id="filterCategory" onchange="applyScholarshipSearch()">
+          <select id="fCategory" onchange="applyScholarSearch()">
             <option value="">All Fields</option>
-            <option value="STEM">STEM</option>
-            <option value="Engineering">Engineering</option>
-            <option value="Humanities">Humanities</option>
-            <option value="Business">Business</option>
-            <option value="Social Sciences">Social Sciences</option>
-            <option value="Arts">Arts</option>
+            <option>STEM</option><option>Engineering</option><option>Humanities</option>
+            <option>Business</option><option>Social Sciences</option><option>Arts</option><option>Medical</option>
           </select>
-          <select id="filterCountry" onchange="applyScholarshipSearch()">
-            <option value="">All Countries</option>
-          </select>
+          <select id="fCountry" onchange="applyScholarSearch()"><option value="">All Countries</option></select>
         </div>
         <div id="searchResults" class="searchResults"></div>
       </div>
-
-      <!-- Scholarship Cards Grid -->
+      <!-- My Scholarships -->
       <div class="card">
-        <div class="cardHeader">
-          <span class="cardIcon">📋</span>
-          <h2>My Scholarships</h2>
-        </div>
-        <div id="scholarshipContainer" class="scholarGrid"></div>
+        <div class="cHead"><span>📋</span><h3>My Scholarships</h3></div>
+        <div id="scholarshipContainer" class="scholGrid"></div>
       </div>
-
-      <!-- Recommended -->
+      <!-- Recommendation -->
       <div class="card">
-        <div class="cardHeader">
-          <span class="cardIcon">⭐</span>
-          <h2>Recommended For You</h2>
-        </div>
-        <div id="recommendScholar" class="recommendWrap"></div>
+        <div class="cHead"><span>⭐</span><h3>Recommended For You</h3></div>
+        <div id="recommendScholar"></div>
       </div>
     </div>
 
-    <!-- ===== PRODUCTIVITY PAGE ===== -->
+    <!-- ══════════ PRODUCTIVITY ══════════ -->
     <div class="page" id="productivityPage">
-      <div class="pageHeader">
-        <h1>📊 Productivity</h1>
-      </div>
-
-      <!-- Productivity Score -->
-      <div class="card" style="margin-bottom:20px">
-        <div class="cardHeader"><span class="cardIcon">🏆</span><h2>Productivity Score</h2></div>
-        <div id="productivityScoreBox"></div>
-      </div>
-      <!-- Study Graph: large -->
-      <div class="card chartBigCard">
-        <div class="cardHeader">
-          <span class="cardIcon">📈</span>
-          <h2>Weekly Study Graph</h2>
+      <div class="pageHdr"><h1>📊 Productivity</h1></div>
+      <!-- Score + Chart row -->
+      <div class="dRow prodTwo">
+        <div class="card">
+          <div class="cHead"><span>🏆</span><h3>Productivity Score</h3></div>
+          <div id="prodScoreBox"></div>
         </div>
-        <canvas id="studyChart"></canvas>
+        <div class="card chartCard">
+          <div class="cHead"><span>📈</span><h3>Weekly Study Graph</h3></div>
+          <canvas id="studyChart"></canvas>
+        </div>
       </div>
-
-      <!-- Schedule Generator -->
+      <!-- Schedule -->
       <div class="card">
-        <div class="cardHeader">
-          <span class="cardIcon">📅</span>
-          <h2>Study Schedule Generator</h2>
-        </div>
-        <div class="scheduleInputRow">
-          <input id="studyHours" type="number" placeholder="Hours available today">
+        <div class="cHead"><span>📅</span><h3>Study Schedule Generator</h3></div>
+        <div class="schedRow">
+          <input id="studyHours" type="number" placeholder="Available hours today">
           <button class="btnPrimary" onclick="generateSchedule()">Generate Plan</button>
         </div>
-        <div id="studyPlan" class="scheduleOutput"></div>
+        <div id="studyPlan" class="planOutput"></div>
       </div>
-
-      <!-- Timeline / Roadmap -->
+      <!-- Roadmap -->
       <div class="card">
-        <div class="cardHeader">
-          <span class="cardIcon">🗺</span>
-          <h2>AI Roadmap</h2>
-        </div>
-        <div id="timelineContainer" class="timelineWrap"></div>
+        <div class="cHead"><span>🗺</span><h3>AI Roadmap</h3></div>
+        <div id="timelineContainer" class="timeline"></div>
       </div>
-
-      <!-- Streak Calendar -->
-      <div class="card">
-        <div class="cardHeader">
-          <span class="cardIcon">🔥</span>
-          <h2>Streak Calendar</h2>
-          <span class="streakLabel" id="streakLabel">0 days</span>
+      <!-- Streak + History row -->
+      <div class="dRow two">
+        <div class="card">
+          <div class="cHead"><span>🔥</span><h3>Streak Calendar</h3><span class="streakLbl" id="streakLabel">0 days</span></div>
+          <div id="streakCalendar" class="streakGrid"></div>
         </div>
-        <div id="streakCalendar" class="streakGrid"></div>
+        <div class="card">
+          <div class="cHead"><span>📖</span><h3>Study History</h3></div>
+          <div class="histHdr"><span>Date</span><span>Course</span><span>Lesson</span></div>
+          <div id="studyHistoryContainer"></div>
+        </div>
       </div>
     </div>
 
-    <!-- ===== AI PAGE ===== -->
+    <!-- ══════════ AI ══════════ -->
     <div class="page" id="aiPage">
-      <div class="pageHeader">
-        <h1>🤖 AI Assistant</h1>
-      </div>
+      <div class="pageHdr"><h1>🤖 AI Assistant</h1></div>
       <div class="aiLayout">
-
-        <!-- Left: Chat (large) -->
-        <div class="card aiChatCard">
-          <div class="cardHeader">
-            <span class="cardIcon">💬</span>
-            <h2>AI Chat</h2>
-          </div>
+        <div class="card chatCard">
+          <div class="cHead"><span>💬</span><h3>Chat with ScholarMate AI</h3></div>
           <div id="chatContainer" class="chatBox">
-            <div class="aiMessage">
-              <span class="aiAvatar">🤖</span>
-              Hello! I'm ScholarMate AI 👋 Ask me anything about your studies, scholarships, or deadlines.
-            </div>
+            <div class="aiMsg"><span class="aiAv">🤖</span>Hi! I'm ScholarMate AI. Ask me about your courses, scholarships, deadlines, or study plan.</div>
           </div>
           <div class="chatInputRow">
-            <input id="chatInput" placeholder="Ask ScholarMate AI..." onkeypress="if(event.key==='Enter') sendMessage()">
+            <input id="chatInput" placeholder="Ask anything..." onkeypress="if(event.key==='Enter')sendMessage()">
             <button class="btnSend" onclick="sendMessage()">➤</button>
           </div>
         </div>
-
-        <!-- Right: Insights column -->
-        <div class="aiSideCol">
+        <div class="aiSide">
           <div class="card">
-            <div class="cardHeader">
-              <span class="cardIcon">🧠</span>
-              <h2>AI Insights</h2>
-            </div>
+            <div class="cHead"><span>🧠</span><h3>AI Insights</h3></div>
             <div id="aiInsights"></div>
           </div>
           <div class="card">
-            <div class="cardHeader">
-              <span class="cardIcon">🎯</span>
-              <h2>Eligibility Analysis</h2>
-            </div>
+            <div class="cHead"><span>🎯</span><h3>Eligibility</h3></div>
             <div id="eligibilityAI"></div>
           </div>
           <div class="card">
-            <div class="cardHeader">
-              <span class="cardIcon">💡</span>
-              <h2>Suggestions</h2>
-            </div>
+            <div class="cHead"><span>💡</span><h3>Suggestions</h3></div>
             <div id="suggestionsAI"></div>
           </div>
         </div>
-
       </div>
     </div>
 
-    <!-- ===== SETTINGS PAGE ===== -->
+    <!-- ══════════ SETTINGS ══════════ -->
     <div class="page" id="settingsPage">
-      <div class="pageHeader">
-        <h1>⚙️ Settings</h1>
-      </div>
-
-      <!-- Profile Settings -->
-      <div class="card settingsCard">
-        <div class="cardHeader">
-          <span class="cardIcon">👤</span>
-          <h2>Profile Settings</h2>
-        </div>
-        <div class="settingsBody">
-          <div class="settingsField">
-            <label>Display Name</label>
-            <input id="usernameInput" placeholder="Choose a username">
+      <div class="pageHdr"><h1>⚙️ Settings</h1></div>
+      <div class="settingsGrid">
+        <div class="card">
+          <div class="cHead"><span>👤</span><h3>Profile</h3></div>
+          <div class="settBody">
+            <div class="settField"><label>Display Name</label><input id="usernameInput" placeholder="Your name"></div>
+            <button class="btnPrimary" style="max-width:200px" onclick="saveProfile()">Save Profile</button>
           </div>
-          <div class="settingsField">
-            <label>Profile Picture</label>
-            <div class="avatarRow">
-              <img id="currentAvatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="avatarPreview">
-              <p class="avatarHint">More avatar options coming soon</p>
-            </div>
+        </div>
+        <div class="card">
+          <div class="cHead"><span>🎨</span><h3>Theme</h3></div>
+          <div class="settBody">
+            <div class="settRow"><span>🌙 Dark Mode</span><label class="toggle"><input type="checkbox" id="darkModeToggle" checked onchange="toggleDarkMode()"><span class="tSlider"></span></label></div>
           </div>
-          <button class="btnPrimary" onclick="saveProfile()">Save Profile</button>
         </div>
-      </div>
-
-      <!-- Theme -->
-      <div class="card settingsCard">
-        <div class="cardHeader">
-          <span class="cardIcon">🎨</span>
-          <h2>Theme</h2>
-        </div>
-        <div class="settingsBody">
-          <div class="themeToggleRow">
-            <div class="themeOption">
-              <span>🌙 Dark Mode</span>
-              <label class="switch">
-                <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()" checked>
-                <span class="slider"></span>
-              </label>
-            </div>
+        <div class="card">
+          <div class="cHead"><span>🔔</span><h3>Notifications</h3></div>
+          <div class="settBody">
+            <div class="settRow"><span>Deadline alerts</span><label class="toggle"><input type="checkbox" checked><span class="tSlider"></span></label></div>
+            <div class="settRow"><span>Streak reminders</span><label class="toggle"><input type="checkbox" checked><span class="tSlider"></span></label></div>
+            <div class="settRow"><span>Daily motivation</span><label class="toggle"><input type="checkbox" checked><span class="tSlider"></span></label></div>
           </div>
         </div>
       </div>
-
-      <!-- Notifications -->
-      <div class="card settingsCard">
-        <div class="cardHeader">
-          <span class="cardIcon">🔔</span>
-          <h2>Notifications</h2>
-        </div>
-        <div class="settingsBody">
-          <div class="notifRow">
-            <span>Task reminders</span>
-            <label class="switch">
-              <input type="checkbox" checked>
-              <span class="slider"></span>
-            </label>
-          </div>
-          <div class="notifRow">
-            <span>Deadline alerts</span>
-            <label class="switch">
-              <input type="checkbox" checked>
-              <span class="slider"></span>
-            </label>
-          </div>
-          <div class="notifRow">
-            <span>Daily motivation</span>
-            <label class="switch">
-              <input type="checkbox" checked>
-              <span class="slider"></span>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <!-- Study History -->
-      <div class="card" id="studyHistoryCard" style="display:none">
-        <div class="cardHeader"><span class="cardIcon">📖</span><h2>Study History</h2></div>
-        <div class="historyHeader">
-          <span>Date</span><span>Course</span><span>Lesson</span>
-        </div>
-        <div id="studyHistoryContainer"></div>
-      </div>
-
     </div>
 
-    <!-- Deadline page (hidden, accessible from links) -->
+    <!-- Deadlines (linked from nav) -->
     <div class="page" id="deadlinePage">
-      <div class="pageHeader"><h1>⏳ Deadlines</h1></div>
+      <div class="pageHdr"><h1>⏳ Deadlines</h1></div>
       <div class="card">
-        <div class="cardHeader"><span class="cardIcon">➕</span><h2>Add Deadline</h2></div>
-        <div class="addBarInputs">
-          <input id="deadlineName" placeholder="Task / deadline name">
+        <div class="cHead"><span>➕</span><h3>Add Deadline</h3></div>
+        <div class="addRow">
+          <input id="deadlineName" placeholder="Deadline name">
           <input id="deadlineDate" type="date">
-          <button class="btnPrimary" onclick="addDeadline()">Add Deadline</button>
+          <button class="btnPrimary" onclick="addDeadline()">Add</button>
         </div>
       </div>
       <div class="card">
-        <div class="cardHeader"><span class="cardIcon">📋</span><h2>All Deadlines</h2></div>
+        <div class="cHead"><span>📋</span><h3>All Deadlines</h3></div>
         <div id="deadlineContainer"></div>
       </div>
     </div>
 
-  </div><!-- end mainContent -->
-</div><!-- end mainWebsite -->
+  </main>
+</div>
 
-<div id="notificationContainer"></div>
-<script src="config.js"></script>
+<div id="notifContainer"></div>
+
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<!-- App -->
+<script src="config.js"></script>
 <script src="script.js"></script>
 <script src="auth.js"></script>
 </body>

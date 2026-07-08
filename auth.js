@@ -1,230 +1,130 @@
 // ============================================================
-//   SCHOLARMATE — AUTH.JS
-//   Firebase Auth + Firestore user profiles
+//   SCHOLARMATE AI — auth.js
+//   Depends on: config.js (auth, db globals)
 //
-//   Structure:
-//     users/{uid} → { username, email, uid, createdAt, ...appData }
+//   Firestore structure per user:
+//     users/{uid} → { uid, username, displayName, email,
+//                     createdAt, lastSeen, ...appData }
 //
-//   Login accepts:  email OR username
-//   Password:       handled by Firebase Auth only (never stored in Firestore)
+//   ► Login accepts email  OR  username
+//   ► Passwords are NEVER stored in Firestore —
+//     Firebase Auth handles them with bcrypt
 // ============================================================
-const firebaseConfig={
-
-apiKey:window.CONFIG.FIREBASE_API_KEY,
-
-authDomain:
-window.CONFIG.FIREBASE_AUTH_DOMAIN,
-
-projectId:
-window.CONFIG.FIREBASE_PROJECT_ID,
-
-storageBucket:
-window.CONFIG.FIREBASE_STORAGE_BUCKET,
-
-messagingSenderId:
-window.CONFIG.FIREBASE_MESSAGING_SENDER_ID,
-
-appId:
-window.CONFIG.FIREBASE_APP_ID
-
-};
-
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db   = firebase.firestore();
 
 // ── SIGN UP ───────────────────────────────────────────────────
 async function signup() {
-  let usernameVal = document.getElementById("signupUsername").value.trim();
-  let emailVal    = document.getElementById("signupEmail").value.trim();
-  let passwordVal = document.getElementById("signupPassword").value;
+  let uname = document.getElementById("signupUsername").value.trim();
+  let email = document.getElementById("signupEmail").value.trim();
+  let pass  = document.getElementById("signupPassword").value;
 
-  // validation
-  if (!usernameVal || !emailVal || !passwordVal) {
-    showAuthError("All fields are required.");
-    return;
-  }
-  if (usernameVal.length < 3) {
-    showAuthError("Username must be at least 3 characters.");
-    return;
-  }
-  if (passwordVal.length < 6) {
-    showAuthError("Password must be at least 6 characters.");
-    return;
-  }
+  clearAuthMsg();
+  if (!uname || !email || !pass) return showAuthMsg("All fields are required.");
+  if (uname.length < 3)          return showAuthMsg("Username must be at least 3 characters.");
+  if (!/^[a-z0-9_]+$/i.test(uname)) return showAuthMsg("Username: letters, numbers and _ only.");
+  if (pass.length < 6)           return showAuthMsg("Password must be at least 6 characters.");
 
-  setAuthLoading(true);
-
+  setBtnLoading(true);
   try {
-    // 1 — check username is not already taken
-    let usernameCheck = await db.collection("users")
-      .where("username", "==", usernameVal.toLowerCase())
-      .get();
+    // 1 — check username availability
+    let snap = await db.collection("users").where("username","==",uname.toLowerCase()).get();
+    if (!snap.empty) { setBtnLoading(false); return showAuthMsg("Username already taken."); }
 
-    if (!usernameCheck.empty) {
-      showAuthError("Username already taken. Choose another.");
-      setAuthLoading(false);
-      return;
-    }
+    // 2 — create Firebase Auth account (password stays inside Firebase Auth, hashed)
+    let { user } = await auth.createUserWithEmailAndPassword(email, pass);
 
-    // 2 — create Firebase Auth account (password stored securely by Firebase, never in Firestore)
-    let userCredential = await auth.createUserWithEmailAndPassword(emailVal, passwordVal);
-    let user = userCredential.user;
-
-    // 3 — save user profile to Firestore (NO password stored here)
+    // 3 — write public profile + blank app data to Firestore
     await db.collection("users").doc(user.uid).set({
       uid:         user.uid,
-      username:    usernameVal.toLowerCase(),
-      displayName: usernameVal,        // original casing for display
-      email:       emailVal.toLowerCase(),
+      username:    uname.toLowerCase(),
+      displayName: uname,
+      email:       email.toLowerCase(),
       createdAt:   firebase.firestore.FieldValue.serverTimestamp(),
-      // app data defaults
-      courses:      [],
-      todaysTasks:  [],
-      scholarships: [],
-      deadlines:    [],
-      studyData:    [0,0,0,0,0,0,0],
-      streakData:   [],
-      studyHistory: [],
-      userXP:       0,
-      darkMode:     true
+      courses:[], todaysTasks:[], scholarships:[], deadlines:[],
+      studyData:[0,0,0,0,0,0,0], streakData:[], studyHistory:[],
+      userXP:0, darkMode:true
     });
-
-    showNotif("✅ Account created! Welcome, " + usernameVal);
-
-  } catch (error) {
-    let msg = friendlyAuthError(error.code);
-    showAuthError(msg);
-    setAuthLoading(false);
+    // onAuthStateChanged handles the rest
+  } catch(e) {
+    setBtnLoading(false);
+    showAuthMsg(friendlyError(e.code));
   }
 }
 
-// ── LOGIN (email OR username) ─────────────────────────────────
+// ── LOGIN (email or username) ─────────────────────────────────
 async function login() {
-  let identifier  = document.getElementById("loginIdentifier").value.trim();
-  let passwordVal = document.getElementById("loginPassword").value;
+  let id   = document.getElementById("loginIdentifier").value.trim();
+  let pass = document.getElementById("loginPassword").value;
 
-  if (!identifier || !passwordVal) {
-    showAuthError("Enter your username or email and password.");
-    return;
-  }
+  clearAuthMsg();
+  if (!id || !pass) return showAuthMsg("Enter your username or email and password.");
 
-  setAuthLoading(true);
-
+  setBtnLoading(true);
   try {
-    let emailToUse = identifier;
+    let emailToUse = id;
 
-    // If it doesn't look like an email, treat it as a username
-    // → look up the email from Firestore
-    if (!identifier.includes("@")) {
-      let snap = await db.collection("users")
-        .where("username", "==", identifier.toLowerCase())
-        .get();
-
-      if (snap.empty) {
-        showAuthError("Username not found. Check your username or use your email.");
-        setAuthLoading(false);
-        return;
-      }
-
+    if (!id.includes("@")) {
+      // username lookup → get email from Firestore
+      let snap = await db.collection("users").where("username","==",id.toLowerCase()).get();
+      if (snap.empty) { setBtnLoading(false); return showAuthMsg("Username not found."); }
       emailToUse = snap.docs[0].data().email;
     }
 
-    // sign in through Firebase Auth (which checks the password securely)
-    await auth.signInWithEmailAndPassword(emailToUse, passwordVal);
-    // onAuthStateChanged handles the rest
-
-  } catch (error) {
-    let msg = friendlyAuthError(error.code);
-    showAuthError(msg);
-    setAuthLoading(false);
+    await auth.signInWithEmailAndPassword(emailToUse, pass);
+    // onAuthStateChanged handles transition
+  } catch(e) {
+    setBtnLoading(false);
+    showAuthMsg(friendlyError(e.code));
   }
 }
 
 // ── LOGOUT ────────────────────────────────────────────────────
 function logout() {
-  auth.signOut().catch(e => console.error(e));
+  auth.signOut();
 }
 
 // ── RESET PASSWORD ────────────────────────────────────────────
 async function resetPassword() {
-  let identifier = document.getElementById("loginIdentifier").value.trim();
-
-  if (!identifier) {
-    showAuthError("Enter your email or username first.");
-    return;
-  }
-
-  let emailToUse = identifier;
-
+  let id = document.getElementById("loginIdentifier").value.trim();
+  clearAuthMsg();
+  if (!id) return showAuthMsg("Enter your email or username first.");
   try {
-    if (!identifier.includes("@")) {
-      let snap = await db.collection("users")
-        .where("username", "==", identifier.toLowerCase())
-        .get();
-      if (snap.empty) { showAuthError("Username not found."); return; }
+    let emailToUse = id;
+    if (!id.includes("@")) {
+      let snap = await db.collection("users").where("username","==",id.toLowerCase()).get();
+      if (snap.empty) return showAuthMsg("Username not found.");
       emailToUse = snap.docs[0].data().email;
     }
-
     await auth.sendPasswordResetEmail(emailToUse);
-    showAuthError("✅ Password reset email sent to " + emailToUse, "success");
-
-  } catch (error) {
-    showAuthError(friendlyAuthError(error.code));
-  }
+    showAuthMsg("✅ Reset email sent to " + emailToUse, true);
+  } catch(e) { showAuthMsg(friendlyError(e.code)); }
 }
 
-// ── SAVE USER DATA (debounced) ────────────────────────────────
-let _saveTimeout = null;
-
+// ── SAVE DATA (debounced → Firestore) ────────────────────────
+let _st = null;
 function saveUserData() {
   let user = auth.currentUser;
   if (!user) return;
-
-  clearTimeout(_saveTimeout);
-
-  _saveTimeout = setTimeout(async () => {
-    try {
-      await db.collection("users").doc(user.uid).update({
-        courses,
-        todaysTasks,
-        scholarships,
-        deadlines,
-        studyData,
-        streakData,
-        studyHistory: studyHistory || [],
-        userXP,
-        username,
-        darkMode,
-        lastSeen: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    } catch (error) {
-      // doc might not exist yet on very first save — use set with merge
-      db.collection("users").doc(user.uid).set({
-        courses, todaysTasks, scholarships, deadlines,
-        studyData, streakData, studyHistory: studyHistory || [],
-        userXP, username, darkMode
-      }, { merge: true });
-    }
+  clearTimeout(_st);
+  _st = setTimeout(() => {
+    db.collection("users").doc(user.uid).set({
+      courses, todaysTasks, scholarships, deadlines,
+      studyData, streakData, studyHistory: studyHistory||[],
+      userXP, username, darkMode,
+      lastSeen: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge:true }).catch(console.error);
   }, 700);
 }
 
-// ── LOAD USER DATA ────────────────────────────────────────────
+// ── LOAD DATA ─────────────────────────────────────────────────
 async function loadUserData() {
   let user = auth.currentUser;
   if (!user) return;
-
   try {
     let doc = await db.collection("users").doc(user.uid).get();
-
     if (doc.exists) {
       let d = doc.data();
-
-      // load profile
-      username  = d.displayName || d.username || user.email.split("@")[0];
-      darkMode  = d.darkMode !== undefined ? d.darkMode : true;
-
-      // load app data
+      username     = d.displayName || d.username || user.email.split("@")[0];
+      darkMode     = d.darkMode !== undefined ? d.darkMode : true;
       courses      = d.courses      || [];
       todaysTasks  = d.todaysTasks  || [];
       scholarships = d.scholarships || [];
@@ -233,107 +133,72 @@ async function loadUserData() {
       streakData   = d.streakData   || [];
       studyHistory = d.studyHistory || [];
       userXP       = d.userXP       || 0;
-
     } else {
-      // brand new user — profile was created by signup, but just in case
       username = user.email.split("@")[0];
-      darkMode = true;
     }
-
-    applyTheme();
-    updateProfileDisplay();
-    refreshDashboard();
-    showQuote();
-
-    // sync streak pill
-    let streakEl = document.getElementById("streakCount");
-    if (streakEl) streakEl.textContent = streakData.length;
-
-    // proactive notifications after a short delay
-    setTimeout(() => checkProactiveNotifications(), 2500);
-
-  } catch (error) {
-    console.error("loadUserData failed:", error);
-    showNotif("⚠ Could not load your data. Check connection.", "warn");
+    applyTheme(); updateProfileDisplay();
+    if (todaysTasks.length===0 && courses.length>0) generateTodayTasks();
+    refreshDashboard(); showQuote();
+    let sEl = document.getElementById("streakCount");
+    if (sEl) sEl.textContent = streakData.length;
+    setTimeout(checkProactiveNotifications, 2500);
+  } catch(e) {
+    console.error("loadUserData:", e);
+    showNotif("⚠ Could not load data — check connection","warn");
   }
 }
 
-// ── AUTH STATE LISTENER ───────────────────────────────────────
+// ── AUTH STATE ────────────────────────────────────────────────
 auth.onAuthStateChanged(user => {
-  let loginScreen  = document.getElementById("loginScreen");
-  let mainWebsite  = document.getElementById("mainWebsite");
-  let loadingScreen = document.getElementById("loadingScreen");
+  let ls = document.getElementById("loginScreen");
+  let mw = document.getElementById("mainWebsite");
+  let ld = document.getElementById("loadingScreen");
+  if (ld) ld.style.display = "none";
 
   if (user) {
-    // hide login, show app
-    if (loginScreen)  loginScreen.style.display  = "none";
-    if (mainWebsite)  mainWebsite.style.display   = "block";
-    if (loadingScreen) loadingScreen.style.display = "none";
-
+    if (ls) ls.style.display = "none";
+    if (mw) mw.style.display = "block";
     loadUserData();
-
   } else {
-    // show login, hide app
-    if (loginScreen)  loginScreen.style.display  = "flex";
-    if (mainWebsite)  mainWebsite.style.display  = "none";
-    if (loadingScreen) loadingScreen.style.display = "none";
-
-    // clear all state so previous account's data can't leak
-    courses = []; todaysTasks = []; scholarships = []; deadlines = [];
-    studyData = [0,0,0,0,0,0,0]; streakData = []; studyHistory = [];
-    userXP = 0; username = "";
+    if (ls) ls.style.display = "flex";
+    if (mw) mw.style.display = "none";
+    // wipe in-memory state so stale data can't leak between accounts
+    courses=[]; todaysTasks=[]; scholarships=[]; deadlines=[];
+    studyData=[0,0,0,0,0,0,0]; streakData=[]; studyHistory=[];
+    userXP=0; username="";
     localStorage.clear();
   }
 });
 
-// ── LOGIN UI HELPERS ──────────────────────────────────────────
-function showLoginForm()   {
-  document.getElementById("loginForm").style.display   = "block";
-  document.getElementById("signupForm").style.display  = "none";
-  clearAuthError();
-}
-function showSignupForm()  {
-  document.getElementById("loginForm").style.display   = "none";
-  document.getElementById("signupForm").style.display  = "block";
-  clearAuthError();
-}
+// ── AUTH UI helpers ───────────────────────────────────────────
+function showLogin()  { document.getElementById("loginForm").style.display="block"; document.getElementById("signupForm").style.display="none"; clearAuthMsg(); }
+function showSignup() { document.getElementById("signupForm").style.display="block"; document.getElementById("loginForm").style.display="none"; clearAuthMsg(); }
 
-function showAuthError(msg, type="error") {
-  let el = document.getElementById("authError");
+function showAuthMsg(msg, ok=false) {
+  let el = document.getElementById("authMsg");
   if (!el) return;
   el.textContent = msg;
+  el.className = "authMsg " + (ok ? "ok" : "err");
   el.style.display = "block";
-  el.style.background = type === "success"
-    ? "rgba(16,185,129,.15)"
-    : "rgba(239,68,68,.15)";
-  el.style.borderColor = type === "success"
-    ? "rgba(16,185,129,.3)"
-    : "rgba(239,68,68,.3)";
-  el.style.color = type === "success" ? "#6ee7b7" : "#fca5a5";
 }
-function clearAuthError() {
-  let el = document.getElementById("authError");
+function clearAuthMsg() {
+  let el = document.getElementById("authMsg");
   if (el) el.style.display = "none";
 }
-
-function setAuthLoading(on) {
-  let btns = document.querySelectorAll(".loginCard button");
-  btns.forEach(b => {
-    b.disabled = on;
-    b.style.opacity = on ? ".5" : "1";
+function setBtnLoading(on) {
+  document.querySelectorAll(".loginCard button").forEach(b => {
+    b.disabled = on; b.style.opacity = on ? ".55" : "1";
   });
 }
-
-function friendlyAuthError(code) {
-  const map = {
-    "auth/user-not-found":        "No account found with that email.",
-    "auth/wrong-password":        "Incorrect password. Try again.",
-    "auth/email-already-in-use":  "An account with this email already exists.",
-    "auth/invalid-email":         "Please enter a valid email address.",
-    "auth/weak-password":         "Password must be at least 6 characters.",
-    "auth/too-many-requests":     "Too many attempts. Try again in a few minutes.",
-    "auth/network-request-failed":"Network error. Check your connection.",
-    "auth/invalid-credential":    "Incorrect email or password.",
-  };
-  return map[code] || "Something went wrong. Please try again.";
+function friendlyError(code) {
+  return ({
+    "auth/user-not-found":       "No account found.",
+    "auth/wrong-password":       "Incorrect password.",
+    "auth/invalid-credential":   "Wrong email or password.",
+    "auth/email-already-in-use": "Email already registered.",
+    "auth/invalid-email":        "Enter a valid email.",
+    "auth/weak-password":        "Password too short (min 6).",
+    "auth/too-many-requests":    "Too many attempts. Wait a moment.",
+    "auth/network-request-failed":"Network error."
+  })[code] || "Something went wrong. Try again.";
 }
