@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="images/cover.png" alt="ScholarMate Banner" width="100%">
+  <img src="images/banner.png" alt="ScholarMate Banner" width="100%">
 </p>
 
 <h1 align="center">🎓 ScholarMate</h1>
@@ -237,7 +237,7 @@ Open `index.html`.
 
 **Maheshwar Siva M**
 
-Artificial Intelligence and Data science
+B.TECH in Artificial Intelligence and Data science
 
 KCG College of Technology
 
