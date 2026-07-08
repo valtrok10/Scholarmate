@@ -26,60 +26,80 @@ async function signup() {
   setBtnLoading(true);
   try {
     // 1 — check username availability
-    let snap = await db.collection("users").where("username","==",uname.toLowerCase()).get();
-    if (!snap.empty) { setBtnLoading(false); return showAuthMsg("Username already taken."); }
-
+    //let snap = await db.collection("users").where("username","==",uname.toLowerCase()).get();
+    //if (!snap.empty) { setBtnLoading(false); return showAuthMsg("Username already taken."); }
     // 2 — create Firebase Auth account (password stays inside Firebase Auth, hashed)
-    let { user } = await auth.createUserWithEmailAndPassword(email, pass);
+    let userCredential = await auth.createUserWithEmailAndPassword(email, pass);
 
-    // 3 — write public profile + blank app data to Firestore
-    await db.collection("users").doc(user.uid).set({
-      uid:         user.uid,
-      username:    uname.toLowerCase(),
-      displayName: uname,
-      email:       email.toLowerCase(),
-      createdAt:   firebase.firestore.FieldValue.serverTimestamp(),
-      courses:[], todaysTasks:[], scholarships:[], deadlines:[],
-      studyData:[0,0,0,0,0,0,0], streakData:[], studyHistory:[],
-      userXP:0, darkMode:true
-    });
+    const newUser = userCredential.user;
+
+    console.log("UID:", newUser.uid);
+
+    await db.collection("users").doc(newUser.uid).set({
+    uid: newUser.uid,
+    username: uname.toLowerCase(),
+    displayName: uname,
+    email: email.toLowerCase(),
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    courses: [],
+    todaysTasks: [],
+    scholarships: [],
+    deadlines: [],
+    studyData: [0,0,0,0,0,0,0],
+    streakData: [],
+    studyHistory: [],
+    userXP: 0,
+    darkMode: true
+});
     // onAuthStateChanged handles the rest
   } catch(e) {
-    setBtnLoading(false);
-    showAuthMsg(friendlyError(e.code));
-  }
+  console.error("SIGNUP ERROR:", e);
+  
+
+  setBtnLoading(false);
+  showAuthMsg(friendlyError(e.code));
+}
 }
 
 // ── LOGIN (email or username) ─────────────────────────────────
-async function login() {
-  let id   = document.getElementById("loginIdentifier").value.trim();
-  let pass = document.getElementById("loginPassword").value;
 
-  clearAuthMsg();
-  if (!id || !pass) return showAuthMsg("Enter your username or email and password.");
+    async function login() {
 
-  setBtnLoading(true);
-  try {
-    let emailToUse = id;
+    let email = document.getElementById("loginIdentifier").value.trim();
+    let pass = document.getElementById("loginPassword").value;
 
-    if (!id.includes("@")) {
-      // username lookup → get email from Firestore
-      let snap = await db.collection("users").where("username","==",id.toLowerCase()).get();
-      if (snap.empty) { setBtnLoading(false); return showAuthMsg("Username not found."); }
-      emailToUse = snap.docs[0].data().email;
+    clearAuthMsg();
+
+    if (!email || !pass)
+        return showAuthMsg("Enter your email and password.");
+
+    setBtnLoading(true);
+
+    try {
+
+        await auth.signInWithEmailAndPassword(email, pass);
+
+    } catch(e) {
+
+        setBtnLoading(false);
+        showAuthMsg(friendlyError(e.code));
+
     }
-
-    await auth.signInWithEmailAndPassword(emailToUse, pass);
-    // onAuthStateChanged handles transition
-  } catch(e) {
-    setBtnLoading(false);
-    showAuthMsg(friendlyError(e.code));
-  }
 }
 
 // ── LOGOUT ────────────────────────────────────────────────────
-function logout() {
-  auth.signOut();
+async function logout() {
+    try {
+        await auth.signOut();
+
+        showLogin();
+
+        document.getElementById("loginScreen").style.display = "flex";
+        document.getElementById("mainWebsite").style.display = "none";
+
+    } catch(err) {
+        console.error(err);
+    }
 }
 
 // ── RESET PASSWORD ────────────────────────────────────────────
@@ -160,14 +180,24 @@ auth.onAuthStateChanged(user => {
     if (mw) mw.style.display = "block";
     loadUserData();
   } else {
+
     if (ls) ls.style.display = "flex";
     if (mw) mw.style.display = "none";
-    // wipe in-memory state so stale data can't leak between accounts
-    courses=[]; todaysTasks=[]; scholarships=[]; deadlines=[];
-    studyData=[0,0,0,0,0,0,0]; streakData=[]; studyHistory=[];
-    userXP=0; username="";
+
+    showLogin();   // <-- Important
+
+    courses = [];
+    todaysTasks = [];
+    scholarships = [];
+    deadlines = [];
+    studyData = [0,0,0,0,0,0,0];
+    streakData = [];
+    studyHistory = [];
+    userXP = 0;
+    username = "";
+
     localStorage.clear();
-  }
+}
 });
 
 // ── AUTH UI helpers ───────────────────────────────────────────
