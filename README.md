@@ -19,230 +19,217 @@ AI-Powered Student Productivity & Scholarship Management Platform
 ![OpenRouter](https://img.shields.io/badge/OpenRouter-AI-blue?style=for-the-badge)
 
 </p>
-# 🎓 ScholarMate
+# 🎓 ScholarMate AI
 
-An AI-powered Student Productivity & Scholarship Management Platform built with Firebase, Firestore, Node.js, Express.js, and OpenRouter AI.
-
----
-
-## 📖 Overview
-
-ScholarMate helps students manage their academic journey from a single dashboard.
-
-It combines course tracking, scholarship management, deadline reminders, daily task planning, productivity analytics, and an AI assistant that provides personalized recommendations based on the student's real-time progress.
+> An AI-Powered Scholarship & Study Management Platform that helps students organize coursework, monitor scholarship eligibility, manage deadlines, and receive personalized AI assistance.
 
 ---
 
-## ✨ Features
+## 🌐 Live Demo
 
-### 👤 Authentication
-- Secure Login & Signup
+🔗 scholarmatelive.netlify.app
+
+---
+
+## 💻 GitHub Repository
+
+🔗 https://github.com/valtrok10/ScholarMate
+
+---
+
+# 📖 About
+
+ScholarMate is a full-stack AI-powered web application designed to help students stay organized throughout their academic journey.
+
+Instead of juggling multiple apps, ScholarMate combines:
+
+- 📚 Course Tracking
+- 🎓 Scholarship Tracking
+- 📅 Deadline Management
+- 🤖 AI Academic Assistant
+- 🔥 Productivity Dashboard
+- 🎯 XP & Gamification
+
+into one intelligent platform.
+
+---
+
+# ✨ Features
+
+## 🔐 Authentication
+
 - Firebase Authentication
-- Cloud user profiles
-
-### 📚 Course Tracker
-- Add/Edit/Delete courses
-- Track completed lessons
-- Course completion percentage
-- Resume from last lesson
-
-### 🎯 Daily Tasks
-- Auto-generated study tasks
-- Task completion tracking
-- Daily productivity monitoring
-
-### 🎓 Scholarship Tracker
-- Scholarship requirement tracking
-- Requirement completion status
-- Deadline management
-- Eligibility monitoring
-
-### 📅 Deadline Manager
-- Add important dates
-- Upcoming deadline alerts
-- Smart reminders
-
-### 🤖 AI Study Assistant
-- Context-aware AI responses
-- Personalized study suggestions
-- Scholarship guidance
-- Course recommendations
-- Productivity coaching
-
-### 📈 Productivity Dashboard
-- XP System
-- Study streak tracking
-- Weekly progress
-- Readiness score
-- Analytics
+- Secure Login
+- Secure Signup
+- Password Reset
+- User Profiles
 
 ---
 
-# 🏗 Architecture
+## 📚 Course Management
 
-```
-Frontend (HTML + CSS + JavaScript)
-            │
-            ▼
- Firebase Authentication
-            │
-            ▼
- Firestore Database
-            │
-            ▼
- Node.js + Express Backend
-            │
-            ▼
- OpenRouter API
-            │
-            ▼
- DeepSeek AI
-```
+- Add Courses
+- Track Progress
+- Lesson Completion
+- Progress Percentage
+
+---
+
+## 🎓 Scholarship Tracker
+
+- Add Scholarships
+- Track Requirements
+- Eligibility Percentage
+- Deadline Monitoring
+
+---
+
+## 🤖 AI Assistant
+
+Powered by:
+
+- OpenRouter API
+- DeepSeek Chat
+
+The AI can:
+
+- Answer academic questions
+- Recommend study plans
+- Analyze scholarship readiness
+- Suggest next tasks
+- Provide productivity advice
+
+---
+
+## 📊 Dashboard
+
+- XP System
+- Productivity Tracker
+- Today's Tasks
+- Streak Counter
+- Progress Charts
 
 ---
 
 # 🛠 Tech Stack
 
-### Frontend
+## Frontend
+
 - HTML5
 - CSS3
-- JavaScript
+- JavaScript (ES6)
 
-### Backend
+## Backend
+
 - Node.js
 - Express.js
 
-### Database
+## Database
+
 - Firebase Firestore
 
-### Authentication
+## Authentication
+
 - Firebase Authentication
 
-### AI
-- OpenRouter API
+## AI
+
+- OpenRouter
 - DeepSeek Chat
 
-### Version Control
+## Deployment
+
+- Netlify
+- Render
+
+## Version Control
+
 - Git
 - GitHub
 
 ---
 
+# 📂 Project Structure
+
+```
+ScholarMate/
+│
+├── assets/
+├── backend/
+│   ├── server.js
+│   ├── package.json
+│   └── .env
+│
+├── css/
+├── js/
+├── auth.js
+├── config.js
+├── script.js
+├── index.html
+└── README.md
+```
+
+---
+
 # 🔒 Security
 
-To improve security:
-
-- API keys are stored in `.env`
-- Backend acts as a proxy for AI requests
-- Firebase Authentication secures user accounts
-- `.gitignore` prevents sensitive files from being uploaded
-
----
-
-## 📊 Project Highlights
-
-- 🔐 Secure Firebase Authentication
-- ☁️ Firestore Cloud Database
-- 🤖 Context-Aware AI Assistant
-- 📚 Course Progress Tracking
-- 🎓 Scholarship Requirement Management
-- 📅 Deadline Reminder System
-- 📈 Productivity Analytics Dashboard
-- 🔥 XP & Study Streak System
----
-
-# 📷 Screenshots
-
-## Login
-
-![Login](images/Login%20page.png)
+- Firebase Authentication
+- Firestore Security Rules
+- API Key stored in `.env`
+- Backend Proxy
+- No API Keys exposed to frontend
 
 ---
+
+# 🚀 Future Improvements
+
+- AI Chat History
+- Email Verification
+- PDF Export
+- Mobile App
+- Calendar Sync
+- AI Study Planner
+
+---
+# 📸 Screenshots
 
 ## Dashboard
 
-![Dashboard](images/dashboard.png)
+![Dashboard](images/Dashboard.png)
 
 ---
 
 ## AI Assistant
 
 ![AI](images/AI%20assistant.png)
----
-## Course Page
-
-![Course Addition](images/Course%20page.png)
-![Course progress](images/Course%20progress.png)
 
 ---
+
 ## Scholarship Tracker
 
-![Scholarships available](images/Scholarship%20available.png)
-![Scholarships requirements](images/Scholarship%20req.png)
-![Scholarships readiness](images/Scholarship%20readiness.png)
+![Scholarship](images/Scholarship%20available.png)
+![Scholarship](images/Scholarship%20req.png)
+![Scholarship](images/Scholarship%20readiness.png)
+
+---
+
+## Course Tracker
+
+![Courses](images/Course%20page.png)
+![Courses](images/Course%20progress.png)
 
 ---
 
 ## Productivity Dashboard
 
-![Productivity page](images/Productivity%20page.png)
-![Streak and History](images/Streak%20and%20History.png)
-![Study planner](images/Study%20paln.png)
-
----
-
-# 🚀 Installation
-
-Clone the repository
-
-```bash
-git clone https://github.com/valtrok10/ScholarMate.git
-```
-
-Install backend dependencies
-
-```bash
-cd backend
-npm install
-```
-
-Create a `.env`
-
-```
-OPENROUTER_KEY=YOUR_API_KEY
-```
-
-Run backend
-
-```bash
-npm start
-```
-
-Open `index.html`.
-
----
-
-# 🌟 Future Improvements
-
-- Mobile application
-- AI timetable generator
-- Resume analyzer
-- Interview preparation assistant
-- Email reminders
-- Multi-language support
-
----
+![Productivity](images/Productivity%20page.png)
+![Productivity](images/Streak%20and%20History.png)
+![Productivity](images/Study%20paln.png)
 
 # 👨‍💻 Author
 
 **Maheshwar Siva M**
 
-B.TECH in Artificial Intelligence and Data science
+B.Tech – Artificial Intelligence & Data Science
 
 KCG College of Technology
-
----
-
-# ⭐ If you like this project
-
-Please consider giving it a ⭐ on GitHub!
