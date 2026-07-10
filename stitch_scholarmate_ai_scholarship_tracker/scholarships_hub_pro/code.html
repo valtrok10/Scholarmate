@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ScholarMate | Scholarships Hub Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Hanken+Grotesk:wght@400;500&amp;family=Geist:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#171f33",
+                    "on-background": "#dae2fd",
+                    "surface-bright": "#31394d",
+                    "surface-variant": "#2d3449",
+                    "on-error-container": "#ffdad6",
+                    "secondary-fixed": "#acedff",
+                    "error": "#ffb4ab",
+                    "outline-variant": "#464554",
+                    "on-primary-fixed-variant": "#2f2ebe",
+                    "surface-container-low": "#131b2e",
+                    "inverse-surface": "#dae2fd",
+                    "on-secondary-fixed-variant": "#004e5c",
+                    "surface-container-lowest": "#060e20",
+                    "inverse-primary": "#494bd6",
+                    "on-secondary-container": "#00424e",
+                    "on-surface": "#dae2fd",
+                    "secondary-container": "#03b5d3",
+                    "surface-container-highest": "#2d3449",
+                    "error-container": "#93000a",
+                    "surface": "#0b1326",
+                    "on-error": "#690005",
+                    "tertiary-container": "#a078ff",
+                    "secondary": "#4cd7f6",
+                    "primary-container": "#8083ff",
+                    "surface-dim": "#0b1326",
+                    "tertiary": "#d0bcff",
+                    "tertiary-fixed": "#e9ddff",
+                    "on-tertiary-fixed-variant": "#5516be",
+                    "on-primary": "#1000a9",
+                    "on-tertiary-container": "#340080",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "on-tertiary-fixed": "#23005c",
+                    "inverse-on-surface": "#283044",
+                    "primary": "#c0c1ff",
+                    "on-secondary": "#003640",
+                    "primary-fixed": "#e1e0ff",
+                    "surface-tint": "#c0c1ff",
+                    "secondary-fixed-dim": "#4cd7f6",
+                    "on-secondary-fixed": "#001f26",
+                    "on-primary-container": "#0d0096",
+                    "background": "#0b1326",
+                    "on-primary-fixed": "#07006c",
+                    "surface-container-high": "#222a3d",
+                    "on-surface-variant": "#c7c4d7",
+                    "on-tertiary": "#3c0091",
+                    "outline": "#908fa0",
+                    "tertiary-fixed-dim": "#d0bcff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "gutter": "24px",
+                    "container-max": "1440px",
+                    "margin-mobile": "20px",
+                    "margin-desktop": "80px",
+                    "stack-gap": "16px"
+            },
+            "fontFamily": {
+                    "display-xl": ["Plus Jakarta Sans"],
+                    "label-sm": ["Geist"],
+                    "body-md": ["Hanken Grotesk"],
+                    "headline-lg": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "display-xl": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                    "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(200%) rotate(45deg); }
+        }
+        .shimmer-sweep {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer-sweep::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to right,
+                transparent 0%,
+                rgba(255, 255, 255, 0.05) 45%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.05) 55%,
+                transparent 100%
+            );
+            transform: rotate(45deg);
+            animation: shimmer 2s infinite linear;
+        }
+
+        .electric-flow {
+            background: linear-gradient(135deg, #c0c1ff 0%, #8083ff 50%, #494bd6 100%);
+        }
+
+        .border-glass {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .neon-pulse {
+            animation: neon-pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes neon-pulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(192, 193, 255, 0.2); }
+            50% { box-shadow: 0 0 20px rgba(192, 193, 255, 0.5); }
+        }
+
+        .ease-in-out-smooth {
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary/30 overflow-x-hidden">
+<!-- Loading Sequence Overlay -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center bg-surface transition-opacity duration-1000 ease-in-out" id="loader">
+<div class="absolute inset-0 shimmer-sweep bg-surface-container-lowest"></div>
+<div class="relative z-10 text-center">
+<div class="font-display-xl text-primary animate-pulse tracking-tighter">ScholarMate</div>
+<div class="mt-4 font-label-sm text-on-surface-variant uppercase tracking-widest">Optimizing Opportunities...</div>
+</div>
+</div>
+<!-- Background Atmospheric Elements -->
+<div class="fixed inset-0 -z-10 overflow-hidden">
+
+<div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-primary/20 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-tertiary/10 blur-[150px] rounded-full"></div>
+</div>
+<!-- Side Navigation Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 border-r border-white/10 bg-surface/30 backdrop-blur-[20px] shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex flex-col py-gutter px-4 z-50">
+<div class="mb-12 px-2">
+<span class="font-display-xl text-display-xl font-extrabold text-primary tracking-tighter">ScholarMate</span>
+<p class="font-label-sm text-on-surface-variant opacity-70">AI Academic Tracker</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 p-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all ease-in-out-smooth" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all ease-in-out-smooth" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-label-sm">Tasks</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all ease-in-out-smooth" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm">Courses</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl text-primary bg-primary/10 border-r-2 border-primary shadow-[0_0_15px_rgba(192,193,255,0.3)]" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm">Scholarships</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all ease-in-out-smooth" href="#">
+<span class="material-symbols-outlined">speed</span>
+<span class="font-label-sm">Productivity</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all ease-in-out-smooth" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-sm">AI Assistant</span>
+</a>
+</nav>
+<div class="mt-auto space-y-4">
+<div class="glass-panel p-4 rounded-2xl relative overflow-hidden group">
+<div class="absolute inset-0 shimmer-sweep opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<p class="font-label-sm text-primary mb-2">Upgrade to Pro</p>
+<p class="text-[10px] text-on-surface-variant mb-3">Unlock unlimited scholarship matches &amp; AI essays.</p>
+<button class="w-full py-2 rounded-lg electric-flow text-on-primary font-label-sm hover:scale-[1.02] transition-transform active:scale-95">Upgrade Now</button>
+</div>
+<a class="flex items-center gap-3 p-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all ease-in-out-smooth" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm">Settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Shell -->
+<main class="ml-64 min-h-screen pb-20">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 h-16 bg-surface/10 backdrop-blur-[40px] border-b border-white/10 flex justify-between items-center px-gutter">
+<div class="flex items-center bg-surface-container-low px-4 py-2 rounded-full border border-white/5 w-96 focus-within:ring-1 focus-within:ring-secondary transition-all">
+<span class="material-symbols-outlined text-on-surface-variant mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-full placeholder:text-on-surface-variant/50" placeholder="Search scholarships, grants..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-white/10 rounded-full transition-colors relative">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 hover:bg-white/10 rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">history</span>
+</button>
+<div class="h-8 w-[1px] bg-white/10 mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden xl:block">
+<p class="font-label-sm text-on-surface">Alex Rivera</p>
+<p class="text-[10px] text-primary">Senior Scholar</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-primary/30 object-cover shadow-[0_0_15px_rgba(192,193,255,0.2)]" data-alt="A cinematic, high-quality portrait of a young professional academic student with a sleek, futuristic fashion sense, illuminated by soft blue and purple neon rim lighting against a dark, tech-inspired background. The image has a clean, premium digital photography aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyXb2A4QgHWZtUV4SIO3_kJfa4E1gtXAiyqf7zWc5boCikYRhJ96N3NS1CZQCgV6n3tmnYxES03Nfpzf1mKKHW9FnuDEV5au4z9pR0yirRAko-USuxttByAc77Z_4xJMJ-ouwGQvxwqtH0-KIGnQapTcBPgxXwJx6JUcg553J6347YYCdiA-4n4msfIhikdDVrF_LV8ouSI7oYif7fTr-YtIJq9RjViLlDUzaJeM12hrI5SYOODgUqpA"/>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="pt-24 px-gutter max-w-container-max mx-auto space-y-12">
+<!-- Hero / Eligibility Visualization -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+<div class="lg:col-span-8 glass-panel rounded-[32px] p-8 flex flex-col justify-between relative overflow-hidden">
+
+<div class="relative z-10">
+<span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary font-label-sm mb-4 border border-primary/20">PRO DASHBOARD</span>
+<h1 class="font-headline-lg text-display-xl text-on-background mb-4 tracking-tight leading-none">Scholarships <br/><span class="text-primary">Hub Pro</span></h1>
+<p class="text-on-surface-variant max-w-md text-body-md mb-8">Your AI-driven portal for global academic opportunities. We've matched your profile with <span class="text-secondary font-bold">142</span> active scholarships.</p>
+</div>
+<div class="relative z-10 flex flex-wrap gap-4">
+<button class="px-8 py-3 rounded-full electric-flow text-on-primary font-bold shadow-lg hover:scale-105 transition-transform">Explore All Matches</button>
+<button class="px-8 py-3 rounded-full border-glass glass-panel text-on-surface font-bold hover:bg-white/5 transition-colors">Sync Profile</button>
+</div>
+</div>
+<div class="lg:col-span-4 glass-panel rounded-[32px] p-8 flex flex-col items-center justify-center text-center">
+<h3 class="font-label-sm text-on-surface-variant mb-6">SCHOLARSHIP READINESS</h3>
+<!-- Readiness Gauge -->
+<div class="relative w-48 h-48 mb-6">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-white/5" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary neon-pulse" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-dasharray="552.92" stroke-dashoffset="110.58" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-display-xl font-extrabold text-on-surface">82<span class="text-headline-lg opacity-50">%</span></span>
+<span class="font-label-sm text-primary tracking-widest">OPTIMAL</span>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant">Your profile is missing a <span class="text-on-surface font-semibold underline decoration-primary">Verified IELTS</span> score to reach 100%.</p>
+</div>
+</section>
+<!-- Scholarship Discovery Bento Grid -->
+<section class="space-y-6">
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-headline-lg text-on-surface">Discovery Feed</h2>
+<p class="font-label-sm text-on-surface-variant">TOP PREDICTIONS BASED ON YOUR RESEARCH PROFILE</p>
+</div>
+<div class="flex gap-2">
+<button class="p-2 border-glass rounded-lg hover:bg-white/5 transition-colors"><span class="material-symbols-outlined">filter_list</span></button>
+<button class="p-2 border-glass rounded-lg hover:bg-white/5 transition-colors"><span class="material-symbols-outlined">grid_view</span></button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- MEXT Card -->
+<div class="glass-panel rounded-3xl p-6 hover:translate-y-[-8px] transition-all duration-500 cursor-pointer group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div class="px-3 py-1 rounded-full bg-secondary/10 text-secondary font-label-sm border border-secondary/20 animate-pulse">98% MATCH</div>
+</div>
+<h3 class="font-headline-lg text-2xl text-on-surface mb-2 group-hover:text-primary transition-colors">MEXT Research Scholarship</h3>
+<p class="text-on-surface-variant text-body-md mb-6 line-clamp-2">Full funding for postgraduate studies in Japan. Includes tuition, airfare, and monthly stipend for 2-3 years.</p>
+<div class="flex items-center gap-4 py-4 border-y border-white/5 mb-6">
+<div class="flex-1">
+<p class="text-[10px] text-on-surface-variant uppercase">Deadline</p>
+<p class="font-label-sm text-on-surface">Oct 15, 2024</p>
+</div>
+<div class="flex-1">
+<p class="text-[10px] text-on-surface-variant uppercase">Grant</p>
+<p class="font-label-sm text-on-surface">Full Ride + $1.4k/mo</p>
+</div>
+</div>
+<button class="w-full py-3 rounded-xl border-glass font-label-sm text-on-surface group-hover:bg-primary group-hover:text-on-primary transition-all">View Eligibility</button>
+</div>
+<!-- GKS Card -->
+<div class="glass-panel rounded-3xl p-6 hover:translate-y-[-8px] transition-all duration-500 cursor-pointer group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">language</span>
+</div>
+<div class="px-3 py-1 rounded-full bg-primary/10 text-primary font-label-sm border border-primary/20">92% MATCH</div>
+</div>
+<h3 class="font-headline-lg text-2xl text-on-surface mb-2 group-hover:text-tertiary transition-colors">Global Korea Scholarship</h3>
+<p class="text-on-surface-variant text-body-md mb-6 line-clamp-2">Comprehensive support for international students pursuing advanced degrees at top Korean universities.</p>
+<div class="flex items-center gap-4 py-4 border-y border-white/5 mb-6">
+<div class="flex-1">
+<p class="text-[10px] text-on-surface-variant uppercase">Deadline</p>
+<p class="font-label-sm text-on-surface">Nov 30, 2024</p>
+</div>
+<div class="flex-1">
+<p class="text-[10px] text-on-surface-variant uppercase">Grant</p>
+<p class="font-label-sm text-on-surface">Tuition + Housing</p>
+</div>
+</div>
+<button class="w-full py-3 rounded-xl border-glass font-label-sm text-on-surface group-hover:bg-tertiary group-hover:text-on-tertiary transition-all">View Eligibility</button>
+</div>
+<!-- DAAD Card -->
+<div class="glass-panel rounded-3xl p-6 hover:translate-y-[-8px] transition-all duration-500 cursor-pointer group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">science</span>
+</div>
+<div class="px-3 py-1 rounded-full bg-secondary/10 text-secondary font-label-sm border border-secondary/20">85% MATCH</div>
+</div>
+<h3 class="font-headline-lg text-2xl text-on-surface mb-2 group-hover:text-secondary transition-colors">DAAD Research Grant</h3>
+<p class="text-on-surface-variant text-body-md mb-6 line-clamp-2">The premier German funding agency for students looking to conduct doctoral research in Germany.</p>
+<div class="flex items-center gap-4 py-4 border-y border-white/5 mb-6">
+<div class="flex-1">
+<p class="text-[10px] text-on-surface-variant uppercase">Deadline</p>
+<p class="font-label-sm text-on-surface">Rolling Basis</p>
+</div>
+<div class="flex-1">
+<p class="text-[10px] text-on-surface-variant uppercase">Grant</p>
+<p class="font-label-sm text-on-surface">€1.2k Monthly</p>
+</div>
+</div>
+<button class="w-full py-3 rounded-xl border-glass font-label-sm text-on-surface group-hover:bg-secondary group-hover:text-on-secondary transition-all">View Eligibility</button>
+</div>
+</div>
+</section>
+<!-- Recommended Carousel -->
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-lg text-on-surface">Recommended for You</h2>
+<div class="flex gap-3">
+<button class="w-10 h-10 flex items-center justify-center border-glass rounded-full hover:bg-white/10 transition-all" onclick="scrollCarousel(-300)">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center border-glass rounded-full hover:bg-white/10 transition-all" onclick="scrollCarousel(300)">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="flex gap-6 overflow-x-auto hide-scrollbar pb-8 snap-x snap-mandatory scroll-smooth" id="recommended-carousel">
+<!-- Carousel Items -->
+<div class="flex-none w-80 glass-panel rounded-2xl overflow-hidden snap-start group cursor-pointer border-glass hover:border-primary/50 transition-colors">
+<div class="h-40 relative">
+<img class="w-full h-full object-cover" data-alt="A futuristic digital image representing higher education in Switzerland, featuring Alpine mountains blended with clean, modern architectural glass elements. The lighting is crisp and cool, with soft neon violet accents reflecting off glassy surfaces. The overall mood is sophisticated and premium." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1Bdvh-F8J3MADRKRLvTZzfo-5TsztPlXK_KRciIqsyDErR32UMXvHpEwV4TfVxBdyg56CzQR7hwfGsBaBQQXdFWDicK0gzhlc7jMwupBBHK0Lf3N6Est5Cwjbx_6VtOIJoiNrFeWvGuIMpAzfcErXQz4SHxGxQ6T3qVRrz_EkUgzCuopNxAvLnToC8J-fphyKRpsOl_ENAv6YC9WwYopUlcG2bTg4Qq4y99WuWdmjTFyB_8y0k7pA9w"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<span class="bg-primary/20 backdrop-blur-md text-primary text-[10px] px-2 py-1 rounded border border-primary/30">EUROPE</span>
+</div>
+</div>
+<div class="p-5">
+<h4 class="font-label-sm text-on-surface mb-1">Swiss Govt Excellence</h4>
+<p class="text-[11px] text-on-surface-variant">Postdoc and Research focus for STEM students.</p>
+</div>
+</div>
+<div class="flex-none w-80 glass-panel rounded-2xl overflow-hidden snap-start group cursor-pointer border-glass hover:border-secondary/50 transition-colors">
+<div class="h-40 relative">
+<img class="w-full h-full object-cover" data-alt="A beautiful, vibrant digital art depiction of an Australian campus at dusk. The sky is filled with neon pink and orange hues, highlighting modern sustainable architecture. The visual style is sleek and tech-forward, with glowing light paths representing knowledge and connectivity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZrPpmz0y_J2DH-mkB4oEcgNjDFKgexrdR-twNhAkNE2xP32inw7ZNgGfN9eQs511QNyuZwsjUQhFKFdqH3mviEDbYgYXtPlQYBBrDucOdQqJaighaRtCv72DwGYRG3R68DfuysqDAVutDjlSkQmM3ccHltaMPMpUF4k9CLD96Hk9B1koKhuWSCZr27DZIfG-B32mcIjnUrr87eUr_uEiHqkV3sZ5RJETu4PWlCzOJcrTyDHK_yFHdag"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<span class="bg-secondary/20 backdrop-blur-md text-secondary text-[10px] px-2 py-1 rounded border border-secondary/30">OCEANIA</span>
+</div>
+</div>
+<div class="p-5">
+<h4 class="font-label-sm text-on-surface mb-1">Australia Awards</h4>
+<p class="text-[11px] text-on-surface-variant">Sustainable development grants for leadership.</p>
+</div>
+</div>
+<div class="flex-none w-80 glass-panel rounded-2xl overflow-hidden snap-start group cursor-pointer border-glass hover:border-tertiary/50 transition-colors">
+<div class="h-40 relative">
+<img class="w-full h-full object-cover" data-alt="A futuristic vision of Oxford University or a similar historic institution, where traditional gothic architecture is augmented with holographic data displays and shimmering neon violet energy fields. The lighting is atmospheric and dark, suggesting a prestigious, secretive academic excellence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9EhmoEK8TqFSgo90XBXI25cYwyE_M1GEr-B3-til-ZCvqZPeMJ_IVpcLqh_czkxBDEfRw0XwMxHNLOkEkkhNqrtKmF0wyYPq_Rk4ifhg4h0TTBB-9B6wyaY1jvJq_28T-LXhsfo8Lt5mwWWs2nwGw8VEy5-Ptj5VRemZSp1Vxc0ZTxOVxr5nj8aido-Xx3IhhLSjF0HI-UHJu8hV8GjYTkSIzltOsCvJPUq5z8CzGIrsmtIUwOW4lRQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<span class="bg-tertiary/20 backdrop-blur-md text-tertiary text-[10px] px-2 py-1 rounded border border-tertiary/30">UK</span>
+</div>
+</div>
+<div class="p-5">
+<h4 class="font-label-sm text-on-surface mb-1">Chevening Scholarship</h4>
+<p class="text-[11px] text-on-surface-variant">One-year Master's degree in the United Kingdom.</p>
+</div>
+</div>
+<div class="flex-none w-80 glass-panel rounded-2xl overflow-hidden snap-start group cursor-pointer border-glass hover:border-primary/50 transition-colors">
+<div class="h-40 relative">
+<img class="w-full h-full object-cover" data-alt="A high-tech lab setting in a North American university, filled with glowing holographic displays, sleek workstations, and vibrant electric blue lighting. The style is hyper-modern and professional, emphasizing cutting-edge research and innovation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4DjdQBzB7irMlxMv5zLKtrvzcG4T3m4593ejvuYEJy7G1I5TtaokAhJZ-NE0QCCV-jOsFLu5IWsLbHpFUVEMMnR3my3KJGP7CtQ7g6S_ng1mJfk6UXfbs3MvgxDIDfer8004Wgf4VciKKBbJTCATGYNUBBPHCEXB1XzYpjTklTN5p57xft6cyS4y2SfdYHrJ_Ew8vXsu4n81Cv-U8xF5aH4seP7W2ICxI6U9DEC2uEhHYzt6btrHc0A"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<span class="bg-primary/20 backdrop-blur-md text-primary text-[10px] px-2 py-1 rounded border border-primary/30">USA</span>
+</div>
+</div>
+<div class="p-5">
+<h4 class="font-label-sm text-on-surface mb-1">Fulbright Program</h4>
+<p class="text-[11px] text-on-surface-variant">Cultural exchange and academic excellence.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-8 right-8 w-14 h-14 rounded-full electric-flow text-on-primary flex items-center justify-center shadow-2xl hover:scale-110 active:scale-90 transition-transform z-50 neon-pulse">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+<script>
+        // Immersive Loading Sequence
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.classList.add('opacity-0');
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 1000);
+            }, 1500);
+        });
+
+        // Carousel Scroll Function
+        function scrollCarousel(distance) {
+            const carousel = document.getElementById('recommended-carousel');
+            carousel.scrollBy({ left: distance, behavior: 'smooth' });
+        }
+
+        // Subtle Parallax for Background Glows
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            
+            const glows = document.querySelectorAll('.bg-primary/20, .bg-tertiary/10');
+            glows.forEach(glow => {
+                glow.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+    </script>
+</body></html>

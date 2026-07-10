@@ -208,67 +208,89 @@ function editCourse(i){
 }
 function showCourses(){
   let el=document.getElementById("courseContainer"); if(!el)return;
-  if(!courses.length){el.innerHTML='<p class="empty">No courses yet.</p>';return;}
+  if(!courses.length){el.innerHTML='<p class="empty text-on-surface-variant text-xs">No courses yet.</p>';return;}
   el.innerHTML=courses.map((c,i)=>{
     let pct=c.total>0?Math.round((c.completed/c.total)*100):0;
-    let cls=pct>=75?"g":pct>=40?"y":"b";
-    let pBadgeCls=c.platform==="youtube"?"yt":c.platform==="udemy"?"ud":"ot";
-    let pBadgeTxt=c.platform==="youtube"?"▶ YouTube":c.platform==="udemy"?"Udemy":"🔗 Link";
+    let pBadgeTxt=c.platform==="youtube"?"YouTube":c.platform==="udemy"?"Udemy":"Link";
+    let pBadgeCls=c.platform==="youtube"?"bg-red-500/10 text-red-400 border border-red-500/10"
+                   :c.platform==="udemy"?"bg-blue-500/10 text-blue-400 border border-blue-500/10"
+                   :"bg-white/10 text-on-surface";
     let nextHtml="";
     if(c.videos?.length&&c.completed<c.videos.length){
-      nextHtml=`<div class="nextBadge">▶ Next: ${c.videos[c.completed]?.title||"Next lesson"}</div>`;
+      nextHtml=`<div class="bg-primary/20 text-primary-fixed px-3 py-1.5 rounded-lg text-[11px] flex items-center gap-2 border border-primary/20">
+        <span class="material-symbols-outlined text-sm">push_pin</span>
+        Last: ${c.videos[c.completed]?.title||"Lesson "+(c.completed+1)}
+      </div>`;
     }else if(c.lastLesson){
-      nextHtml=`<div class="lastBadge">📍 Last: ${c.lastLesson}</div>`;
+      nextHtml=`<div class="bg-primary/20 text-primary-fixed px-3 py-1.5 rounded-lg text-[11px] flex items-center gap-2 border border-primary/20">
+        <span class="material-symbols-outlined text-sm">push_pin</span>
+        Last: ${c.lastLesson}
+      </div>`;
     }else{
-      nextHtml=`<div class="lastBadge newBadge">🆕 Start learning</div>`;
+      nextHtml=`<div class="bg-secondary/10 text-secondary px-3 py-1.5 rounded-lg text-[11px] flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">new_releases</span>
+        Start learning
+      </div>`;
     }
-    return`<div class="cCard">
-      <div class="cCardTop">
-        <div><div class="pBadge ${pBadgeCls}">${pBadgeTxt}</div><h3>${c.name}</h3></div>
-        <span class="pctBadge ${cls}">${pct}%</span>
+    return`<div class="glass-panel glass-edge p-6 rounded-2xl group hover:translate-y-[-4px] transition-all duration-300 shimmer">
+      <div class="flex justify-between items-start mb-6">
+        <span class="${pBadgeCls} px-3 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 uppercase tracking-tighter">
+          <span class="material-symbols-outlined text-[14px]">${c.platform==="youtube"?"play_circle":"link"}</span> ${pBadgeTxt}
+        </span>
+        <span class="text-primary font-extrabold text-lg">${pct}%</span>
       </div>
-      <div class="lessonBar">
-        <div class="lBarTrack"><div class="lBarFill ${cls}" style="width:${pct}%"></div></div>
-        <span class="lCount">${c.completed} / ${c.total} lessons</span>
+      <h3 class="font-headline-md text-xl font-bold text-on-surface mb-2">${c.name}</h3>
+      <div class="mb-6">
+        <div class="flex justify-between items-end mb-2">
+          <span class="text-xs text-on-surface-variant">${c.completed} / ${c.total} lessons</span>
+        </div>
+        <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+          <div class="neon-gradient-primary h-full rounded-full shadow-[0_0_10px_rgba(192,193,255,0.5)]" style="width:${pct}%"></div>
+        </div>
       </div>
-      ${nextHtml}
-      ${c.lastStudied?`<span class="lastSt">Last studied: ${c.lastStudied}</span>`:""}
-      <div class="cBtns">
-        <button class="btnGreen" onclick="completeLessonWithTracking(${i})">✓ Done</button>
-        <button class="btnBlue"  onclick="resumeCourse(${i})">▶ Continue</button>
-        <button class="btnGhost" onclick="undoLesson(${i})">↺</button>
-        <button class="btnGhost" onclick="editCourse(${i})">✏</button>
-        <button class="btnRed"   onclick="deleteCourse(${i})">🗑</button>
+      <div class="flex items-center gap-2 mb-6">
+        ${nextHtml}
+        ${c.lastStudied?`<span class="text-[10px] text-on-surface-variant ml-auto">${c.lastStudied}</span>`:""}
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="flex-1 bg-surface-container-high/40 hover:bg-green-500/10 text-green-400 py-2.5 rounded-lg transition-colors font-label-md text-label-md border border-green-500/10 text-xs" onclick="completeLessonWithTracking(${i})">
+          Done
+        </button>
+        <button class="flex-1 neon-gradient-primary text-on-primary py-2.5 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform text-xs" onclick="resumeCourse(${i})">
+          <span class="material-symbols-outlined text-sm">play_arrow</span> Continue
+        </button>
+      </div>
+      <div class="flex justify-end gap-2 mt-4 border-t border-white/5 pt-3">
+        <button class="p-1.5 rounded-lg bg-white/5 text-xs text-on-surface-variant hover:bg-white/10" onclick="undoLesson(${i})">↺ Undo</button>
+        <button class="p-1.5 rounded-lg bg-white/5 text-xs text-on-surface-variant hover:bg-white/10" onclick="editCourse(${i})">✏ Edit</button>
+        <button class="p-1.5 rounded-lg bg-error-container/10 text-xs text-error hover:bg-error-container/20" onclick="deleteCourse(${i})">🗑 Remove</button>
       </div>
     </div>`;
   }).join("");
 }
 
-// ── COURSE METERS ─────────────────────────────────────────────
 function renderCourseMeters(){
   let el=document.getElementById("courseMeters"); if(!el)return;
-  if(!courses.length){el.innerHTML='<p class="empty">Add a course to see meters.</p>';el.className="metersWrap";return;}
-  let cnt=courses.length, mode=cnt<=3?"ring":cnt<=6?"ringS":"bar";
-  let sz=mode==="ring"?110:75;
-  el.className="metersWrap"+(mode==="bar"?" barMode":"");
-  el.innerHTML=courses.map(c=>{
+  if(!courses.length){el.innerHTML='<p class="empty text-on-surface-variant text-xs">Add a course to see meters.</p>';return;}
+  el.innerHTML=`<div class="grid grid-cols-2 gap-6 w-full">${courses.map(c=>{
     let pct=c.total>0?Math.round((c.completed/c.total)*100):0;
-    return mode==="bar"?barMeter(c,pct):ringMeter(c,pct,sz);
-  }).join("");
+    return ringMeter(c,pct,100);
+  }).join("")}</div>`;
 }
+
 function ringMeter(c,pct,sz){
   let r=(sz/2)-9,ci=2*Math.PI*r,off=ci-(pct/100)*ci,cx=sz/2;
-  let col=pct>=75?"#10b981":pct>=40?"#f59e0b":"#38bdf8";
-  return`<div class="meterItem">
-    <svg width="${sz}" height="${sz}">
-      <circle cx="${cx}" cy="${cx}" r="${r}" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="8"></circle>
-      <circle cx="${cx}" cy="${cx}" r="${r}" fill="none" stroke="${col}" stroke-width="8"
-        stroke-linecap="round" transform="rotate(-90 ${cx} ${cx})"
-        style="stroke-dasharray:${ci};stroke-dashoffset:${off};transition:stroke-dashoffset .9s"></circle>
-      <text x="${cx}" y="${cx+5}" text-anchor="middle" fill="${col}" font-size="${sz<90?11:13}" font-weight="700">${pct}%</text>
-    </svg>
-    <p class="mLbl">${c.name}</p>
-    ${c.lastLesson?`<p class="mSub">▶ ${c.lastLesson}</p>`:""}
+  return`<div class="flex flex-col items-center gap-2">
+    <div class="relative group" style="width:${sz}px; height:${sz}px;">
+      <svg class="w-full h-full transform -rotate-90">
+        <circle class="text-white/5" cx="${cx}" cy="${cx}" r="${r}" fill="transparent" stroke="currentColor" stroke-width="6"></circle>
+        <circle class="text-primary progress-ring-glow transition-all duration-1000" cx="${cx}" cy="${cx}" r="${r}" fill="transparent" stroke="currentColor" stroke-dasharray="${ci}" stroke-dashoffset="${off}" stroke-linecap="round" stroke-width="8"></circle>
+      </svg>
+      <div class="absolute inset-0 flex flex-col items-center justify-center">
+        <span class="font-display-lg text-sm text-primary font-bold">${pct}%</span>
+      </div>
+    </div>
+    <span class="font-label-sm text-[10px] text-on-surface-variant font-bold uppercase tracking-wide text-center">${c.name}</span>
   </div>`;
 }
 function barMeter(c,pct){
@@ -308,15 +330,19 @@ function showTodayTasks(){
   let done=todaysTasks.filter(t=>t.done).length,total=todaysTasks.length;
   let pct=total>0?Math.round((done/total)*100):0;
   if(pCt)pCt.textContent=total-done; if(cCt)cCt.textContent=done;
-  if(sumEl)sumEl.textContent=`${done}/${total} tasks — ${pct}%`;
+  if(sumEl)sumEl.textContent=`${done}/${total} tasks completed — ${pct}%`;
   if(barEl)barEl.style.width=pct+"%";
   todaysTasks.forEach((t,i)=>{
-    let html=`<div class="taskItem${t.done?" done":""}">
-      <input type="checkbox" class="taskCheck" ${t.done?"checked":""} onchange="toggleTask(${i})">
-      <span>${t.name}</span></div>`;
+    let html=`<div class="group flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:border-primary/45 hover:bg-primary/5 transition-all cursor-pointer">
+      <div class="flex items-center gap-4">
+        <input type="checkbox" class="w-4 h-4 rounded border-white/10 bg-surface-container text-primary focus:ring-primary/40 focus:ring-1 cursor-pointer" ${t.done?"checked":""} onchange="toggleTask(${i})">
+        <span class="${t.done ? 'line-through text-on-surface-variant/40' : 'text-on-surface text-sm'}">${t.name}</span>
+      </div>
+    </div>`;
     if(t.done)cEl.innerHTML+=html; else pEl.innerHTML+=html;
   });
-  if(!pEl.innerHTML)pEl.innerHTML='<p class="empty" style="color:var(--green)">🎉 All done!</p>';
+  if(!pEl.innerHTML)pEl.innerHTML='<p class="empty text-xs text-secondary font-bold text-center">🎉 All pending tasks completed!</p>';
+  if(!cEl.innerHTML)cEl.innerHTML='<p class="empty text-xs text-on-surface-variant/40 text-center">No completed tasks yet.</p>';
 }
 function toggleTask(i){
   let was=todaysTasks[i].done; todaysTasks[i].done=!was;
@@ -351,25 +377,35 @@ function applyScholarSearch(){
   });
   if(!q&&!deg&&!cat&&!cty)results=SCHOL_DB.slice(0,10);
   let el=document.getElementById("searchResults"); if(!el)return;
-  if(!results.length){el.innerHTML='<p class="empty">No results. Try a different search.</p>';return;}
+  if(!results.length){el.innerHTML='<p class="empty text-xs text-on-surface-variant text-center col-span-2">No results. Try a different search.</p>';return;}
   el.innerHTML=results.slice(0,12).map(s=>{
     let already=scholarships.some(x=>x.id===s.id);
     let days=Math.ceil((new Date(s.deadline)-new Date())/86400000);
     let urg=days<=30?"🔴":days<=90?"🟡":"🟢";
-    return`<div class="srCard">
-      <div class="srHeader">
-        <span class="srFlag">${s.flag}</span>
-        <div class="srInfo"><h4>${s.name}</h4><span class="srCty">${s.country}</span></div>
-        <div class="srRight">
-          <span class="srDl">${urg} ${days}d left</span>
-          ${already?'<span class="srAdded">✓ Added</span>':`<button class="btnSm btnBlue" onclick="addScholFromDB('${s.id}')">+ Add</button>`}
+    return`<div class="glass-panel rounded-3xl p-6 hover:translate-y-[-4px] transition-all duration-300 cursor-pointer group flex flex-col justify-between">
+      <div>
+        <div class="flex justify-between items-start mb-4">
+          <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+            <span class="text-xl">${s.flag}</span>
+          </div>
+          <div class="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold text-[10px] border border-primary/20">${urg} ${days}d left</div>
         </div>
+        <h3 class="font-headline-lg text-lg font-bold text-on-surface mb-2 group-hover:text-primary transition-colors">${s.name}</h3>
+        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider block mb-3">${s.country}</span>
+        <p class="text-on-surface-variant text-xs mb-4 line-clamp-2">${s.desc}</p>
       </div>
-      <p class="srDesc">${s.desc}</p>
-      <div class="srTags">
-        ${(s.degree||[]).map(d=>`<span class="tag">${d}</span>`).join("")}
-        ${(s.category||[]).slice(0,2).map(c=>`<span class="tag tagC">${c}</span>`).join("")}
-        <span class="tag tagA">💰 ${s.amount}</span>
+      <div>
+        <div class="flex items-center gap-3 py-3 border-y border-white/5 mb-4 text-[11px]">
+          <div class="flex-1">
+            <p class="text-[9px] text-on-surface-variant uppercase">Degree</p>
+            <p class="font-bold text-on-surface truncate">${s.degree.join(", ")}</p>
+          </div>
+          <div class="flex-1">
+            <p class="text-[9px] text-on-surface-variant uppercase">Grant</p>
+            <p class="font-bold text-on-surface truncate">${s.amount}</p>
+          </div>
+        </div>
+        ${already?'<span class="block text-center py-2.5 text-xs text-green-400 font-bold bg-green-500/10 rounded-xl border border-green-500/10">✓ Tracked</span>':`<button class="w-full py-2.5 rounded-xl neon-gradient-primary text-on-primary font-bold text-xs hover:scale-[1.02] transition-transform" onclick="addScholFromDB('${s.id}')">+ Track Scholarship</button>`}
       </div>
     </div>`;
   }).join("");
@@ -389,30 +425,49 @@ function addScholFromDB(id){
 }
 function showScholarships(){
   let el=document.getElementById("scholarshipContainer"); if(!el)return;
-  if(!scholarships.length){el.innerHTML='<p class="empty">No scholarships yet — search above.</p>';return;}
+  if(!scholarships.length){el.innerHTML='<p class="empty text-xs text-on-surface-variant text-center col-span-3">No scholarships tracked yet — search above to add some.</p>';return;}
   el.innerHTML=scholarships.map((s,i)=>{
     let done=s.completed.length,total=s.requirements.length;
     let pct=total>0?Math.round((done/total)*100):0;
     let days=s.deadline?Math.max(0,Math.ceil((new Date(s.deadline)-new Date())/86400000)):null;
     let urg=days!=null?(days<=30?"🔴":days<=90?"🟡":"🟢"):"";
-    return`<div class="sCard">
-      <div class="sCardHdr"><span class="sFlag">${s.flag||"🎓"}</span>
-        <div><h3>${s.name}</h3>
-          <p class="sMeta">${s.country}${days!=null?` · ${urg} ${days} days left`:""}</p>
+    return`<div class="glass-panel glass-edge p-6 rounded-3xl group hover:translate-y-[-4px] transition-all duration-300 shimmer">
+      <div class="flex justify-between items-start mb-4">
+        <div class="flex gap-3">
+          <span class="text-2xl">${s.flag||"🎓"}</span>
+          <div>
+            <h3 class="font-bold text-sm text-on-surface line-clamp-1">${s.name}</h3>
+            <p class="text-[10px] text-on-surface-variant">${s.country}${days!=null?` · ${urg} ${days} days left`:""}</p>
+          </div>
         </div>
       </div>
-      <div class="sProgress">
-        <div class="sBarTrack"><div class="sBarFill" style="width:${pct}%"></div></div>
-        <p class="sPct">${done}/${total} · ${pct}%</p>
+      
+      <div class="mb-4">
+        <div class="flex justify-between items-center text-[10px] text-on-surface-variant mb-1">
+          <span>Requirements Completed</span>
+          <span class="font-bold text-primary">${done}/${total} (${pct}%)</span>
+        </div>
+        <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+          <div class="neon-gradient-primary h-full rounded-full shadow-[0_0_10px_rgba(192,193,255,0.5)]" style="width:${pct}%"></div>
+        </div>
       </div>
-      <button class="sToggle" onclick="toggleExpand(${i})">${s.expanded?"▼ Hide":"▶ Show"} requirements</button>
-      ${s.expanded?`<div class="reqList">${s.requirements.map(r=>`
-        <div class="reqItem">
-          <input type="checkbox" class="scholChk" ${s.completed.includes(r)?"checked":""}
-            onchange="toggleReq(${i},'${r.replace(/'/g,"\\'")}')">
-          <span>${r}</span>
-        </div>`).join("")}</div>`:""}
-      <button class="btnDanger" onclick="deleteSchol(${i})">🗑 Remove</button>
+      
+      <button class="w-full text-center py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-xs text-on-surface font-semibold mb-3 transition-colors" onclick="toggleExpand(${i})">
+        ${s.expanded?"▼ Hide":"▶ Show"} Checklist
+      </button>
+      
+      ${s.expanded?`<div class="space-y-2 mb-4 bg-black/10 p-3 rounded-2xl border border-white/5 max-h-[160px] overflow-y-auto">
+        ${s.requirements.map(r=>`
+          <div class="flex items-center gap-3">
+            <input type="checkbox" class="w-3.5 h-3.5 rounded border-white/10 bg-surface text-primary focus:ring-primary/40 cursor-pointer" ${s.completed.includes(r)?"checked":""}
+              onchange="toggleReq(${i},'${r.replace(/'/g,"\\'")}')">
+            <span class="text-[11px] ${s.completed.includes(r) ? 'line-through text-on-surface-variant/40' : 'text-on-surface-variant'}">${r}</span>
+          </div>`).join("")}
+      </div>`:""}
+      
+      <button class="w-full py-2 rounded-xl bg-error-container/10 border border-error/20 text-error hover:bg-error-container/20 text-[11px] font-bold transition-all" onclick="deleteSchol(${i})">
+        🗑 Remove Tracker
+      </button>
     </div>`;
   }).join("");
 }
@@ -437,20 +492,22 @@ function renderRecommendation(){
     sc+=cp*0.3; sc+=Math.min(streakData.length,30)*1.2;
     sc+=Math.floor(userXP/100)*2; sc+=Math.random()*4;
     return{...s,match:Math.min(99,Math.round(sc))};
-  }).sort((a,b)=>b.match-a.match).slice(0,4);
-  el.innerHTML=`<div class="recGrid">${scored.map((s,i)=>`
-    <div class="recCard${i===0?" top":""}">
-      <div class="recL"><span class="recFlag">${s.flag}</span>
-        <div><div class="recName">${i===0?"🏆 ":""}${s.name}</div>
-          <div class="recCty">${s.country} · ${s.degree.join(", ")}</div>
-        </div>
+  }).sort((a,b)=>b.match-a.match).slice(0,3);
+  
+  el.innerHTML=scored.map((s,i)=>{
+    let already=scholarships.some(x=>x.id===s.id);
+    return`<div class="glass-panel rounded-3xl p-6 hover:translate-y-[-4px] transition-all duration-300 group flex flex-col justify-between border-glass">
+      <div class="flex justify-between items-start mb-4">
+        <span class="text-2xl">${s.flag}</span>
+        <span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/20 font-bold text-[10px] animate-pulse">${s.match}% MATCH</span>
       </div>
-      <div class="recScore">
-        <div class="recPct" style="color:${i===0?"var(--green)":i===1?"var(--cyan)":"var(--sub)"}">${s.match}%</div>
-        <div class="recLbl">match</div>
-        ${scholarships.some(x=>x.id===s.id)?'<div class="recAdded">✓ Added</div>':`<button class="btnSm btnBlue" onclick="addScholFromDB('${s.id}')">+ Add</button>`}
+      <div>
+        <h4 class="font-bold text-sm text-on-surface mb-1 group-hover:text-secondary transition-colors">${s.name}</h4>
+        <p class="text-[10px] text-on-surface-variant mb-4">${s.country} · ${s.degree.join(", ")}</p>
       </div>
-    </div>`).join("")}</div>`;
+      ${already?'<span class="block text-center py-2 text-xs text-green-400 font-bold bg-green-500/10 rounded-xl border border-green-500/10">✓ Added</span>':`<button class="w-full py-2 rounded-xl border border-white/10 hover:border-secondary/40 text-xs font-bold text-on-surface hover:bg-white/5 transition-all" onclick="addScholFromDB('${s.id}')">+ Add Tracker</button>`}
+    </div>`;
+  }).join("");
 }
 
 // ── DEADLINES ─────────────────────────────────────────────────
@@ -465,22 +522,41 @@ function addDeadline(){
 }
 function showDeadlines(){
   let el=document.getElementById("deadlineContainer"); if(!el)return;
-  if(!deadlines.length){el.innerHTML='<p class="empty">No deadlines yet.</p>';return;}
+  if(!deadlines.length){el.innerHTML='<p class="empty text-xs text-on-surface-variant text-center col-span-2">No deadlines tracked yet.</p>';return;}
   let sorted=[...deadlines].sort((a,b)=>new Date(a.date)-new Date(b.date));
   el.innerHTML=sorted.map((d,i)=>{
     let days=Math.max(0,Math.ceil((new Date(d.date)-new Date())/86400000));
-    let cls=days<=3?"u":days<=14?"up":"s";
-    let pcls=days<=3?"urgent":days<=14?"upcoming":"";
-    return`<div class="planCard ${pcls}">
-      <div class="dRow2">
-        <div><h3>${d.name}</h3><p>📅 ${d.date}</p></div>
-        <div class="dDays ${cls}">${days}d</div>
-        <button class="btnRed btnSm" onclick="deleteDeadline(${i})">🗑</button>
+    let colorCls=days<=3?"text-error bg-error/10 border-error/20" : days<=14?"text-amber-400 bg-amber-400/10 border-amber-400/20" : "text-green-400 bg-green-400/10 border-green-400/20";
+    let glowCls=days<=3?"urgent-glow" : days<=14?"border-amber-400/20" : "border-green-400/10";
+    return`<div class="glass-panel p-6 rounded-2xl ${glowCls} flex items-center justify-between hover:translate-x-1 transition-transform">
+      <div class="flex items-center gap-4 flex-1">
+        <div class="w-14 h-14 rounded-xl flex flex-col items-center justify-center font-bold text-center ${colorCls} border">
+          <span class="text-lg leading-none">${days}</span>
+          <span class="text-[8px] tracking-wide mt-1 uppercase">DAYS</span>
+        </div>
+        <div>
+          <h4 class="text-sm font-bold text-on-surface">${d.name}</h4>
+          <div class="flex items-center gap-1 text-[11px] text-on-surface-variant mt-1">
+            <span class="material-symbols-outlined text-xs">event</span>
+            <span>${d.date}</span>
+          </div>
+        </div>
       </div>
+      <button class="p-2.5 rounded-xl bg-error-container/10 border border-error/20 text-error hover:bg-error-container/20 transition-colors" onclick="deleteDeadline(${i})">
+        <span class="material-symbols-outlined text-sm block">delete</span>
+      </button>
     </div>`;
   }).join("");
 }
-function deleteDeadline(i){deadlines.splice(i,1);saveData();showDeadlines();refreshDashboard();}
+function deleteDeadline(i){
+  let sorted=[...deadlines].sort((a,b)=>new Date(a.date)-new Date(b.date));
+  let target=sorted[i];
+  if(target){
+    let idx=deadlines.findIndex(d=>d.name===target.name && d.date===target.date);
+    if(idx!==-1) deadlines.splice(idx,1);
+  }
+  saveData();showDeadlines();refreshDashboard();
+}
 
 // ── STREAK ────────────────────────────────────────────────────
 function updateStreak(){
@@ -520,12 +596,12 @@ function drawChart(){
         label:"Study %",data:studyData,
         backgroundColor:ctx=>{
           let g=ctx.chart.ctx.createLinearGradient(0,0,0,240);
-          g.addColorStop(0,"rgba(56,189,248,.85)");
-          g.addColorStop(1,"rgba(99,102,241,.4)");
+          g.addColorStop(0,"rgba(192, 193, 255, 0.85)");
+          g.addColorStop(1,"rgba(76, 215, 246, 0.3)");
           return g;
         },
         borderRadius:10,barThickness:34,
-        borderColor:"rgba(56,189,248,.6)",borderWidth:1
+        borderColor:"rgba(192, 193, 255, 0.6)",borderWidth:1
       }]
     },
     options:{
@@ -533,7 +609,7 @@ function drawChart(){
       plugins:{
         legend:{display:false},
         tooltip:{callbacks:{label:c=>` ${c.raw}% study progress`},
-          backgroundColor:"rgba(10,20,40,.9)",borderColor:"rgba(56,189,248,.3)",borderWidth:1}
+          backgroundColor:"rgba(11, 19, 38, 0.9)",borderColor:"rgba(192, 193, 255, 0.3)",borderWidth:1}
       },
       scales:{
         x:{grid:{color:"rgba(255,255,255,.04)"},ticks:{color:"rgba(255,255,255,.4)",font:{size:12}}},
@@ -593,17 +669,37 @@ function calcProdScore(){
 function renderProdScore(){
   let el=document.getElementById("prodScoreBox"); if(!el)return;
   let s=calcProdScore();
-  let col=s>=80?"var(--green)":s>=60?"var(--cyan)":s>=40?"var(--amber)":"var(--red)";
-  let lbl=s>=80?"Excellent 🚀":s>=60?"Good 📈":s>=40?"Moderate ⚡":"Building 🌱";
   let done=todaysTasks.filter(t=>t.done).length;
-  el.innerHTML=`<div class="prodScoreWrap">
-    <div class="prodNum" style="color:${col}">${s}</div>
-    <div class="prodLbl">${lbl}</div>
-    <div class="prodRows">
-      <div class="prodRow"><span>Tasks today</span><span>${done}/${todaysTasks.length}</span></div>
-      <div class="prodRow"><span>Eligibility</span><span>${calcEligibility()}%</span></div>
-      <div class="prodRow"><span>Streak</span><span>${streakData.length} days</span></div>
-      <div class="prodRow"><span>XP earned</span><span>${userXP}</span></div>
+  let statusText=s>=80?"Peak Flow 🚀":s>=60?"Optimal 📈":s>=40?"Building ⚡":"Starting 🌱";
+  
+  el.innerHTML=`<div class="flex flex-col items-center justify-center relative overflow-hidden w-full">
+    <div class="relative w-56 h-56 mb-6">
+      <svg class="w-full h-full transform -rotate-90">
+        <circle class="text-white/5" cx="112" cy="112" fill="transparent" r="96" stroke="currentColor" stroke-width="6"></circle>
+        <circle class="transition-all duration-[2000ms] ease-out text-primary progress-ring-glow" cx="112" cy="112" fill="transparent" r="96" stroke="currentColor" stroke-dasharray="603" stroke-dashoffset="${Math.round(603 - (s/100)*603)}" stroke-linecap="round" stroke-width="8"></circle>
+      </svg>
+      <div class="absolute inset-0 flex flex-col items-center justify-center">
+        <span class="font-display-lg text-4xl text-white font-extrabold">${s}</span>
+        <span class="text-secondary font-bold text-[10px] uppercase mt-1">${statusText}</span>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 w-full text-left max-w-xs text-[11px] mt-2">
+      <div class="p-3 rounded-2xl bg-white/5 border border-white/5 flex flex-col">
+        <span class="text-[9px] text-on-surface-variant uppercase mb-1">Tasks Done</span>
+        <span class="text-xs font-bold text-white">${done}/${todaysTasks.length}</span>
+      </div>
+      <div class="p-3 rounded-2xl bg-white/5 border border-white/5 flex flex-col">
+        <span class="text-[9px] text-on-surface-variant uppercase mb-1">Streak</span>
+        <span class="text-xs font-bold text-white">${streakData.length} days</span>
+      </div>
+      <div class="p-3 rounded-2xl bg-white/5 border border-white/5 flex flex-col">
+        <span class="text-[9px] text-on-surface-variant uppercase mb-1">XP Points</span>
+        <span class="text-xs font-bold text-white">${userXP}</span>
+      </div>
+      <div class="p-3 rounded-2xl bg-white/5 border border-white/5 flex flex-col">
+        <span class="text-[9px] text-on-surface-variant uppercase mb-1">Readiness</span>
+        <span class="text-xs font-bold text-white">${calcEligibility()}%</span>
+      </div>
     </div>
   </div>`;
 }
@@ -630,6 +726,16 @@ function calcEligibility(){
   let done=todaysTasks.filter(t=>t.done).length;
   if(todaysTasks.length>0)s+=(done/todaysTasks.length)*10;
   return Math.round(s);
+}
+function applyTheme(){
+  darkMode=true;
+  document.documentElement.classList.add("dark");
+  document.documentElement.classList.remove("light");
+  document.body.classList.remove("light");
+}
+function toggleDarkMode(){
+  darkMode=true;
+  applyTheme();
 }
 
 // ── PROACTIVE NOTIFICATIONS ───────────────────────────────────
@@ -660,16 +766,21 @@ function showXP(){
 
 // ── PROFILE ───────────────────────────────────────────────────
 function applyTheme(){
-  document.body.classList.toggle("light",!darkMode);
-  let t=document.getElementById("darkModeToggle"); if(t)t.checked=darkMode;
+  darkMode=true;
+  document.documentElement.classList.add("dark");
+  document.documentElement.classList.remove("light");
+  document.body.classList.remove("light");
 }
 function toggleDarkMode(){
-  let t=document.getElementById("darkModeToggle");
-  darkMode=t?t.checked:!darkMode; applyTheme(); saveData();
+  darkMode=true;
+  applyTheme();
 }
 function updateProfileDisplay(){
-  let n=document.getElementById("userName"); if(n)n.textContent=username||"User";
+  let n=document.getElementById("userName"); if(n)n.textContent=username||"Alex Rivera";
+  let wTitle=document.getElementById("welcomeBackTitle"); if(wTitle)wTitle.textContent=`Welcome back, ${username||"Alex Rivera"}`;
   let i=document.getElementById("usernameInput"); if(i)i.value=username;
+  let sName=document.getElementById("sidebarName"); if(sName)sName.textContent=username||"Alex Rivera";
+  let sSub=document.getElementById("sidebarSub"); if(sSub)sSub.textContent="Premium Plan";
 }
 function saveProfile(){
   let i=document.getElementById("usernameInput");
@@ -712,8 +823,8 @@ async function sendMessage(){
   if(!txt)return;
   let chat=document.getElementById("chatContainer");
   if(execCmd(txt)){if(inp)inp.value="";return;}
-  chat.innerHTML+=`<div class="userMsg">${txt}</div>`;
-  chat.innerHTML+=`<div class="aiMsg" id="aiThinking"><span class="aiAv">🤖</span>Thinking...</div>`;
+  chat.innerHTML+=`<div class="userMsg self-end bg-gradient-to-r from-primary to-primary-container text-on-primary p-4 rounded-2xl max-w-[80%] text-xs font-semibold self-end shadow-sm align-right ml-auto">${txt}</div>`;
+  chat.innerHTML+=`<div class="aiMsg flex gap-3 p-4 rounded-2xl bg-white/5 text-xs text-on-surface-variant leading-relaxed" id="aiThinking"><span class="aiAv text-base">🤖</span><div>Thinking...</div></div>`;
   chat.scrollTop=chat.scrollHeight; if(inp)inp.value="";
   
  try {
@@ -739,17 +850,14 @@ async function sendMessage(){
 });
 
 const data = await res.json();
-console.log(data.choices[0].message.content);
-const thinking = document.getElementById("aiThink");
+const thinking = document.getElementById("aiThinking");
 if(thinking) thinking.remove();
-
-console.log(data);
 
 if(data.error){
     chat.innerHTML += `
-    <div class="aiMsg">
-        <span class="aiAv">🤖</span>
-        ${data.error}
+    <div class="aiMsg flex gap-3 p-4 rounded-2xl bg-error-container/10 border border-error/20 text-xs text-error leading-relaxed">
+        <span class="aiAv text-base">🤖</span>
+        <div>${data.error}</div>
     </div>`;
     return;
 }
@@ -759,25 +867,23 @@ data.choices?.[0]?.message?.content ??
 "No response received.";
 
 chat.innerHTML += `
-<div class="aiMsg">
-    <span class="aiAv">🤖</span>
-    ${reply}
+<div class="aiMsg flex gap-3 p-4 rounded-2xl bg-white/5 text-xs text-on-surface-variant leading-relaxed">
+    <span class="aiAv text-base">🤖</span>
+    <div class="prose prose-invert text-xs">${reply.replace(/\n/g, "<br>")}</div>
 </div>`;
 
 chat.scrollTop = chat.scrollHeight;
     }
 
 catch(err){
-
     console.error(err);
-
-    const thinking = document.getElementById("aiThink");
+    const thinking = document.getElementById("aiThinking");
     if(thinking) thinking.remove();
 
     chat.innerHTML += `
-    <div class="aiMsg">
-        <span class="aiAv">🤖</span>
-        Connection failed.
+    <div class="aiMsg flex gap-3 p-4 rounded-2xl bg-error-container/10 border border-error/20 text-xs text-error leading-relaxed">
+        <span class="aiAv text-base">🤖</span>
+        <div>Connection failed. Please try again.</div>
     </div>`;
 }
 }
@@ -821,92 +927,141 @@ function renderAISide(){
 
 // ── DASHBOARD ─────────────────────────────────────────────────
 function renderDashboard(){
-  // Focus
+  // 1. Focus
   let fEl=document.getElementById("todayFocus");
   if(fEl){
-    let items=todaysTasks.filter(t=>!t.done).slice(0,4);
-    fEl.innerHTML=items.length
-      ?items.map(t=>`<div class="focusItem"><span class="fDot"></span>${t.name}</div>`).join("")
-      :'<div class="focusItem"><span class="fDot" style="background:var(--green)"></span>🎉 All done!</div>';
+    let items=todaysTasks.slice(0,4); // slice first 4 tasks
+    if(!items.length) {
+      fEl.innerHTML='<div class="flex items-center gap-3 p-4 text-xs text-on-surface-variant font-bold">🎉 All tasks done!</div>';
+    } else {
+      fEl.innerHTML=items.map((t, i)=>{
+        let name = t.name;
+        let icon = "description", bg = "bg-blue-50 dark:bg-blue-950/40", textCol = "text-blue-500";
+        let sub = "Daily checklist task";
+        
+        let cName = name.toLowerCase();
+        if (cName.includes("essay") || cName.includes("draft") || cName.includes("scholarship")) {
+          icon = "description"; bg = "bg-blue-50 dark:bg-blue-950/40"; textCol = "text-blue-500";
+          sub = "Global Excellence Award · Due tomorrow";
+        } else if (cName.includes("calculus") || cName.includes("math") || cName.includes("prep") || cName.includes("course") || cName.includes("study")) {
+          icon = "menu_book"; bg = "bg-slate-50 dark:bg-slate-900/40"; textCol = "text-slate-500";
+          sub = "Module 4: Triple Integrals · 2:00 PM";
+        } else if (cName.includes("request") || cName.includes("recommendation") || cName.includes("email") || cName.includes("ask")) {
+          icon = "mail"; bg = "bg-amber-50 dark:bg-amber-950/40"; textCol = "text-amber-500";
+          sub = "Email Prof. Henderson regarding Rhodes Fellowship";
+        }
+        
+        return `<div class="flex items-center justify-between p-3 rounded-2xl bg-slate-50/50 dark:bg-white/5 border border-slate-100 dark:border-white/5 hover:border-primary/20 hover:bg-slate-100/50 transition-all cursor-pointer" onclick="toggleTask(${todaysTasks.indexOf(t)})">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl ${bg} flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined ${textCol} text-base">${icon}</span>
+            </div>
+            <div>
+              <div class="text-sm font-bold text-on-surface ${t.done?'line-through opacity-50':''}">${name}</div>
+              <div class="text-[10px] text-on-surface-variant">${sub}</div>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-on-surface-variant text-sm">${t.done?'check_circle':'chevron_right'}</span>
+        </div>`;
+      }).join("");
+    }
   }
-  // Quick Status
-  let qs=document.getElementById("quickStatus");
-  if(qs){
-    let done=todaysTasks.filter(t=>t.done).length;
-    qs.innerHTML=`
-      <div class="qStat"><div class="qsIco">✅</div><div class="qsLbl">Tasks</div><div class="qsVal">${done}/${todaysTasks.length}</div></div>
-      <div class="qStat"><div class="qsIco">📚</div><div class="qsLbl">Courses</div><div class="qsVal">${courses.length}</div></div>
-      <div class="qStat"><div class="qsIco">⏳</div><div class="qsLbl">Deadlines</div><div class="qsVal">${deadlines.length}</div></div>
-      <div class="qStat"><div class="qsIco">🔥</div><div class="qsLbl">Streak</div><div class="qsVal">${streakData.length}</div></div>`;
+
+  // 2. Readiness Circle Gauge & Progress
+  let sc = calcEligibility();
+  let rCircle = document.getElementById("readinessProgressCircle");
+  if(rCircle) {
+    let r = 68;
+    let ci = 2 * Math.PI * r;
+    let off = ci - (sc / 100) * ci;
+    rCircle.style.strokeDasharray = ci;
+    rCircle.style.strokeDashoffset = off;
   }
-  // AI suggestion
-  let aiEl=document.getElementById("aiSuggestionDashboard");
-  if(aiEl){
-    let pend=todaysTasks.filter(t=>!t.done);
-    let tL=0,dL=0; courses.forEach(c=>{tL+=c.total;dL+=c.completed;});
-    let cp=tL>0?Math.round((dL/tL)*100):0;
-    let near=deadlines.length?[...deadlines].sort((a,b)=>new Date(a.date)-new Date(b.date))[0]:null;
-    let msg;
-    let nearDays=near?Math.ceil((new Date(near.date)-new Date())/86400000):null;
-    if(nearDays!=null&&nearDays<=7)msg=`⚠ "${near.name}" deadline in ${nearDays} days!`;
-    else if(pend.length)msg=`${pend.length} pending tasks. Next: "${pend[0].name}"`;
-    else if(cp>0)msg=`Courses at ${cp}%. Keep the momentum!`;
-    else msg="Add a course or scholarship to get personalised tips.";
-    aiEl.innerHTML=`<div class="aiSuggBox">🤖 ${msg}</div>`;
+  let rScoreVal = document.getElementById("readinessScoreVal");
+  if(rScoreVal) {
+    rScoreVal.textContent = sc + "%";
   }
-  // Course snapshot
-  let csEl=document.getElementById("courseDashboard");
-  if(csEl){
-    if(!courses.length){csEl.innerHTML='<p class="empty">No courses yet.</p>';}
-    else csEl.innerHTML=`<div class="cSnap">${courses.slice(0,3).map(c=>{
-      let pct=c.total>0?Math.round((c.completed/c.total)*100):0;
-      return`<div class="cSnapItem">
-        <div class="cSnapName">${c.name}${c.lastLesson?`<span class="cTag">▶ ${c.lastLesson}</span>`:""}</div>
-        <div class="cSnapBar"><div class="cSnapFill" style="width:${pct}%"></div></div>
-        <div class="cSnapPct">${pct}%</div>
-      </div>`;
-    }).join("")}</div>`;
+
+  // 3. Recommended scholarship details
+  let recTitle = document.getElementById("recommendedTitle");
+  let recSub = document.getElementById("recommendedSub");
+  if (recTitle && recSub) {
+    let best = SCHOL_DB[0];
+    let maxSc = 0;
+    SCHOL_DB.forEach(s => {
+      let score = 0;
+      let ex = scholarships.find(x => x.id === s.id);
+      if(ex) score += 50;
+      else score += 20;
+      if (score > maxSc) {
+        maxSc = score;
+        best = s;
+      }
+    });
+    recTitle.textContent = best.name;
+    recSub.textContent = best.country + " · " + (best.degree ? best.degree[0] : "Grant");
   }
-  // Eligibility ring
-  let eigEl=document.getElementById("eligibilityDashboard");
-  if(eigEl){
-    let sc=calcEligibility(),r=38,ci=2*Math.PI*r,off=ci-(sc/100)*ci;
-    let col=sc>=70?"var(--green)":sc>=40?"var(--amber)":"var(--cyan)";
-    eigEl.innerHTML=`<div style="position:relative;width:90px;height:90px">
-      <svg width="90" height="90">
-        <circle cx="45" cy="45" r="${r}" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="8"></circle>
-        <circle cx="45" cy="45" r="${r}" fill="none" stroke="${col}" stroke-width="8" stroke-linecap="round"
-          transform="rotate(-90 45 45)" style="stroke-dasharray:${ci};stroke-dashoffset:${off};transition:stroke-dashoffset .9s"></circle>
-      </svg>
-      <div class="eligCenter"><span class="eligPct">${sc}%</span><span class="eligLbl">Ready</span></div>
-    </div>
-    <span class="eligStatus" style="color:${col}">${sc>=70?"High":sc>=40?"Medium":"Low"}</span>`;
+
+  // 4. Update counter chips
+  let dCountTasks = document.getElementById("dashCountTasks");
+  if(dCountTasks) dCountTasks.textContent = todaysTasks.filter(t => !t.done).length;
+  let dCountCourses = document.getElementById("dashCountCourses");
+  if(dCountCourses) dCountCourses.textContent = courses.length;
+  let dCountDeadlines = document.getElementById("dashCountDeadlines");
+  if(dCountDeadlines) dCountDeadlines.textContent = deadlines.length;
+  let dCountStreak = document.getElementById("dashCountStreak");
+  if(dCountStreak) dCountStreak.textContent = streakData.length;
+
+  // 5. Course Snapshot Grid
+  let cSnapEl = document.getElementById("courseContainerDashboard");
+  if(cSnapEl){
+    if(!courses.length){
+      cSnapEl.innerHTML = '<p class="empty col-span-3 text-center text-on-surface-variant text-xs p-8">No courses active yet.</p>';
+    } else {
+      cSnapEl.innerHTML = courses.slice(0,3).map(c => {
+        let pct = c.total > 0 ? Math.round((c.completed / c.total) * 100) : 0;
+        let img = "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&q=80";
+        let prof = "Academic Instructor";
+        
+        let cName = c.name.toLowerCase();
+        if (cName.includes("fluid") || cName.includes("mechanic")) {
+          img = "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&q=80";
+          prof = "Dr. Sarah Jenkins";
+        } else if (cName.includes("calculus") || cName.includes("math")) {
+          img = "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&q=80";
+          prof = "Prof. Robert Chen";
+        } else if (cName.includes("ai") || cName.includes("intelligence") || cName.includes("machine")) {
+          img = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&q=80";
+          prof = "Dr. Elena Rodriguez";
+        }
+        
+        return `<div class="glass-panel rounded-3xl overflow-hidden hover:translate-y-[-4px] transition-all duration-300 flex flex-col justify-between">
+          <div class="h-32 w-full overflow-hidden relative">
+            <img src="${img}" class="w-full h-full object-cover" alt="${c.name}">
+          </div>
+          <div class="p-5 flex-grow flex flex-col justify-between">
+            <div class="mb-4">
+              <h4 class="font-bold text-sm text-on-surface line-clamp-1">${c.name}</h4>
+              <p class="text-[10px] text-on-surface-variant mt-0.5">${prof}</p>
+            </div>
+            <div>
+              <div class="w-full h-1.5 bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden mb-2">
+                <div class="h-full bg-primary" style="width: ${pct}%;"></div>
+              </div>
+              <div class="flex justify-between items-center text-[10px] font-semibold">
+                <span class="text-on-surface-variant">${c.completed}/${c.total} Lessons</span>
+                <span class="text-primary font-bold">${pct}%</span>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      }).join("");
+    }
   }
-  // Task snapshot
-  let tsEl=document.getElementById("taskSnapshotDash");
-  if(tsEl){
-    let done=todaysTasks.filter(t=>t.done).length,rem=todaysTasks.length-done;
-    tsEl.innerHTML=`<div class="tSnapGrid">
-      <div class="tSnapRow"><span>Completed</span><span class="tSnapN g">${done}</span></div>
-      <div class="tSnapRow"><span>Remaining</span><span class="tSnapN a">${rem}</span></div>
-    </div>`;
-  }
-  // Deadlines
-  let dlEl=document.getElementById("deadlineDashboard");
-  if(dlEl){
-    if(!deadlines.length){dlEl.innerHTML='<p class="empty">No deadlines 🎉</p>';}
-    else dlEl.innerHTML=[...deadlines].sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,4).map(d=>{
-      let days=Math.max(0,Math.ceil((new Date(d.date)-new Date())/86400000));
-      let cls=days<=3?"urgent":days<=14?"upcoming":"";
-      return`<div class="dChip ${cls}">
-        <span class="dChipDays" style="color:${days<=3?"var(--red)":days<=14?"var(--amber)":"var(--green)"}">${days}d</span>
-        <div><div class="dChipName">${d.name}</div><div class="dChipDate">📅 ${d.date}</div></div>
-      </div>`;
-    }).join("");
-  }
+
   // update counts
-  let nc=document.getElementById("notificationCount");
-  if(nc)nc.textContent=todaysTasks.filter(t=>!t.done).length+deadlines.length;
+  let nc = document.getElementById("notificationCount");
+  if(nc) nc.textContent = todaysTasks.filter(t => !t.done).length + deadlines.length;
   showXP(); updateProfileDisplay();
 }
 
@@ -926,4 +1081,36 @@ window.onload=function(){
     let ld=document.getElementById("loadingScreen");
     if(ld)ld.style.display="none";
   },1400);
-  };
+};
+
+function applyGlobalSearch(){
+  let q=(document.getElementById("globalSearch")?.value||"").toLowerCase().trim();
+  
+  // 1. Sync & Search on Scholarship Discovery Feed
+  let sInp=document.getElementById("scholarSearch");
+  if(sInp){
+    sInp.value=q;
+    applyScholarSearch();
+  }
+  
+  // 2. Filter courses list on Courses page
+  let cCards=document.querySelectorAll("#courseContainer > div");
+  cCards.forEach(card=>{
+    let txt=card.textContent.toLowerCase();
+    card.style.display=txt.includes(q)?"":"none";
+  });
+  
+  // 3. Filter pending/completed tasks checklist on Tasks page
+  let tItems=document.querySelectorAll("#pendingTasks > div, #completedTasks > div");
+  tItems.forEach(item=>{
+    let txt=item.textContent.toLowerCase();
+    item.style.display=txt.includes(q)?"":"none";
+  });
+  
+  // 4. Filter milestones checklist on Deadlines page
+  let dCards=document.querySelectorAll("#deadlineContainer > div");
+  dCards.forEach(card=>{
+    let txt=card.textContent.toLowerCase();
+    card.style.display=txt.includes(q)?"":"none";
+  });
+}

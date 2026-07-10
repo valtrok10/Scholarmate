@@ -1,391 +1,977 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>ScholarMate AI</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScholarMate AI | Premium Academic & Scholarship Portal</title>
+  
+  <!-- Tailwind CSS & Config -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#2f2ebe",
+            "surface-dim": "#0b1326",
+            "on-error-container": "#ffdad6",
+            "tertiary": "#4cd7f6",
+            "primary-fixed": "#e1e0ff",
+            "on-secondary-container": "#d6a9ff",
+            "on-surface": "#dae2fd",
+            "primary-container": "#8083ff",
+            "error-container": "#93000a",
+            "on-tertiary-container": "#002f38",
+            "secondary": "#ddb7ff",
+            "surface-tint": "#c0c1ff",
+            "on-tertiary-fixed-variant": "#004e5c",
+            "on-primary-fixed": "#07006c",
+            "tertiary-fixed-dim": "#4cd7f6",
+            "on-primary": "#1000a9",
+            "secondary-fixed": "#f0dbff",
+            "surface-container-lowest": "#060e20",
+            "surface-container": "#171f33",
+            "error": "#ffb4ab",
+            "surface": "#0b1326",
+            "on-secondary": "#490080",
+            "background": "#0b1326",
+            "primary-fixed-dim": "#c0c1ff",
+            "on-primary-container": "#0d0096",
+            "secondary-container": "#6f00be",
+            "surface-container-highest": "#2d3449",
+            "secondary-fixed-dim": "#ddb7ff",
+            "tertiary-fixed": "#acedff",
+            "surface-variant": "#2d3449",
+            "inverse-surface": "#dae2fd",
+            "on-secondary-fixed-variant": "#6900b3",
+            "primary": "#c0c1ff",
+            "inverse-primary": "#494bd6",
+            "on-background": "#dae2fd",
+            "surface-bright": "#31394d",
+            "outline-variant": "#464554",
+            "on-tertiary-fixed": "#001f26",
+            "inverse-on-surface": "#283044",
+            "on-error": "#690005",
+            "surface-container-high": "#222a3d",
+            "on-tertiary": "#003640",
+            "on-secondary-fixed": "#2c0051",
+            "tertiary-container": "#009eb9",
+            "surface-container-low": "#131b2e",
+            "outline": "#908fa0",
+            "on-surface-variant": "#c7c4d7"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "base": "8px",
+            "margin-sm": "16px",
+            "margin-lg": "64px",
+            "margin-md": "32px",
+            "container-padding": "24px",
+            "gutter": "20px"
+          },
+          "fontFamily": {
+            "label-sm": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+            "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+            "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+            "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Geist:wght@400;600&family=Hanken+Grotesk:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  
+  <!-- Global Stylesheet -->
   <link rel="stylesheet" href="style.css">
+  
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
+<body class="font-body-md text-on-surface bg-surface min-h-screen relative overflow-x-hidden antialiased">
 
-<!-- HAMBURGER + OVERLAY (mobile) -->
-<button class="hamburger" id="hamburger" onclick="toggleSidebar()">☰</button>
-<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+  <!-- HAMBURGER + OVERLAY (mobile navigation) -->
+  <button class="hamburger z-50 text-white" id="hamburger" onclick="toggleSidebar()">☰</button>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-<!-- ═══════════════════ LOADING ═══════════════════ -->
-<div id="loadingScreen">
-  <div class="loaderWrap">
-    <div class="loaderRing"></div>
-    <div class="loaderLogo">🎓</div>
+  <!-- ═══════════════════ LOADING SCREEN ═══════════════════ -->
+  <div id="loadingScreen">
+    <div class="loaderWrap">
+      <div class="loaderRing"></div>
+      <div class="loaderLogo">🎓</div>
+    </div>
+    <p class="loaderText">ScholarMate AI</p>
+    <div class="loaderBar"><div class="loaderFill"></div></div>
   </div>
-  <p class="loaderText">ScholarMate AI</p>
-  <div class="loaderBar"><div class="loaderFill"></div></div>
-</div>
 
-<!-- ═══════════════════ LOGIN ═══════════════════ -->
-<div id="loginScreen" class="loginScreen">
-  <div class="loginBg"></div>
-  <div class="loginCard">
-    <div class="loginBrand">🎓 <span>ScholarMate</span></div>
-    <h1>Welcome back</h1>
-    <p class="loginSub">Your AI-powered study companion</p>
+  <!-- ═══════════════════ LOGIN & SIGNUP SCREEN ═══════════════════ -->
+  <div id="loginScreen" class="loginScreen flex items-center justify-center min-h-screen px-4">
+    <div class="loginBg"></div>
+    <div class="loginCard loginCardNew glass-panel rounded-[32px] p-8 max-w-md w-full relative z-10">
+      <div class="loginBrand font-display-lg text-2xl font-extrabold text-primary mb-2 flex items-center gap-3">
+        <span class="p-2 rounded-lg bg-primary/10 border border-primary/20">🎓</span>
+        <span>ScholarMate</span>
+      </div>
+      <h1 class="text-xl font-bold text-white mb-1">Welcome back</h1>
+      <p class="loginSub text-xs text-on-surface-variant mb-6">Your AI-powered academic tracker & scholarship matching companion.</p>
 
-    <div id="authMsg" class="authMsg" style="display:none"></div>
+      <!-- Auth Error / Success Message Box -->
+      <div id="authMsg" class="authMsg text-xs p-4 rounded-xl border mb-4" style="display:none"></div>
 
-    <!-- Login form -->
-    <div id="loginForm">
-      <div class="inputGroup">
-        <span class="inputIcon">👤</span>
-        <input id="loginIdentifier" type="email" placeholder="Email" autocomplete="email">
+      <!-- Login Form View -->
+      <div id="loginForm">
+        <div class="inputGroup mb-4">
+          <span class="inputIcon text-on-surface-variant">👤</span>
+          <input id="loginIdentifier" class="w-full bg-surface-container-low/50 border border-white/5 rounded-xl pl-12 pr-4 py-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary text-white outline-none" type="email" placeholder="Email Address" autocomplete="email">
+        </div>
+        <div class="inputGroup mb-6">
+          <span class="inputIcon text-on-surface-variant">🔒</span>
+          <input id="loginPassword" class="w-full bg-surface-container-low/50 border border-white/5 rounded-xl pl-12 pr-4 py-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary text-white outline-none" type="password" placeholder="Password" autocomplete="current-password">
+        </div>
+        <button class="btnAuth w-full electric-flow text-on-primary py-3.5 rounded-xl font-bold text-sm hover:scale-[1.02] transition-transform duration-200" onclick="login()">Login →</button>
+        <button class="btnForgot text-xs text-on-surface-variant hover:text-primary transition-colors block mx-auto mt-4 underline" onclick="resetPassword()">Forgot password?</button>
+        <p class="authToggle text-xs text-on-surface-variant text-center mt-6">
+          No account? <button class="btnLink text-primary font-bold hover:underline ml-1" onclick="showSignup()">Sign up free</button>
+        </p>
       </div>
-      <div class="inputGroup">
-        <span class="inputIcon">🔒</span>
-        <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">
-      </div>
-      <button class="btnAuth" onclick="login()">Login →</button>
-      <button class="btnForgot" onclick="resetPassword()">Forgot password?</button>
-      <p class="authToggle">No account? <button class="btnLink" onclick="showSignup()">Sign up free</button></p>
-    </div>
 
-    <!-- Signup form -->
-    <div id="signupForm" style="display:none">
-      <div class="inputGroup">
-        <span class="inputIcon">✨</span>
-        <input id="signupUsername" type="text" placeholder="Choose username (a-z, 0-9, _)" autocomplete="username">
+      <!-- Signup Form View -->
+      <div id="signupForm" style="display:none">
+        <div class="inputGroup mb-4">
+          <span class="inputIcon text-on-surface-variant">✨</span>
+          <input id="signupUsername" class="w-full bg-surface-container-low/50 border border-white/5 rounded-xl pl-12 pr-4 py-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary text-white outline-none" type="text" placeholder="Username (a-z, 0-9, _)" autocomplete="username">
+        </div>
+        <div class="inputGroup mb-4">
+          <span class="inputIcon text-on-surface-variant">📧</span>
+          <input id="signupEmail" class="w-full bg-surface-container-low/50 border border-white/5 rounded-xl pl-12 pr-4 py-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary text-white outline-none" type="email" placeholder="Email Address" autocomplete="email">
+        </div>
+        <div class="inputGroup mb-6">
+          <span class="inputIcon text-on-surface-variant">🔒</span>
+          <input id="signupPassword" class="w-full bg-surface-container-low/50 border border-white/5 rounded-xl pl-12 pr-4 py-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary text-white outline-none" type="password" placeholder="Password (min 6 chars)" autocomplete="new-password">
+        </div>
+        <button class="btnAuth w-full electric-flow text-on-primary py-3.5 rounded-xl font-bold text-sm hover:scale-[1.02] transition-transform duration-200" onclick="signup()">Create Account →</button>
+        <p class="authToggle text-xs text-on-surface-variant text-center mt-6">
+          Have an account? <button class="btnLink text-primary font-bold hover:underline ml-1" onclick="showLogin()">Login</button>
+        </p>
       </div>
-      <div class="inputGroup">
-        <span class="inputIcon">📧</span>
-        <input id="signupEmail" type="email" placeholder="Email address" autocomplete="email">
-      </div>
-      <div class="inputGroup">
-        <span class="inputIcon">🔒</span>
-        <input id="signupPassword" type="password" placeholder="Password (min 6 chars)" autocomplete="new-password">
-      </div>
-      <button class="btnAuth" onclick="signup()">Create Account →</button>
-      <p class="authToggle">Have an account? <button class="btnLink" onclick="showLogin()">Login</button></p>
     </div>
   </div>
-</div>
 
-<!-- ═══════════════════ MAIN APP ═══════════════════ -->
-<div id="mainWebsite" style="display:none">
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebarBrand">
-      <span class="brandIcon">🎓</span>
-      <span class="brandName">ScholarMate</span>
-    </div>
-    <nav class="sidebarNav">
-      <div class="navItem active" onclick="showPage('dashboardPage',this)"><span class="ni">🏠</span>Dashboard</div>
-      <div class="navItem" onclick="showPage('taskPage',this)"><span class="ni">✅</span>Tasks</div>
-      <div class="navItem" onclick="showPage('coursePage',this)"><span class="ni">📚</span>Courses</div>
-      <div class="navItem" onclick="showPage('scholarPage',this)"><span class="ni">🎓</span>Scholarships</div>
-      <div class="navItem" onclick="showPage('productivityPage',this)"><span class="ni">📊</span>Productivity</div>
-      <div class="navItem" onclick="showPage('aiPage',this)"><span class="ni">🤖</span>AI Assistant</div>
-      <div class="navItem" onclick="showPage('settingsPage',this)"><span class="ni">⚙️</span>Settings</div>
-    </nav>
-    <button class="logoutBtn" onclick="logout()">🚪 Logout</button>
-  </aside>
-
-  <!-- MAIN -->
-  <main class="mainContent">
-
-    <!-- ══════════ DASHBOARD ══════════ -->
-    <div class="page activePage" id="dashboardPage">
-
-      <!-- Profile strip -->
-      <div class="profileStrip">
-        <div class="profileLeft">
-          <div class="avatarWrap">
-            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="avatar" id="profileAvatar">
-            <div class="avatarRing" id="avatarRing"></div>
-          </div>
-          <div>
-            <div class="profileGreet">Welcome back,</div>
-            <div class="profileName" id="userName">User</div>
-            <div class="profileLvl"><span class="lvlBadge" id="topUserLevel">Lv 1</span></div>
-          </div>
+  <!-- ═══════════════════ MAIN SYSTEM CONTAINER ═══════════════════ -->
+  <div id="mainWebsite" class="flex min-h-screen w-full relative" style="display:none">
+    
+    <!-- SIDEBAR PANEL (COMPONENTS_5 Style) -->
+    <aside class="sidebar h-screen w-64 fixed left-0 top-0 bg-surface/30 backdrop-blur-[20px] border-r border-white/10 flex flex-col py-6 px-4 z-50 shadow-[0_20px_40px_rgba(0,0,0,0.4)]" id="sidebar">
+      <div class="mb-10 px-2 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center neon-border-indigo">
+          <span class="material-symbols-outlined text-on-primary text-2xl">school</span>
         </div>
-        <div class="profileStats">
-          <div class="pStat xpStat">
-            <div class="pStatTop"><span class="pStatLabel">XP</span></div>
-            <div class="pStatVal" id="xpDisplay">0</div>
-            <div class="xpBar"><div class="xpBarFill" id="xpBarFill"></div></div>
-          </div>
-          <div class="pStat">
-            <div class="pStatLabel">🔥 Streak</div>
-            <div class="pStatVal fire" id="streakCount">0</div>
-            <div class="pStatSub">days</div>
-          </div>
-          <div class="pStat">
-            <div class="pStatLabel">🔔 Alerts</div>
-            <div class="pStatVal purple" id="notificationCount">0</div>
-            <div class="pStatSub">pending</div>
+        <div>
+          <h1 class="font-display-lg text-[20px] font-extrabold text-primary tracking-tighter leading-none">Academia</h1>
+          <p class="text-[9px] text-on-surface-variant font-medium tracking-wide uppercase mt-1">Academic Excellence</p>
+        </div>
+      </div>
+      
+      <!-- Navigation Links -->
+      <nav class="space-y-1.5 flex-grow">
+        <div class="navItem active flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all cursor-pointer font-label-sm text-label-sm" onclick="showPage('dashboardPage',this)">
+          <span class="material-symbols-outlined">dashboard</span>
+          <span>Dashboard</span>
+        </div>
+        <div class="navItem flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all cursor-pointer font-label-sm text-label-sm" onclick="showPage('taskPage',this)">
+          <span class="material-symbols-outlined">assignment</span>
+          <span>Tasks</span>
+        </div>
+        <div class="navItem flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all cursor-pointer font-label-sm text-label-sm" onclick="showPage('coursePage',this)">
+          <span class="material-symbols-outlined">menu_book</span>
+          <span>Courses</span>
+        </div>
+        <div class="navItem flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all cursor-pointer font-label-sm text-label-sm" onclick="showPage('scholarPage',this)">
+          <span class="material-symbols-outlined">school</span>
+          <span>Scholarships</span>
+        </div>
+        <div class="navItem flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all cursor-pointer font-label-sm text-label-sm" onclick="showPage('productivityPage',this)">
+          <span class="material-symbols-outlined">speed</span>
+          <span>Productivity</span>
+        </div>
+        <div class="navItem flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all cursor-pointer font-label-sm text-label-sm" onclick="showPage('aiPage',this)">
+          <span class="material-symbols-outlined">psychology</span>
+          <span>AI Assistant</span>
+        </div>
+        <div class="navItem flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all cursor-pointer font-label-sm text-label-sm" onclick="showPage('settingsPage',this)">
+          <span class="material-symbols-outlined">settings</span>
+          <span>Settings</span>
+        </div>
+      </nav>
+
+      <!-- Bottom Profile Panel -->
+      <div class="mt-auto pt-4 border-t border-slate-100 dark:border-white/5 flex items-center gap-3">
+        <div class="flex items-center gap-3 cursor-pointer flex-grow overflow-hidden" onclick="showPage('settingsPage')">
+          <img class="w-10 h-10 rounded-full border border-primary/20 object-cover" id="sidebarAvatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+          <div class="overflow-hidden">
+            <p class="text-xs font-bold text-on-surface truncate" id="sidebarName">Alex Rivera</p>
+            <p class="text-[10px] text-on-surface-variant truncate uppercase font-bold tracking-wider" id="sidebarSub">Premium Plan</p>
           </div>
         </div>
+        <button class="p-2 rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container/10 transition-colors flex-shrink-0" onclick="logout()" title="Log out">
+          <span class="material-symbols-outlined text-lg">logout</span>
+        </button>
       </div>
+    </aside>
 
-      <!-- Row 1: Focus + Quick Status -->
-      <div class="dRow two">
-        <div class="card glowCard">
-          <div class="cHead"><span>🎯</span><h3>Today's Focus</h3></div>
-          <div id="todayFocus" class="focusList"></div>
-        </div>
-        <div class="card">
-          <div class="cHead"><span>⚡</span><h3>Quick Status</h3></div>
-          <div id="quickStatus" class="quickGrid"></div>
-        </div>
-      </div>
-
-      <!-- Row 2: AI + Course Snap + Eligibility + Task Snap -->
-      <div class="dRow four">
-        <div class="card">
-          <div class="cHead"><span>🤖</span><h3>AI Tip</h3></div>
-          <div id="aiSuggestionDashboard"></div>
-        </div>
-        <div class="card">
-          <div class="cHead"><span>📚</span><h3>Courses</h3></div>
-          <div id="courseDashboard"></div>
-        </div>
-        <div class="card">
-          <div class="cHead"><span>🎯</span><h3>Eligibility</h3></div>
-          <div id="eligibilityDashboard" class="eligWrap"></div>
-        </div>
-        <div class="card">
-          <div class="cHead"><span>✅</span><h3>Tasks</h3></div>
-          <div id="taskSnapshotDash"></div>
-        </div>
-      </div>
-
-      <!-- Row 3: Deadlines full width -->
-      <div class="card">
-        <div class="cHead"><span>⏳</span><h3>Deadline Alerts</h3></div>
-        <div id="deadlineDashboard" class="deadlineChips"></div>
-      </div>
-
-    </div>
-
-    <!-- ══════════ TASKS ══════════ -->
-    <div class="page" id="taskPage">
-      <div class="pageHdr"><h1>✅ Today's Tasks</h1></div>
-      <div class="reminderBar">
-        <span>📌</span>
-        <span id="taskProgressSummary">Loading...</span>
-        <div class="rBarTrack"><div class="rBarFill" id="rBarFill"></div></div>
-      </div>
-      <div class="twoCol">
-        <div class="card">
-          <div class="cHead"><span>⏳</span><h3>Pending</h3><span class="badge red" id="pendingCount">0</span></div>
-          <div id="pendingTasks" class="taskList"></div>
-        </div>
-        <div class="card">
-          <div class="cHead"><span>✅</span><h3>Completed</h3><span class="badge green" id="completedCount">0</span></div>
-          <div id="completedTasks" class="taskList"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══════════ COURSES ══════════ -->
-    <div class="page" id="coursePage">
-      <div class="pageHdr"><h1>📚 Courses</h1></div>
-      <!-- Add Course -->
-      <div class="card addCard">
-        <div class="cHead"><span>➕</span><h3>Add Course</h3></div>
-        <div class="addRow">
-          <input id="courseName"  placeholder="Course name">
-          <input id="courseLink"  placeholder="URL — YouTube playlists auto-extract lessons">
-          <input id="courseTotal" type="number" placeholder="Total lessons">
-          <button class="btnPrimary" onclick="addCourseWithTracking()">Add Course</button>
-        </div>
-        <div class="ytKeyRow" id="ytKeyRow">
-          <span class="ytLabel">▶ YouTube API key (optional — enables auto-tracking):</span>
-          <input id="ytApiKeyInput" placeholder="AIzaSy..." style="flex:1;min-width:180px">
-          <button class="btnSm btnBlue" onclick="saveYtKey()">Save</button>
-          <a href="https://console.cloud.google.com" target="_blank" class="ytLink">Get free key →</a>
-        </div>
-      </div>
-      <!-- Meters -->
-      <div class="card">
-        <div class="cHead"><span>📈</span><h3>Progress Meters</h3></div>
-        <div id="courseMeters" class="metersWrap"></div>
-      </div>
-      <!-- Cards -->
-      <div class="card">
-        <div class="cHead"><span>🗂</span><h3>My Courses</h3></div>
-        <div id="courseContainer" class="courseGrid"></div>
-      </div>
-    </div>
-
-    <!-- ══════════ SCHOLARSHIPS ══════════ -->
-    <div class="page" id="scholarPage">
-      <div class="pageHdr"><h1>🎓 Scholarships</h1></div>
-      <!-- Search -->
-      <div class="card">
-        <div class="cHead"><span>🔍</span><h3>Search Database</h3><span class="pill">50+ scholarships</span></div>
-        <div class="searchRow">
-          <input id="scholarSearch" placeholder="Country, name, degree..." oninput="applyScholarSearch()">
-          <button class="btnPrimary" onclick="applyScholarSearch()">Search</button>
-        </div>
-        <div class="filterRow">
-          <select id="fDegree" onchange="applyScholarSearch()">
-            <option value="">All Degrees</option>
-            <option>Bachelor</option><option>Master</option><option>PhD</option>
-          </select>
-          <select id="fCategory" onchange="applyScholarSearch()">
-            <option value="">All Fields</option>
-            <option>STEM</option><option>Engineering</option><option>Humanities</option>
-            <option>Business</option><option>Social Sciences</option><option>Arts</option><option>Medical</option>
-          </select>
-          <select id="fCountry" onchange="applyScholarSearch()"><option value="">All Countries</option></select>
-        </div>
-        <div id="searchResults" class="searchResults"></div>
-      </div>
-      <!-- My Scholarships -->
-      <div class="card">
-        <div class="cHead"><span>📋</span><h3>My Scholarships</h3></div>
-        <div id="scholarshipContainer" class="scholGrid"></div>
-      </div>
-      <!-- Recommendation -->
-      <div class="card">
-        <div class="cHead"><span>⭐</span><h3>Recommended For You</h3></div>
-        <div id="recommendScholar"></div>
-      </div>
-    </div>
-
-    <!-- ══════════ PRODUCTIVITY ══════════ -->
-    <div class="page" id="productivityPage">
-      <div class="pageHdr"><h1>📊 Productivity</h1></div>
-      <!-- Score + Chart row -->
-      <div class="dRow prodTwo">
-        <div class="card">
-          <div class="cHead"><span>🏆</span><h3>Productivity Score</h3></div>
-          <div id="prodScoreBox"></div>
-        </div>
-        <div class="card chartCard">
-          <div class="cHead"><span>📈</span><h3>Weekly Study Graph</h3></div>
-          <canvas id="studyChart"></canvas>
-        </div>
-      </div>
-      <!-- Schedule -->
-      <div class="card">
-        <div class="cHead"><span>📅</span><h3>Study Schedule Generator</h3></div>
-        <div class="schedRow">
-          <input id="studyHours" type="number" placeholder="Available hours today">
-          <button class="btnPrimary" onclick="generateSchedule()">Generate Plan</button>
-        </div>
-        <div id="studyPlan" class="planOutput"></div>
-      </div>
-      <!-- Roadmap -->
-      <div class="card">
-        <div class="cHead"><span>🗺</span><h3>AI Roadmap</h3></div>
-        <div id="timelineContainer" class="timeline"></div>
-      </div>
-      <!-- Streak + History row -->
-      <div class="dRow two">
-        <div class="card">
-          <div class="cHead"><span>🔥</span><h3>Streak Calendar</h3><span class="streakLbl" id="streakLabel">0 days</span></div>
-          <div id="streakCalendar" class="streakGrid"></div>
-        </div>
-        <div class="card">
-          <div class="cHead"><span>📖</span><h3>Study History</h3></div>
-          <div class="histHdr"><span>Date</span><span>Course</span><span>Lesson</span></div>
-          <div id="studyHistoryContainer"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══════════ AI ══════════ -->
-    <div class="page" id="aiPage">
-      <div class="pageHdr"><h1>🤖 AI Assistant</h1></div>
-      <div class="aiLayout">
-        <div class="card chatCard">
-          <div class="cHead"><span>💬</span><h3>Chat with ScholarMate AI</h3></div>
-          <div id="chatContainer" class="chatBox">
-            <div class="aiMsg"><span class="aiAv">🤖</span>Hi! I'm ScholarMate AI. Ask me about your courses, scholarships, deadlines, or study plan.</div>
-          </div>
-          <div class="chatInputRow">
-            <input id="chatInput" placeholder="Ask anything..." onkeypress="if(event.key==='Enter')sendMessage()">
-            <button class="btnSend" onclick="sendMessage()">➤</button>
+    <!-- MAIN CANVAS CONTENT AREA -->
+    <main class="ml-0 lg:ml-64 mt-16 lg:mt-0 flex-grow p-4 lg:p-8 min-h-screen relative z-10 w-full overflow-hidden">
+      
+      <!-- Top Navigation Bar -->
+      <header class="fixed top-0 right-0 w-full lg:w-[calc(100%-16rem)] h-16 bg-surface/10 backdrop-blur-[40px] border-b border-white/10 z-40 flex justify-end items-center px-4 lg:px-8">
+        <div class="flex items-center gap-4">
+          <button class="p-2 hover:bg-white/10 rounded-full transition-colors relative" onclick="showPage('taskPage')">
+            <span class="material-symbols-outlined text-on-surface-variant text-xl">notifications</span>
+          </button>
+          <div class="h-6 w-[1px] bg-white/10 mx-1"></div>
+          
+          <!-- Avatar User Trigger -->
+          <div class="flex items-center gap-2 cursor-pointer" onclick="showPage('settingsPage')">
+            <img class="w-8 h-8 rounded-full border border-primary/30 object-cover" id="topNavAvatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
           </div>
         </div>
-        <div class="aiSide">
-          <div class="card">
-            <div class="cHead"><span>🧠</span><h3>AI Insights</h3></div>
-            <div id="aiInsights"></div>
+      </header>
+
+      <!-- Content Views Wrapper (Padding Top for header) -->
+      <div class="pt-12 w-full max-w-container-max mx-auto">
+
+                <!-- ══════════ PAGE: DASHBOARD ══════════ -->
+        <div class="page activePage" id="dashboardPage">
+          
+          <!-- Welcome Banner Section -->
+          <div class="mb-8 animate-stagger glass-panel glass-edge rounded-3xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div class="flex items-center gap-4">
+              <div class="relative w-16 h-16 flex-shrink-0">
+                <img class="w-16 h-16 rounded-full border-2 border-primary/40 object-cover" id="dashboardAvatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+                <span class="absolute -bottom-1 -right-1 bg-primary text-on-primary text-[9px] font-extrabold px-2 py-0.5 rounded-full border-2 border-surface" id="topUserLevel">Lv 1</span>
+              </div>
+              <div>
+                <h1 class="font-headline-lg text-[26px] lg:text-[32px] text-on-surface font-extrabold tracking-tight" id="welcomeBackTitle">Welcome back, Alex</h1>
+                <p class="text-on-surface-variant text-[13px] mt-1" id="welcomeBackSubtitle">You've reached 85% of your scholarship readiness goal. Let's tackle today's focus to stay on track.</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 self-stretch md:self-auto">
+              <div class="glass-panel rounded-2xl px-5 py-3 text-center min-w-[92px]">
+                <p class="text-[9px] text-on-surface-variant uppercase tracking-widest font-extrabold mb-1">XP</p>
+                <p class="text-lg font-extrabold text-primary leading-none" id="xpDisplay">0</p>
+                <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden mt-2">
+                  <div class="h-full neon-gradient-primary rounded-full transition-all duration-700" id="xpBarFill" style="width:0%"></div>
+                </div>
+              </div>
+              <div class="glass-panel rounded-2xl px-5 py-3 text-center min-w-[92px]">
+                <p class="text-[9px] text-on-surface-variant uppercase tracking-widest font-extrabold mb-1">Streak</p>
+                <p class="text-lg font-extrabold text-amber-400 leading-none" id="streakCount">0</p>
+                <p class="text-[9px] text-on-surface-variant mt-2">days</p>
+              </div>
+              <button class="w-11 h-11 rounded-xl bg-error-container/10 border border-error/20 text-error flex items-center justify-center hover:bg-error-container/20 transition-colors flex-shrink-0" onclick="logout()" title="Log out">
+                <span class="material-symbols-outlined text-lg">logout</span>
+              </button>
+            </div>
           </div>
-          <div class="card">
-            <div class="cHead"><span>🎯</span><h3>Eligibility</h3></div>
-            <div id="eligibilityAI"></div>
+
+          <!-- Main Grid (Today's Focus on left, Readiness & Recommended on right) -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+            
+            <!-- Left: Today's Focus Card -->
+            <section class="lg:col-span-7 glass-panel rounded-3xl p-6 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center mb-6">
+                  <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary text-[20px]">target</span>
+                    <h3 class="font-label-md text-on-surface text-[16px] font-bold">Today's Focus</h3>
+                  </div>
+                  <span class="text-primary text-xs font-semibold cursor-pointer hover:underline" onclick="showPage('taskPage')">View Schedule</span>
+                </div>
+                <div id="todayFocus" class="space-y-4">
+                  <!-- Loaded dynamically by JS -->
+                </div>
+              </div>
+            </section>
+
+            <!-- Right: Readiness & Recommended Column -->
+            <div class="lg:col-span-5 flex flex-col gap-6">
+              
+              <!-- Readiness Card -->
+              <section class="glass-panel rounded-3xl p-6 flex flex-col items-center">
+                <h3 class="text-[16px] font-bold text-on-surface self-start mb-6">Readiness</h3>
+                
+                <!-- Circle gauge wrapper -->
+                <div class="relative w-40 h-40 flex items-center justify-center mb-6">
+                  <svg class="w-full h-full transform -rotate-90">
+                    <circle cx="80" cy="80" r="68" stroke="var(--lumina-outline-variant)" stroke-width="8" fill="transparent" />
+                    <circle id="readinessProgressCircle" cx="80" cy="80" r="68" stroke="var(--lumina-primary)" stroke-width="8" stroke-dasharray="427" stroke-dashoffset="64" stroke-linecap="round" fill="transparent" />
+                  </svg>
+                  <div class="absolute flex flex-col items-center justify-center">
+                    <span class="text-[28px] font-extrabold text-on-surface leading-none" id="readinessScoreVal">85%</span>
+                    <span class="text-[9px] text-on-surface-variant font-bold uppercase tracking-wider mt-1">Ready</span>
+                  </div>
+                </div>
+                
+                <!-- Progress lists -->
+                <div class="w-full space-y-4 mb-6">
+                  <div>
+                    <div class="flex justify-between text-xs font-semibold mb-1">
+                      <span class="text-on-surface-variant">Profile Completion</span>
+                      <span class="text-on-surface">95%</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
+                      <div class="h-full bg-primary rounded-full" style="width: 95%;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between text-xs font-semibold mb-1">
+                      <span class="text-on-surface-variant">Documentation</span>
+                      <span class="text-on-surface">70%</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
+                      <div class="h-full bg-primary rounded-full" style="width: 70%;"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <button class="w-full py-3 rounded-xl bg-primary text-white font-bold text-xs hover:opacity-90 transition-opacity" onclick="showPage('settingsPage')">Improve Score</button>
+              </section>
+
+              <!-- Recommended Card -->
+              <section class="rounded-3xl p-6 text-white flex flex-col justify-between min-h-[200px] relative overflow-hidden bg-primary shadow-lg shadow-primary/20">
+                <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full pointer-events-none"></div>
+                
+                <div>
+                  <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-[10px] font-bold tracking-wider uppercase mb-4">Recommended for you</span>
+                  <h3 class="text-xl font-bold leading-tight" id="recommendedTitle">Stem Future Leaders</h3>
+                  <p class="text-white/80 text-xs mt-1" id="recommendedSub">$25,000 Annual Grant</p>
+                </div>
+                
+                <div class="flex items-center justify-between mt-6">
+                  <div class="flex items-center gap-1 text-xs">
+                    <span class="material-symbols-outlined text-sm">calendar_today</span>
+                    <span id="recommendedDaysLeft">12 Days Left</span>
+                  </div>
+                  <button class="py-2.5 px-5 bg-white text-primary rounded-xl font-bold text-xs hover:scale-105 transition-transform" id="recommendedApplyBtn" onclick="showPage('scholarPage')">Apply Now</button>
+                </div>
+              </section>
+
+            </div>
           </div>
-          <div class="card">
-            <div class="cHead"><span>💡</span><h3>Suggestions</h3></div>
-            <div id="suggestionsAI"></div>
+
+          <!-- Counters Row (TASKS, COURSES, DEADLINES, STREAK) -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+            <div class="glass-panel p-6 rounded-2xl flex flex-col">
+              <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-extrabold mb-1">Tasks</span>
+              <p class="text-[28px] font-extrabold text-primary leading-none mt-2" id="dashCountTasks">12</p>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl flex flex-col">
+              <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-extrabold mb-1">Courses</span>
+              <p class="text-[28px] font-extrabold text-primary leading-none mt-2" id="dashCountCourses">6</p>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl flex flex-col">
+              <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-extrabold mb-1">Deadlines</span>
+              <p class="text-[28px] font-extrabold text-error leading-none mt-2" id="dashCountDeadlines">2</p>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl flex flex-col">
+              <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-extrabold mb-1">Streak</span>
+              <p class="text-[28px] font-extrabold text-amber-500 leading-none mt-2" id="dashCountStreak">14</p>
+            </div>
+          </div>
+
+          <!-- Courses Horizontal Section -->
+          <div class="mb-8">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-xl font-bold text-on-surface">My Courses</h3>
+              <div class="flex gap-2">
+                <button class="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors text-on-surface" id="coursesPrevBtn" onclick="showPage('coursePage')">
+                  <span class="material-symbols-outlined text-sm">chevron_left</span>
+                </button>
+                <button class="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors text-on-surface" id="coursesNextBtn" onclick="showPage('coursePage')">
+                  <span class="material-symbols-outlined text-sm">chevron_right</span>
+                </button>
+              </div>
+            </div>
+            <div id="courseContainerDashboard" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- Rendered dynamically by JS -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ══════════ PAGE: TASKS ══════════ -->
+        <div class="page" id="taskPage">
+          <div class="flex justify-between items-end mb-8">
+            <div>
+              <h2 class="font-headline-lg text-2xl lg:text-3xl text-on-background font-extrabold mb-1">Tasks & Milestones <span class="text-primary">Pro</span></h2>
+              <p class="text-on-surface-variant text-xs">Manage your daily academic goals and complete checklist challenges.</p>
+            </div>
+          </div>
+          
+          <!-- Reminder Bar / Track -->
+          <div class="glass-panel p-5 rounded-2xl mb-8 flex flex-col md:flex-row items-center gap-4">
+            <span class="text-xl">📌</span>
+            <span class="text-sm font-bold text-on-surface" id="taskProgressSummary">0/0 tasks completed — 0%</span>
+            <div class="flex-grow w-full bg-white/10 h-2.5 rounded-full overflow-hidden relative">
+              <div class="bg-primary h-full rounded-full transition-all duration-500 shadow-[0_0_8px_#6366f1]" id="rBarFill" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Tasks checklists column -->
+            <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+              
+              <!-- Pending Tasks Box -->
+              <div class="glass-panel p-6 rounded-3xl">
+                <div class="flex justify-between items-center mb-6">
+                  <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-error">hourglass_empty</span>
+                    <h3 class="font-label-md text-on-surface uppercase tracking-widest text-xs font-bold">Pending Goals</h3>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-md bg-error/20 text-error text-[10px] font-bold" id="pendingCount">0</span>
+                </div>
+                <div id="pendingTasks" class="space-y-3 taskList">
+                  <!-- Loaded dynamically by JS -->
+                </div>
+              </div>
+
+              <!-- Completed Tasks Box -->
+              <div class="glass-panel p-6 rounded-3xl">
+                <div class="flex justify-between items-center mb-6">
+                  <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-green-400">check_circle</span>
+                    <h3 class="font-label-md text-on-surface uppercase tracking-widest text-xs font-bold">Completed</h3>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-md bg-green-500/20 text-green-400 text-[10px] font-bold" id="completedCount">0</span>
+                </div>
+                <div id="completedTasks" class="space-y-3 taskList">
+                  <!-- Loaded dynamically by JS -->
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Deep Work Pomodoro Sidebar -->
+            <div class="lg:col-span-4 space-y-6">
+              <div class="glass-panel p-8 rounded-[32px] text-center relative overflow-hidden pulse-glow">
+                <h3 class="font-label-sm text-[10px] text-primary mb-6 tracking-[0.2em] uppercase font-bold">Deep Work Timer</h3>
+                <div class="relative w-40 h-40 mx-auto mb-6">
+                  <svg class="w-full h-full">
+                    <circle cx="80" cy="80" fill="none" r="74" stroke="rgba(255,255,255,0.05)" stroke-width="6"></circle>
+                    <circle class="timer-ring transition-all" cx="80" cy="80" fill="none" id="timer-progress" r="74" stroke="url(#timer-gradient)" stroke-dasharray="464.95" stroke-dashoffset="0" stroke-width="7"></circle>
+                    <defs>
+                      <linearGradient id="timer-gradient" x1="0%" x2="100%" y1="0%" y2="100%">
+                        <stop offset="0%" stop-color="#c0c1ff"></stop>
+                        <stop offset="100%" stop-color="#4cd7f6"></stop>
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <div class="absolute inset-0 flex flex-col items-center justify-center">
+                    <span class="font-display-lg text-3xl text-on-surface font-extrabold tracking-tight" id="timer-display">25:00</span>
+                    <span class="text-[8px] font-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Minutes Left</span>
+                  </div>
+                </div>
+                
+                <div class="flex justify-center gap-4">
+                  <button class="w-12 h-12 rounded-full border border-primary/30 flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-all" id="timer-btn">
+                    <span class="material-symbols-outlined text-2xl" id="timer-icon">play_arrow</span>
+                  </button>
+                  <button class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-on-surface-variant hover:bg-white/10 transition-all" onclick="resetLocalTimer()">
+                    <span class="material-symbols-outlined text-2xl">refresh</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
+        <!-- ══════════ PAGE: COURSES ══════════ -->
+        <div class="page" id="coursePage">
+          <div class="mb-8">
+            <h1 class="font-headline-lg text-2xl lg:text-3xl text-on-surface font-extrabold mb-1">My Academic Curriculum</h1>
+            <p class="text-on-surface-variant text-xs">Track lesson completions, extract YouTube playlists, and monitor overall study velocity.</p>
+          </div>
+
+          <!-- Add Course Section -->
+          <section class="glass-panel glass-edge p-6 rounded-2xl mb-8">
+            <div class="flex items-center gap-3 mb-6">
+              <span class="material-symbols-outlined text-primary">add_circle</span>
+              <h2 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">Add Course Tracker</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              <input id="courseName" class="bg-surface-container-high/50 border border-white/5 rounded-xl px-4 py-3 text-on-surface focus:ring-primary/45 focus:border-primary text-sm" placeholder="Course name" type="text">
+              <input id="courseLink" class="md:col-span-2 bg-surface-container-high/50 border border-white/5 rounded-xl px-4 py-3 text-on-surface focus:ring-primary/45 focus:border-primary text-sm" placeholder="URL — YouTube playlist maps auto-track lessons" type="text">
+              <div class="flex gap-2">
+                <input id="courseTotal" class="flex-1 bg-surface-container-high/50 border border-white/5 rounded-xl px-4 py-3 text-on-surface focus:ring-primary/45 focus:border-primary text-sm" placeholder="Total lessons" type="number">
+                <button class="neon-gradient-primary text-on-primary px-6 rounded-xl font-bold text-xs pulse-glow hover:scale-[1.02] transition-transform duration-200" onclick="addCourseWithTracking()">Add</button>
+              </div>
+            </div>
+            
+            <!-- YouTube API Row -->
+            <div class="flex flex-wrap items-center gap-4 text-xs bg-black/20 p-3 rounded-xl border border-white/5" id="ytKeyRow">
+              <span class="material-symbols-outlined text-on-surface-variant text-lg">key</span>
+              <p class="text-on-surface-variant">YouTube API key (optional — enables auto-extract):</p>
+              <input id="ytApiKeyInput" class="bg-transparent border-none text-on-surface focus:ring-0 p-0 text-xs flex-grow font-mono" type="password" placeholder="AIzaSy...">
+              <button class="text-tertiary font-bold hover:underline" onclick="saveYtKey()">Save key</button>
+            </div>
+          </section>
+
+          <!-- Progress Meters + Bento Grid Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+            
+            <!-- Progress Rings Meter (Left Sidebar) -->
+            <div class="lg:col-span-4 glass-panel glass-edge p-6 rounded-2xl flex flex-col justify-start">
+              <div class="flex items-center gap-3 mb-6">
+                <span class="material-symbols-outlined text-tertiary">analytics</span>
+                <h2 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">Progress Meters</h2>
+              </div>
+              <div id="courseMeters" class="space-y-8 flex-grow flex flex-col justify-center py-4 items-center">
+                <!-- Rendered dynamically by JS -->
+              </div>
+            </div>
+
+            <!-- Main Course grid lists -->
+            <div class="lg:col-span-8 space-y-6">
+              <div class="flex items-center justify-between px-2">
+                <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-secondary">folder_open</span>
+                  <h2 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">My Courses</h2>
+                </div>
+              </div>
+              
+              <!-- Cards Container -->
+              <div id="courseContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6 courseGrid">
+                <!-- Loaded dynamically by JS -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════ PAGE: SCHOLARSHIPS ══════════ -->
+        <div class="page" id="scholarPage">
+          <div class="mb-8">
+            <h1 class="font-headline-lg text-2xl lg:text-3xl text-on-surface font-extrabold mb-1">Scholarships Hub <span class="text-primary">Pro</span></h1>
+            <p class="text-on-surface-variant text-xs">Verify eligibility, explore predictions, and keep checklist items mapped to global deadlines.</p>
+          </div>
+
+          <!-- Search & Filter Options -->
+          <section class="glass-panel rounded-3xl p-6 mb-8">
+            <div class="flex items-center gap-3 mb-6">
+              <span class="material-symbols-outlined text-primary">search</span>
+              <h2 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">Search Database</h2>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-4 mb-4 searchRow">
+              <input id="scholarSearch" class="flex-grow bg-surface-container-high/50 border border-white/5 rounded-xl px-4 py-3 text-on-surface focus:ring-primary/45 focus:border-primary text-sm" placeholder="Search by name, country, category, degree..." type="text" oninput="applyScholarSearch()">
+              <button class="btnPrimary electric-flow text-on-primary px-8 rounded-xl font-bold text-sm hover:scale-[1.02] transition-transform duration-200" onclick="applyScholarSearch()">Search</button>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 filterRow">
+              <select id="fDegree" class="bg-surface-container-high/50 border border-white/5 rounded-xl px-4 py-2.5 text-on-surface focus:ring-primary/45 text-sm" onchange="applyScholarSearch()">
+                <option value="">All Degrees</option>
+                <option>Bachelor</option>
+                <option>Master</option>
+                <option>PhD</option>
+              </select>
+              <select id="fCategory" class="bg-surface-container-high/50 border border-white/5 rounded-xl px-4 py-2.5 text-on-surface focus:ring-primary/45 text-sm" onchange="applyScholarSearch()">
+                <option value="">All Fields</option>
+                <option>STEM</option>
+                <option>Engineering</option>
+                <option>Humanities</option>
+                <option>Business</option>
+                <option>Social Sciences</option>
+                <option>Arts</option>
+                <option>Medical</option>
+                <option>All fields</option>
+              </select>
+              <select id="fCountry" class="bg-surface-container-high/50 border border-white/5 rounded-xl px-4 py-2.5 text-on-surface focus:ring-primary/45 text-sm" onchange="applyScholarSearch()">
+                <option value="">All Countries</option>
+              </select>
+            </div>
+
+            <!-- Search Results list -->
+            <div id="searchResults" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 searchResults">
+              <!-- Loaded dynamically by JS -->
+            </div>
+          </section>
+
+          <!-- My Tracked Scholarships -->
+          <section class="mb-8">
+            <div class="flex items-center gap-3 mb-6 px-2">
+              <span class="material-symbols-outlined text-secondary">assignment_turned_in</span>
+              <h2 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">My Scholarships Tracker</h2>
+            </div>
+            <div id="scholarshipContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 scholGrid">
+              <!-- Loaded dynamically by JS -->
+            </div>
+          </section>
+
+          <!-- Recommended for you cards -->
+          <section>
+            <div class="flex items-center gap-3 mb-6 px-2">
+              <span class="material-symbols-outlined text-tertiary">auto_awesome</span>
+              <h2 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">Recommended opportunities</h2>
+            </div>
+            <div id="recommendScholar" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <!-- Loaded dynamically by JS -->
+            </div>
+          </section>
+        </div>
+
+        <!-- ══════════ PAGE: PRODUCTIVITY ══════════ -->
+        <div class="page" id="productivityPage">
+          <div class="mb-8">
+            <h1 class="font-headline-lg text-2xl lg:text-3xl text-on-surface font-extrabold mb-1">Productivity & Insights <span class="text-primary">Pro</span></h1>
+            <p class="text-on-surface-variant text-xs">Analyze study consistency, generate dynamic timeboxes, and review AI roadmaps.</p>
+          </div>
+
+          <!-- Score & Weekly Study distribution charts -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-8 prodTwo">
+            <div class="lg:col-span-5 glass-panel rounded-3xl p-6 flex flex-col justify-center">
+              <div class="flex items-center gap-3 mb-6">
+                <span class="material-symbols-outlined text-primary">emoji_events</span>
+                <h3 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">Productivity Score</h3>
+              </div>
+              <div id="prodScoreBox" class="flex-grow flex items-center justify-center">
+                <!-- Loaded dynamically by JS -->
+              </div>
+            </div>
+
+            <div class="lg:col-span-7 glass-panel rounded-3xl p-6 chartCard">
+              <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-secondary">trending_up</span>
+                  <h3 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">Weekly Study Graph</h3>
+                </div>
+              </div>
+              <div class="relative h-[230px] w-full">
+                <canvas id="studyChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Schedule Generator & Timeline -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter mb-8">
+            <section class="glass-panel p-6 rounded-3xl flex flex-col">
+              <div class="flex items-center gap-3 mb-6">
+                <span class="material-symbols-outlined text-tertiary">calendar_today</span>
+                <h3 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">Daily Schedule Generator</h3>
+              </div>
+              <div class="flex gap-3 mb-6 schedRow">
+                <input id="studyHours" class="flex-grow bg-surface-container-high/50 border border-white/5 rounded-xl px-4 py-3 text-on-surface focus:ring-primary/45 text-sm" placeholder="Available study hours today" type="number">
+                <button class="electric-flow text-on-primary px-6 py-3 rounded-xl font-bold text-xs hover:scale-[1.02] transition-transform duration-200" onclick="generateSchedule()">Generate</button>
+              </div>
+              <div id="studyPlan" class="space-y-3 flex-grow planOutput">
+                <!-- Generated output -->
+              </div>
+            </section>
+
+            <section class="glass-panel p-6 rounded-3xl flex flex-col">
+              <div class="flex items-center gap-3 mb-6">
+                <span class="material-symbols-outlined text-primary">map</span>
+                <h3 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">AI Learning Roadmap</h3>
+              </div>
+              <div id="timelineContainer" class="space-y-4 flex-grow timeline">
+                <!-- Timeline milestones -->
+              </div>
+            </section>
+          </div>
+
+          <!-- Streak heatmap & study histories -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+            <section class="lg:col-span-5 glass-panel p-6 rounded-3xl flex flex-col">
+              <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-secondary">local_fire_department</span>
+                  <h3 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">Streak Calendar</h3>
+                </div>
+                <span id="streakLabel" class="text-xs text-secondary font-bold">0 days</span>
+              </div>
+              <div id="streakCalendar" class="grid grid-cols-7 gap-2 streakGrid">
+                <!-- Streak calendar boxes -->
+              </div>
+            </section>
+
+            <section class="lg:col-span-7 glass-panel p-6 rounded-3xl flex flex-col">
+              <div class="flex items-center gap-3 mb-6">
+                <span class="material-symbols-outlined text-tertiary">history</span>
+                <h3 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">Study History</h3>
+              </div>
+              <div class="histHdr grid grid-cols-3 text-[10px] text-on-surface-variant font-bold border-b border-white/5 pb-2 mb-2">
+                <span>Date</span>
+                <span>Course</span>
+                <span>Milestone lesson</span>
+              </div>
+              <div id="studyHistoryContainer" class="space-y-2 flex-grow overflow-y-auto max-h-[220px]">
+                <!-- Load histories dynamic -->
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <!-- ══════════ PAGE: AI ASSISTANT ══════════ -->
+        <div class="page" id="aiPage">
+          <div class="mb-8">
+            <h1 class="font-headline-lg text-2xl lg:text-3xl text-on-surface font-extrabold mb-1">ScholarMate AI <span class="text-primary">Chatbot</span></h1>
+            <p class="text-on-surface-variant text-xs">Explore deep learning assistance, check matches, and outline specific queries.</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter aiLayout">
+            <!-- Chat interaction window -->
+            <div class="lg:col-span-8 glass-panel rounded-3xl p-6 flex flex-col min-h-[500px] chatCard">
+              <div id="chatContainer" class="flex-grow space-y-4 overflow-y-auto max-h-[380px] pr-2 scrollbar-thin chatBox">
+                <div class="aiMsg flex gap-3 p-4 rounded-2xl bg-white/5 text-xs text-on-surface-variant leading-relaxed">
+                  <span class="aiAv text-base">🤖</span>
+                  <div>
+                    Hi! I'm ScholarMate AI. Ask me about your courses, scholarships, upcoming deadlines, or study schedule.
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Input box -->
+              <div class="flex gap-3 mt-4 chatInputRow">
+                <input id="chatInput" class="flex-grow bg-surface-container-high/50 border border-white/5 rounded-xl px-4 py-3 text-on-surface focus:ring-primary/45 text-sm" placeholder="Ask anything..." type="text" onkeypress="if(event.key==='Enter')sendMessage()">
+                <button class="btnSend electric-flow text-on-primary w-12 h-12 flex items-center justify-center rounded-xl hover:scale-105 active:scale-95 transition-transform" onclick="sendMessage()">➤</button>
+              </div>
+            </div>
+
+            <!-- Insights / Readiness stats right sidebar -->
+            <div class="lg:col-span-4 space-y-6 aiSide">
+              <div class="glass-panel p-6 rounded-2xl">
+                <div class="flex items-center gap-2 mb-4">
+                  <span class="material-symbols-outlined text-secondary text-base">analytics</span>
+                  <h3 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">AI Insights</h3>
+                </div>
+                <div id="aiInsights" class="space-y-2">
+                  <!-- Loaded dynamically by JS -->
+                </div>
+              </div>
+
+              <div class="glass-panel p-6 rounded-2xl">
+                <div class="flex items-center gap-2 mb-4">
+                  <span class="material-symbols-outlined text-tertiary text-base">track_changes</span>
+                  <h3 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">Readiness Gauge</h3>
+                </div>
+                <div id="eligibilityAI">
+                  <!-- Loaded dynamically by JS -->
+                </div>
+              </div>
+
+              <div class="glass-panel p-6 rounded-2xl">
+                <div class="flex items-center gap-2 mb-4">
+                  <span class="material-symbols-outlined text-primary text-base">tips_and_updates</span>
+                  <h3 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">Action Suggestions</h3>
+                </div>
+                <div id="suggestionsAI" class="space-y-2">
+                  <!-- Loaded dynamically by JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════ PAGE: SETTINGS ══════════ -->
+        <div class="page" id="settingsPage">
+          <div class="mb-8">
+            <h1 class="font-headline-lg text-2xl lg:text-3xl text-on-surface font-extrabold mb-1">Preferences & Settings</h1>
+            <p class="text-on-surface-variant text-xs">Configure your display credentials, custom notifications, and visual theme choices.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 settingsGrid">
+            
+            <!-- Profile settings -->
+            <div class="glass-panel p-8 rounded-[32px] flex flex-col justify-between md:col-span-2">
+              <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-primary">person</span>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-on-surface">Profile</h3>
+                  <p class="text-xs text-on-surface-variant">Update credentials.</p>
+                </div>
+              </div>
+              
+              <div class="space-y-4 flex-grow mb-6 settBody">
+                <div class="flex flex-col gap-1.5 settField">
+                  <label class="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Display Name</label>
+                  <input id="usernameInput" class="bg-surface-container-high/50 border border-white/5 rounded-xl px-4 py-3 text-on-surface focus:ring-primary/45 text-sm" placeholder="Your name" type="text">
+                </div>
+              </div>
+              
+              <button class="electric-flow text-on-primary py-3 px-8 rounded-xl font-bold text-xs hover:scale-[1.02] transition-transform duration-200 w-full md:w-auto self-start" onclick="saveProfile()">Save Profile</button>
+            </div>
+
+            <!-- Notification preferences -->
+            <div class="glass-panel p-8 rounded-[32px] md:col-span-2">
+              <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-2xl bg-tertiary/10 border border-tertiary/20 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-tertiary">notifications</span>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-on-surface">Notifications</h3>
+                  <p class="text-xs text-on-surface-variant">Adjust your alert rhythms.</p>
+                </div>
+              </div>
+              
+              <div class="space-y-4 max-w-md settBody">
+                <div class="flex items-center justify-between settRow border-b border-white/5 pb-3">
+                  <span class="text-sm font-medium">Deadline alerts</span>
+                  <label class="toggle"><input type="checkbox" checked><span class="tSlider"></span></label>
+                </div>
+                <div class="flex items-center justify-between settRow border-b border-white/5 pb-3">
+                  <span class="text-sm font-medium">Streak reminders</span>
+                  <label class="toggle"><input type="checkbox" checked><span class="tSlider"></span></label>
+                </div>
+                <div class="flex items-center justify-between settRow">
+                  <span class="text-sm font-medium">Daily motivation tips</span>
+                  <label class="toggle"><input type="checkbox" checked><span class="tSlider"></span></label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="flex justify-center mt-8">
+            <button class="flex items-center gap-2 px-8 py-3 rounded-xl bg-error-container/10 border border-error/20 text-error font-bold text-xs hover:bg-error-container/20 transition-colors" onclick="logout()">
+              <span class="material-symbols-outlined text-base">logout</span> Sign Out
+            </button>
+          </div>
+        </div>
+
+        <!-- ══════════ PAGE: DEADLINES ══════════ -->
+        <div class="page" id="deadlinePage">
+          <div class="mb-8">
+            <h1 class="font-headline-lg text-2xl lg:text-3xl text-on-surface font-extrabold mb-1">Milestone Deadlines</h1>
+            <p class="text-on-surface-variant text-xs">Create custom milestones and follow target dates to guarantee scholarship readiness.</p>
+          </div>
+
+          <!-- Add Deadline Section -->
+          <section class="glass-panel p-6 rounded-2xl mb-8">
+            <div class="flex items-center gap-3 mb-6">
+              <span class="material-symbols-outlined text-primary">add_alert</span>
+              <h2 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">Add Deadline Milestone</h2>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4 addRow">
+              <input id="deadlineName" class="flex-grow bg-surface-container-high/50 border border-white/5 rounded-xl px-4 py-3 text-on-surface focus:ring-primary/45 text-sm" placeholder="Deadline milestone title" type="text">
+              <input id="deadlineDate" class="bg-surface-container-high/50 border border-white/5 rounded-xl px-4 py-3 text-on-surface focus:ring-primary/45 text-sm" type="date">
+              <button class="btnPrimary electric-flow text-on-primary px-8 rounded-xl font-bold text-sm hover:scale-[1.02] transition-transform duration-200" onclick="addDeadline()">Create</button>
+            </div>
+          </section>
+
+          <!-- List Container -->
+          <section class="glass-panel p-6 rounded-2xl">
+            <div class="flex items-center gap-3 mb-6">
+              <span class="material-symbols-outlined text-secondary">list</span>
+              <h2 class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest font-bold">All Tracked Milestones</h2>
+            </div>
+            <div id="deadlineContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Loaded dynamically by JS -->
+            </div>
+          </section>
+        </div>
+
       </div>
-    </div>
 
-    <!-- ══════════ SETTINGS ══════════ -->
-    <div class="page" id="settingsPage">
-      <div class="pageHdr"><h1>⚙️ Settings</h1></div>
-      <div class="settingsGrid">
-        <div class="card">
-          <div class="cHead"><span>👤</span><h3>Profile</h3></div>
-          <div class="settBody">
-            <div class="settField"><label>Display Name</label><input id="usernameInput" placeholder="Your name"></div>
-            <button class="btnPrimary" style="max-width:200px" onclick="saveProfile()">Save Profile</button>
-          </div>
-        </div>
-        <div class="card">
-          <div class="cHead"><span>🎨</span><h3>Theme</h3></div>
-          <div class="settBody">
-            <div class="settRow"><span>🌙 Dark Mode</span><label class="toggle"><input type="checkbox" id="darkModeToggle" checked onchange="toggleDarkMode()"><span class="tSlider"></span></label></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="cHead"><span>🔔</span><h3>Notifications</h3></div>
-          <div class="settBody">
-            <div class="settRow"><span>Deadline alerts</span><label class="toggle"><input type="checkbox" checked><span class="tSlider"></span></label></div>
-            <div class="settRow"><span>Streak reminders</span><label class="toggle"><input type="checkbox" checked><span class="tSlider"></span></label></div>
-            <div class="settRow"><span>Daily motivation</span><label class="toggle"><input type="checkbox" checked><span class="tSlider"></span></label></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </main>
+  </div>
 
-    <!-- Deadlines (linked from nav) -->
-    <div class="page" id="deadlinePage">
-      <div class="pageHdr"><h1>⏳ Deadlines</h1></div>
-      <div class="card">
-        <div class="cHead"><span>➕</span><h3>Add Deadline</h3></div>
-        <div class="addRow">
-          <input id="deadlineName" placeholder="Deadline name">
-          <input id="deadlineDate" type="date">
-          <button class="btnPrimary" onclick="addDeadline()">Add</button>
-        </div>
-      </div>
-      <div class="card">
-        <div class="cHead"><span>📋</span><h3>All Deadlines</h3></div>
-        <div id="deadlineContainer"></div>
-      </div>
-    </div>
+  <!-- Notifications container -->
+  <div id="notifContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3"></div>
 
-  </main>
-</div>
+  <!-- Firebase Services -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  
+  <!-- Main Application Scripts -->
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+  <script src="auth.js"></script>
 
-<div id="notifContainer"></div>
+  <!-- Timer Interaction Inline helper script -->
+  <script>
+    let timeLeft = 1500; // 25 minutes
+    let timerRunning = false;
+    let timerInterval = null;
+    const totalLength = 464.95; // Circumference of radius 74 circle
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-<!-- App -->
-<script src="config.js"></script>
-<script src="script.js"></script>
-<script src="auth.js"></script>
+    function updateLocalTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      const display = document.getElementById('timer-display');
+      const progressRing = document.getElementById('timer-progress');
+      
+      if (display) {
+        display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }
+      
+      if (progressRing) {
+        const offset = totalLength - (timeLeft / 1500) * totalLength;
+        progressRing.style.strokeDashoffset = offset;
+      }
+      
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        const icon = document.getElementById('timer-icon');
+        if (icon) icon.textContent = 'play_arrow';
+        timeLeft = 1500;
+        showNotif("⏱ Deep work session completed! Take a break. ☕", "success");
+      }
+    }
+
+    const timerBtn = document.getElementById('timer-btn');
+    if (timerBtn) {
+      timerBtn.addEventListener('click', () => {
+        const icon = document.getElementById('timer-icon');
+        if (timerRunning) {
+          clearInterval(timerInterval);
+          if (icon) icon.textContent = 'play_arrow';
+          timerRunning = false;
+        } else {
+          timerInterval = setInterval(() => {
+            timeLeft--;
+            updateLocalTimerDisplay();
+          }, 1000);
+          if (icon) icon.textContent = 'pause';
+          timerRunning = true;
+        }
+      });
+    }
+
+    function resetLocalTimer() {
+      clearInterval(timerInterval);
+      timerRunning = false;
+      timeLeft = 1500;
+      const icon = document.getElementById('timer-icon');
+      if (icon) icon.textContent = 'play_arrow';
+      updateLocalTimerDisplay();
+    }
+  </script>
 </body>
 </html>

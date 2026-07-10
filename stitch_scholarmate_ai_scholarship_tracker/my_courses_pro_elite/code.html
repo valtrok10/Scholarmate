@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ScholarMate | Premium Courses Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#001f26",
+                        "on-surface": "#dae2fd",
+                        "on-background": "#dae2fd",
+                        "inverse-on-surface": "#283044",
+                        "inverse-surface": "#dae2fd",
+                        "error": "#ffb4ab",
+                        "surface-dim": "#0b1326",
+                        "surface": "#0b1326",
+                        "on-primary-fixed": "#07006c",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-low": "#131b2e",
+                        "tertiary": "#4cd7f6",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "on-primary": "#1000a9",
+                        "surface-container-high": "#222a3d",
+                        "inverse-primary": "#494bd6",
+                        "on-tertiary-container": "#002f38",
+                        "surface-tint": "#c0c1ff",
+                        "primary-container": "#8083ff",
+                        "outline-variant": "#464554",
+                        "tertiary-fixed": "#acedff",
+                        "secondary-fixed-dim": "#ddb7ff",
+                        "error-container": "#93000a",
+                        "on-primary-container": "#0d0096",
+                        "primary-fixed": "#e1e0ff",
+                        "on-secondary": "#490080",
+                        "on-tertiary": "#003640",
+                        "on-tertiary-fixed-variant": "#004e5c",
+                        "surface-container-highest": "#2d3449",
+                        "primary": "#c0c1ff",
+                        "on-error": "#690005",
+                        "tertiary-container": "#009eb9",
+                        "surface-bright": "#31394d",
+                        "background": "#0b1326",
+                        "on-secondary-fixed": "#2c0051",
+                        "on-secondary-container": "#d6a9ff",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "outline": "#908fa0",
+                        "on-secondary-fixed-variant": "#6900b3",
+                        "secondary-fixed": "#f0dbff",
+                        "secondary-container": "#6f00be",
+                        "on-surface-variant": "#c7c4d7",
+                        "surface-variant": "#2d3449",
+                        "surface-container": "#171f33",
+                        "secondary": "#ddb7ff",
+                        "tertiary-fixed-dim": "#4cd7f6",
+                        "surface-container-lowest": "#060e20"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-sm": "16px",
+                        "margin-md": "32px",
+                        "margin-lg": "64px",
+                        "base": "8px",
+                        "gutter": "20px",
+                        "container-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0b1326;
+            color: #dae2fd;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(11, 19, 38, 0.4);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-edge {
+            position: relative;
+        }
+        .glass-edge::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(192, 193, 255, 0.3), rgba(255, 255, 255, 0.05));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .neon-gradient-primary {
+            background: linear-gradient(135deg, #c0c1ff 0%, #6366f1 100%);
+        }
+
+        .shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.05) 40%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.05) 60%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(-45deg);
+            animation: shimmer 4s infinite linear;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(-45deg); }
+            100% { transform: translateX(100%) rotate(-45deg); }
+        }
+
+        .pulse-glow {
+            box-shadow: 0 0 20px rgba(192, 193, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .pulse-glow:hover {
+            box-shadow: 0 0 35px rgba(192, 193, 255, 0.4);
+        }
+
+        .progress-ring-glow {
+            filter: drop-shadow(0 0 12px rgba(192, 193, 255, 0.6));
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background">
+<!-- Global Layout Wrapper -->
+<div class="flex min-h-screen">
+<!-- SideNavBar (from COMPONENTS_5) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface/30 backdrop-blur-[20px] border-r border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex flex-col py-gutter px-4 z-50">
+<div class="mb-margin-md px-2">
+<h1 class="font-display-lg text-[2.5rem] font-extrabold text-primary tracking-tighter">ScholarMate</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-[0.2em] mt-1">AI Academic Tracker</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all ease-in-out-smooth hover:scale-[1.02] duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all ease-in-out-smooth hover:scale-[1.02] duration-200" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-label-sm text-label-sm">Tasks</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-primary bg-primary/10 border-r-2 border-primary shadow-[0_0_15px_rgba(192,193,255,0.3)] hover:scale-[1.02] transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm text-label-sm">Courses</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all ease-in-out-smooth hover:scale-[1.02] duration-200" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm text-label-sm">Scholarships</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all ease-in-out-smooth hover:scale-[1.02] duration-200" href="#">
+<span class="material-symbols-outlined">speed</span>
+<span class="font-label-sm text-label-sm">Productivity</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all ease-in-out-smooth hover:scale-[1.02] duration-200" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-sm text-label-sm">AI Assistant</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all ease-in-out-smooth hover:scale-[1.02] duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-2 space-y-4">
+<button class="w-full py-3 bg-primary-container text-on-primary-container font-label-md text-label-md rounded-lg pulse-glow transition-transform scale-95 active:scale-90">
+                Upgrade to Pro
+            </button>
+<div class="flex items-center gap-3 pt-6 border-t border-white/5">
+<img alt="ScholarMate Premium User" class="w-10 h-10 rounded-full border border-primary/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHudLyB1gb1TfqfSuw0gfINFQv0E2TzMw9aC5a7bkjVs23jj4TlTUh96dao8Ft3c2hewfs14nk276lIcE35QdyudQ9Pueuq3kHANmBthI1umq09XmTWDEoZd0ugZBlq2qhT4bzmj9H8_cD0ifqr_Ylxwcuk4Xr33C4BUypel24vfqY-I1oSW3fqiFoqFONTNu0RPVVjCbX7h3Jk54Ym0qGI_42hBapkJoqhGRfm617Ccxgxb37paiQWA"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Alex Rivera</p>
+<p class="text-[10px] text-primary/70 uppercase">Master Tier</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex-1 flex flex-col relative min-h-screen">
+<!-- TopNavBar (from COMPONENTS_5) -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-surface/10 backdrop-blur-[40px] border-b border-white/10 shadow-sm flex justify-between items-center h-16 px-gutter">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="w-full bg-surface-container-low/50 border border-white/5 rounded-full pl-10 pr-4 py-1.5 text-sm focus:ring-1 focus:ring-secondary text-on-surface placeholder:text-on-surface-variant/40" placeholder="Search your knowledge base..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-white/10 rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-tertiary rounded-full border border-surface"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-white/10 rounded-full transition-colors">
+<span class="material-symbols-outlined">history</span>
+</button>
+<div class="h-6 w-[1px] bg-white/10 mx-2"></div>
+<div class="flex items-center gap-2 pr-4">
+<span class="font-headline-lg text-headline-sm font-bold text-primary">Courses</span>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-margin-lg pt-24 space-y-margin-md">
+<!-- Add Course Section -->
+<section class="glass-panel glass-edge p-margin-sm rounded-lg shimmer">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">add_circle</span>
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Add Course</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+<input class="bg-surface-container-high/50 border border-white/5 rounded-lg px-4 py-3 text-on-surface focus:ring-primary/40 focus:border-primary" placeholder="Course name" type="text"/>
+<input class="md:col-span-2 bg-surface-container-high/50 border border-white/5 rounded-lg px-4 py-3 text-on-surface focus:ring-primary/40 focus:border-primary" placeholder="URL — YouTube playlists auto-extract" type="text"/>
+<div class="flex gap-2">
+<input class="flex-1 bg-surface-container-high/50 border border-white/5 rounded-lg px-4 py-3 text-on-surface focus:ring-primary/40 focus:border-primary" placeholder="Lessons" type="number"/>
+<button class="neon-gradient-primary text-on-primary px-6 rounded-lg font-label-md text-label-md pulse-glow hover:scale-[1.02] transition-all">Add</button>
+</div>
+</div>
+<div class="flex items-center gap-4 text-sm bg-black/20 p-3 rounded-lg border border-white/5">
+<span class="material-symbols-outlined text-on-surface-variant text-base">key</span>
+<p class="text-on-surface-variant">YouTube API key (optional):</p>
+<input class="bg-transparent border-none text-on-surface focus:ring-0 p-0 text-sm flex-1 font-mono" type="password" value="AlzaSy..."/>
+<button class="text-tertiary font-bold hover:underline">Save</button>
+</div>
+</section>
+<!-- Combined Progress & Courses Bento Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Progress Meters Column -->
+<div class="lg:col-span-1 glass-panel glass-edge p-margin-sm rounded-lg flex flex-col shimmer">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-tertiary">analytics</span>
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Progress Meters</h2>
+</div>
+<div class="flex flex-col items-center justify-center flex-1 space-y-12 py-8">
+<!-- Ring 1 -->
+<div class="relative group">
+<svg class="w-44 h-44 transform -rotate-90">
+<circle class="text-white/5" cx="88" cy="88" fill="transparent" r="76" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary progress-ring-glow transition-all duration-1000" cx="88" cy="88" fill="transparent" r="76" stroke="currentColor" stroke-dasharray="477" stroke-dashoffset="458" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-display-lg text-display-lg text-primary">4%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter">Python</span>
+</div>
+</div>
+<!-- Horizontal meters for smaller ones -->
+<div class="grid grid-cols-2 gap-8 w-full">
+<div class="flex flex-col items-center gap-2">
+<div class="relative w-24 h-24">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-white/5" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-secondary opacity-20" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251" stroke-dashoffset="251" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="font-headline-sm text-headline-sm text-on-surface-variant/40">0%</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">SQL</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="relative w-24 h-24">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-white/5" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-tertiary opacity-20" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251" stroke-dashoffset="251" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="font-headline-sm text-headline-sm text-on-surface-variant/40">0%</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Japanese</span>
+</div>
+</div>
+</div>
+</div>
+<!-- My Courses Column -->
+<div class="lg:col-span-2 space-y-6">
+<div class="flex items-center justify-between px-2">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">folder_open</span>
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">My Courses</h2>
+</div>
+<button class="text-primary text-sm hover:underline font-bold">View All</button>
+</div>
+<!-- Course Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Course 1: Python -->
+<div class="glass-panel glass-edge p-6 rounded-lg group hover:translate-y-[-4px] transition-all duration-300 shimmer">
+<div class="flex justify-between items-start mb-6">
+<span class="bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold text-on-surface flex items-center gap-1 uppercase tracking-tighter">
+<span class="material-symbols-outlined text-[14px]">link</span> Link
+                                </span>
+<span class="text-primary font-extrabold text-lg">4%</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Python</h3>
+<div class="mb-6">
+<div class="flex justify-between items-end mb-2">
+<span class="text-xs text-on-surface-variant">1 / 25 lessons</span>
+</div>
+<div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+<div class="neon-gradient-primary h-full w-[4%] rounded-full shadow-[0_0_10px_rgba(192,193,255,0.5)]"></div>
+</div>
+</div>
+<div class="flex items-center gap-2 mb-6">
+<div class="bg-primary/20 text-primary-fixed px-3 py-1.5 rounded-lg text-xs flex items-center gap-2 border border-primary/20">
+<span class="material-symbols-outlined text-sm">push_pin</span>
+                                    Last: Lesson 1
+                                </div>
+<span class="text-[10px] text-on-surface-variant ml-auto">5 Jul</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex-1 bg-surface-container-high/40 hover:bg-green-500/10 text-green-400 py-2.5 rounded-lg transition-colors font-label-md text-label-md border border-green-500/10">
+                                    Done
+                                </button>
+<button class="flex-1 neon-gradient-primary text-on-primary py-2.5 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform">
+<span class="material-symbols-outlined text-sm">play_arrow</span> Continue
+                                </button>
+</div>
+</div>
+<!-- Course 2: SQL -->
+<div class="glass-panel glass-edge p-6 rounded-lg group hover:translate-y-[-4px] transition-all duration-300 shimmer">
+<div class="flex justify-between items-start mb-6">
+<span class="bg-red-500/10 px-3 py-1 rounded-full text-[10px] font-bold text-red-400 flex items-center gap-1 uppercase tracking-tighter border border-red-500/10">
+<span class="material-symbols-outlined text-[14px]">play_circle</span> YouTube
+                                </span>
+<span class="text-on-surface-variant/20 font-extrabold text-lg">0%</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">SQL</h3>
+<div class="mb-6">
+<div class="flex justify-between items-end mb-2">
+<span class="text-xs text-on-surface-variant">0 / 1 lessons</span>
+</div>
+<div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full w-0 rounded-full"></div>
+</div>
+</div>
+<div class="flex items-center gap-2 mb-6">
+<div class="bg-secondary/10 text-secondary px-3 py-1.5 rounded-lg text-xs flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">new_releases</span>
+                                    Start learning
+                                </div>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex-1 bg-surface-container-high/20 text-on-surface-variant/20 py-2.5 rounded-lg cursor-not-allowed">Done</button>
+<button class="flex-1 neon-gradient-primary text-on-primary py-2.5 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform">
+<span class="material-symbols-outlined text-sm">play_arrow</span> Continue
+                                </button>
+</div>
+</div>
+<!-- Course 3: Japanese -->
+<div class="glass-panel glass-edge p-6 rounded-lg group hover:translate-y-[-4px] transition-all duration-300 shimmer">
+<div class="flex justify-between items-start mb-6">
+<span class="bg-red-500/10 px-3 py-1 rounded-full text-[10px] font-bold text-red-400 flex items-center gap-1 uppercase tracking-tighter border border-red-500/10">
+<span class="material-symbols-outlined text-[14px]">play_circle</span> YouTube
+                                </span>
+<span class="text-on-surface-variant/20 font-extrabold text-lg">0%</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Japanese</h3>
+<div class="mb-6">
+<div class="flex justify-between items-end mb-2">
+<span class="text-xs text-on-surface-variant">0 / 10 lessons</span>
+</div>
+<div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full w-0 rounded-full"></div>
+</div>
+</div>
+<div class="flex items-center gap-2 mb-6">
+<div class="bg-secondary/10 text-secondary px-3 py-1.5 rounded-lg text-xs flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">new_releases</span>
+                                    Start learning
+                                </div>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex-1 bg-surface-container-high/20 text-on-surface-variant/20 py-2.5 rounded-lg cursor-not-allowed">Done</button>
+<button class="flex-1 neon-gradient-primary text-on-primary py-2.5 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform">
+<span class="material-symbols-outlined text-sm">play_arrow</span> Continue
+                                </button>
+</div>
+</div>
+<!-- Placeholder Card (Add New) -->
+<div class="glass-panel border-dashed border-2 border-white/10 flex flex-col items-center justify-center p-6 rounded-lg text-on-surface-variant hover:border-primary/40 hover:text-primary transition-all cursor-pointer bg-white/5 group">
+<span class="material-symbols-outlined text-4xl mb-2 group-hover:scale-110 transition-transform">add_circle</span>
+<p class="font-label-md uppercase tracking-wider">Explore Curriculum</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Interaction Bar (Micro-interactions) -->
+<div class="fixed bottom-8 right-8 z-50">
+<button class="w-16 h-16 neon-gradient-primary text-on-primary rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(99,102,241,0.5)] hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+<!-- Decorative Atmosphere Background -->
+<div class="fixed inset-0 -z-10 pointer-events-none opacity-20">
+<div class="absolute top-[-10%] left-1/4 w-[600px] h-[600px] bg-primary rounded-full blur-[150px]"></div>
+<div class="absolute bottom-[-10%] right-1/4 w-[800px] h-[800px] bg-secondary rounded-full blur-[180px]"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.05)_0%,transparent_70%)]"></div>
+</div>
+<script>
+    // Initialize progress ring dash offsets
+    window.addEventListener('DOMContentLoaded', () => {
+        const rings = document.querySelectorAll('circle[stroke-dasharray]');
+        rings.forEach(ring => {
+            const percent = ring.getAttribute('stroke-dashoffset');
+            ring.style.strokeDashoffset = ring.getAttribute('stroke-dasharray');
+            setTimeout(() => {
+                ring.style.strokeDashoffset = percent;
+            }, 500);
+        });
+    });
+</script>
+</body></html>

@@ -6,19 +6,23 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 
-/* ── TOKENS ───────────────────────────────────────────────── */
+/* ── TOKENS — "Vivid Lumina" glassmorphism palette ─────────── */
 :root{
-  --bg:#07101f; --bg2:#0b1628; --bg3:#101e35;
-  --sidebar:#060e1c;
+  --bg:#0b1326; --bg2:#131b2e; --bg3:#171f33;
+  --sidebar:rgba(11,19,38,.55);
   --card:rgba(255,255,255,.04); --cardH:rgba(255,255,255,.07);
-  --border:rgba(255,255,255,.07); --borderA:rgba(56,189,248,.35);
-  --text:#eef4ff; --sub:#6b8aad; --muted:#344f6b;
-  --a1:#3b82f6; --a2:#6366f1; --cyan:#38bdf8;
+  --border:rgba(255,255,255,.1); --borderA:rgba(192,193,255,.35);
+  --text:#dae2fd; --sub:#c7c4d7; --muted:#8b8fa8;
+  --a1:#6366f1; --a2:#8083ff; --cyan:#4cd7f6;
+  --primary:#c0c1ff; --secondary:#ddb7ff; --tertiary:#4cd7f6;
   --green:#10b981; --amber:#f59e0b; --red:#ef4444;
-  --gA:rgba(56,189,248,.18); --gG:rgba(16,185,129,.18);
+  --gA:rgba(76,215,246,.18); --gG:rgba(16,185,129,.18);
   --gR:rgba(239,68,68,.18);  --gY:rgba(245,158,11,.18);
-  --font:'Inter',system-ui,sans-serif;
+  --font:'Plus Jakarta Sans','Inter',system-ui,sans-serif;
   --r:18px; --rSm:12px; --rLg:24px;
+  --glass-bg:rgba(11,19,38,.4); --glass-border:rgba(255,255,255,.1);
+  /* Used directly as SVG stroke="var(...)" on the dashboard readiness ring */
+  --lumina-primary:#c0c1ff; --lumina-outline-variant:rgba(255,255,255,.1);
 }
 body.light{
   --bg:#f0f5ff; --bg2:#e8eeff; --bg3:#dde8ff;
@@ -32,11 +36,51 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
 /* animated mesh */
 body::before{content:"";position:fixed;inset:0;z-index:-2;
-  background:radial-gradient(ellipse 70% 55% at 15% 12%,rgba(56,189,248,.07),transparent),
-             radial-gradient(ellipse 60% 65% at 85% 85%,rgba(99,102,241,.07),transparent),
-             radial-gradient(ellipse 45% 45% at 55% 55%,rgba(16,185,129,.04),transparent);
+  background:radial-gradient(ellipse 70% 55% at 15% 12%,rgba(192,193,255,.08),transparent),
+             radial-gradient(ellipse 60% 65% at 85% 85%,rgba(221,183,255,.07),transparent),
+             radial-gradient(ellipse 45% 45% at 55% 55%,rgba(76,215,246,.05),transparent);
   animation:meshPulse 14s ease-in-out infinite alternate;}
 @keyframes meshPulse{0%{opacity:.6}100%{opacity:1}}
+
+/* Large soft glow orbs (Hyper-Glassmorphism atmosphere, behind everything) */
+body::after{content:"";position:fixed;inset:0;z-index:-3;pointer-events:none;opacity:.5;
+  background:
+    radial-gradient(circle 600px at 25% -5%, rgba(192,193,255,.10), transparent 70%),
+    radial-gradient(circle 800px at 78% 105%, rgba(221,183,255,.09), transparent 70%);}
+
+/* ── GLASS SYSTEM (Vivid Lumina / Stitch design) ─────────────
+   Referenced throughout index.html + script.js templates.
+──────────────────────────────────────────────────────────── */
+.glass-panel{
+  background:var(--glass-bg);
+  backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
+  border:1px solid var(--glass-border);
+}
+.glass-edge{position:relative;}
+.glass-edge::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:linear-gradient(135deg,rgba(192,193,255,.3),rgba(255,255,255,.05));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.neon-gradient-primary,.electric-flow{
+  background:linear-gradient(135deg,#c0c1ff 0%,#6366f1 100%);
+}
+.neon-border-indigo{box-shadow:0 0 0 1px rgba(192,193,255,.4),0 0 20px rgba(99,102,241,.35);}
+.pulse-glow{box-shadow:0 0 20px rgba(192,193,255,.2);transition:box-shadow .3s ease;}
+.pulse-glow:hover{box-shadow:0 0 35px rgba(192,193,255,.4);}
+.progress-ring-glow{filter:drop-shadow(0 0 12px rgba(192,193,255,.6));}
+.no-scrollbar::-webkit-scrollbar{display:none;}
+.shimmer{position:relative;overflow:hidden;}
+.shimmer::after{
+  content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:linear-gradient(to bottom right,
+    rgba(255,255,255,0) 0%,rgba(255,255,255,.05) 40%,
+    rgba(255,255,255,.15) 50%,rgba(255,255,255,.05) 60%,rgba(255,255,255,0) 100%);
+  transform:rotate(-45deg);animation:shimmerSweep 4s infinite linear;pointer-events:none;
+}
+@keyframes shimmerSweep{0%{transform:translateX(-100%) rotate(-45deg);}100%{transform:translateX(100%) rotate(-45deg);}}
 
 /* ── LOADING ──────────────────────────────────────────────── */
 #loadingScreen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
@@ -55,9 +99,9 @@ body::before{content:"";position:fixed;inset:0;z-index:-2;
 
 /* ── LOGIN ────────────────────────────────────────────────── */
 .loginScreen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,#04091a 0%,#08152e 60%,#0d1f3e 100%);z-index:9999;}
+  background:linear-gradient(135deg,#060e20 0%,#0b1326 55%,#131b2e 100%);z-index:9999;}
 .loginBg{position:absolute;width:600px;height:600px;border-radius:50%;
-  background:radial-gradient(circle,rgba(56,189,248,.08),transparent 70%);
+  background:radial-gradient(circle,rgba(192,193,255,.10),transparent 70%);
   top:-200px;left:-200px;animation:orbFloat 9s ease-in-out infinite alternate;}
 @keyframes orbFloat{0%{transform:translate(0,0)}100%{transform:translate(30px,40px)}}
 .loginCard{position:relative;z-index:1;width:430px;padding:46px 42px;
@@ -103,11 +147,19 @@ body::before{content:"";position:fixed;inset:0;z-index:-2;
 /* ── LAYOUT ───────────────────────────────────────────────── */
 #mainWebsite{display:flex;min-height:100vh;}
 
+/* FIX: <main> uses both `lg:ml-64` and `w-full` in the markup, which
+   together make it 256px wider than the viewport (100% + 256px margin),
+   pushing the right side of every page off-screen. Force the correct
+   width at the same breakpoint Tailwind uses for ml-64 (lg = 1024px). */
+@media (min-width:1024px){
+  #mainWebsite > main{width:calc(100% - 16rem) !important;}
+}
+
 /* SIDEBAR */
-.sidebar{position:fixed;top:0;left:0;width:216px;height:100vh;
-  background:var(--sidebar);border-right:1px solid var(--border);
-  display:flex;flex-direction:column;padding:20px 12px;z-index:200;
-  transition:transform .3s cubic-bezier(.4,0,.2,1);}
+/* Box layout (width/position/padding) now lives on the <aside> as Tailwind
+   utilities (w-64, fixed, left-0, top-0, py-6, px-4). This rule only adds
+   the mobile off-canvas slide behavior on top of that. */
+.sidebar{transition:transform .3s cubic-bezier(.4,0,.2,1);}
 .sidebarBrand{display:flex;align-items:center;gap:9px;padding:0 8px 20px;
   border-bottom:1px solid var(--border);margin-bottom:14px;}
 .brandIcon{font-size:22px;}
@@ -119,9 +171,11 @@ body::before{content:"";position:fixed;inset:0;z-index:-2;
   cursor:pointer;color:var(--sub);font-size:13px;font-weight:500;
   transition:.2s;border-left:3px solid transparent;}
 .navItem:hover{background:rgba(255,255,255,.05);color:var(--text);transform:translateX(2px);}
-.navItem.active{background:linear-gradient(90deg,rgba(59,130,246,.15),rgba(99,102,241,.07));
-  color:var(--text);border-left-color:var(--cyan);font-weight:700;}
-.navItem.active .ni{filter:drop-shadow(0 0 5px rgba(56,189,248,.6));}
+.navItem.active{background:linear-gradient(90deg,rgba(192,193,255,.15),rgba(99,102,241,.07));
+  color:var(--primary);border-left-color:var(--primary);font-weight:700;
+  box-shadow:0 0 15px rgba(192,193,255,.15);}
+.navItem.active .material-symbols-outlined,
+.navItem.active .ni{filter:drop-shadow(0 0 5px rgba(192,193,255,.6));}
 .ni{font-size:16px;transition:.2s;}
 .logoutBtn{width:100%;padding:10px;margin-top:10px;border-radius:11px;
   background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);
@@ -198,7 +252,7 @@ input,select{padding:10px 14px;font-size:13px;border:1px solid var(--border);
   outline:none;transition:.22s;font-family:var(--font);}
 input:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(56,189,248,.1);
   background:rgba(255,255,255,.08);}
-select option{background:#1e293b;color:#fff;}
+select option{background:#171f33;color:#fff;}
 
 /* ── NOTIFICATIONS ────────────────────────────────────────── */
 #notifContainer{position:fixed;top:16px;right:20px;z-index:9999;

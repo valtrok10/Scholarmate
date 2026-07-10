@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ScholarMate | Settings &amp; Account Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Geist:wght@400;600&amp;family=Hanken+Grotesk:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --ease-in-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: #0b1326;
+            color: #dae2fd;
+            font-family: 'Hanken Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s var(--ease-in-out-smooth);
+        }
+
+        .glass-panel:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .electric-flow {
+            background: linear-gradient(135deg, #c0c1ff 0%, #4cd7f6 100%);
+        }
+
+        .shimmer-gradient {
+            background: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0) 25%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 75%
+            );
+            background-size: 200% 200%;
+            animation: shimmer 2s infinite linear;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .glowing-ring {
+            box-shadow: 0 0 15px rgba(192, 193, 255, 0.5), inset 0 0 10px rgba(192, 193, 255, 0.3);
+            border: 2px solid #c0c1ff;
+        }
+
+        .toggle-active {
+            box-shadow: 0 0 10px rgba(76, 215, 246, 0.6);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#171f33",
+                        "on-background": "#dae2fd",
+                        "surface-bright": "#31394d",
+                        "surface-variant": "#2d3449",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed": "#acedff",
+                        "error": "#ffb4ab",
+                        "outline-variant": "#464554",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "surface-container-low": "#131b2e",
+                        "inverse-surface": "#dae2fd",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "surface-container-lowest": "#060e20",
+                        "inverse-primary": "#494bd6",
+                        "on-secondary-container": "#00424e",
+                        "on-surface": "#dae2fd",
+                        "secondary-container": "#03b5d3",
+                        "surface-container-highest": "#2d3449",
+                        "error-container": "#93000a",
+                        "surface": "#0b1326",
+                        "on-error": "#690005",
+                        "tertiary-container": "#a078ff",
+                        "secondary": "#4cd7f6",
+                        "primary-container": "#8083ff",
+                        "surface-dim": "#0b1326",
+                        "tertiary": "#d0bcff",
+                        "tertiary-fixed": "#e9ddff",
+                        "on-tertiary-fixed-variant": "#5516be",
+                        "on-primary": "#1000a9",
+                        "on-tertiary-container": "#340080",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-tertiary-fixed": "#23005c",
+                        "inverse-on-surface": "#283044",
+                        "primary": "#c0c1ff",
+                        "on-secondary": "#003640",
+                        "primary-fixed": "#e1e0ff",
+                        "surface-tint": "#c0c1ff",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "on-secondary-fixed": "#001f26",
+                        "on-primary-container": "#0d0096",
+                        "background": "#0b1326",
+                        "on-primary-fixed": "#07006c",
+                        "surface-container-high": "#222a3d",
+                        "on-surface-variant": "#c7c4d7",
+                        "on-tertiary": "#3c0091",
+                        "outline": "#908fa0",
+                        "tertiary-fixed-dim": "#d0bcff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "container-max": "1440px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "80px",
+                        "stack-gap": "16px"
+                    },
+                    "fontFamily": {
+                        "display-xl": ["Plus Jakarta Sans"],
+                        "label-sm": ["Geist"],
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "display-xl": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background selection:bg-primary/30">
+<!-- Ambient Background -->
+<div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/10 blur-[120px] rounded-full"></div>
+</div>
+<!-- Side Navigation Bar (Shared Component) -->
+<aside class="h-screen w-64 fixed left-0 top-0 border-r border-white/10 bg-surface/30 backdrop-blur-[20px] shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex flex-col py-6 px-4 z-50">
+<div class="flex items-center gap-3 mb-10 px-2">
+<div class="w-10 h-10 rounded-xl electric-flow flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-on-primary font-bold">school</span>
+</div>
+<span class="font-display-xl text-display-xl font-extrabold text-primary tracking-tighter text-[24px]">ScholarMate</span>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 p-3 rounded-xl transition-all ease-in-out-smooth text-on-surface-variant hover:text-on-surface hover:bg-white/5 group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl transition-all ease-in-out-smooth text-on-surface-variant hover:text-on-surface hover:bg-white/5 group" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-label-sm text-label-sm">Tasks</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl transition-all ease-in-out-smooth text-on-surface-variant hover:text-on-surface hover:bg-white/5 group" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm text-label-sm">Courses</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl transition-all ease-in-out-smooth text-on-surface-variant hover:text-on-surface hover:bg-white/5 group" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm text-label-sm">Scholarships</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl transition-all ease-in-out-smooth text-on-surface-variant hover:text-on-surface hover:bg-white/5 group" href="#">
+<span class="material-symbols-outlined">speed</span>
+<span class="font-label-sm text-label-sm">Productivity</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl transition-all ease-in-out-smooth text-on-surface-variant hover:text-on-surface hover:bg-white/5 group" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-sm text-label-sm">AI Assistant</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl transition-all ease-in-out-smooth text-primary bg-primary/10 border-r-2 border-primary shadow-[0_0_15px_rgba(192,193,255,0.3)]" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto p-4 glass-panel rounded-2xl border-primary/20">
+<p class="text-[10px] text-primary font-bold tracking-widest mb-1">PRO PLAN</p>
+<div class="w-full bg-white/10 h-1.5 rounded-full mb-3 overflow-hidden">
+<div class="electric-flow w-3/4 h-full"></div>
+</div>
+<button class="w-full electric-flow text-on-primary py-2 rounded-lg font-label-sm text-label-sm hover:scale-[1.02] transition-transform active:scale-95 shadow-lg shadow-primary/20">
+                Upgrade to Pro
+            </button>
+</div>
+</aside>
+<!-- Top Navigation Bar (Shared Component) -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-surface/10 backdrop-blur-[40px] border-b border-white/10 shadow-sm flex justify-between items-center h-16 px-gutter">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative group w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary">search</span>
+<input class="w-full bg-white/5 border border-white/10 rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-secondary transition-all" placeholder="Search settings, tools, or help..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-white/10 rounded-full transition-colors text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 hover:bg-white/10 rounded-full transition-colors text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined">history</span>
+</button>
+<div class="h-8 w-px bg-white/10 mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-bold text-on-surface">Alex Chen</p>
+<p class="text-[10px] text-primary">Elite Member</p>
+</div>
+<img class="w-10 h-10 rounded-full border border-primary/30" data-alt="A hyper-realistic studio portrait of a trendy young male professional with sharp features, wearing a high-tech obsidian-colored smart-wear. The background is a sophisticated dark gradient with soft neon blue backlighting, reflecting a premium digital craftsman aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbFbiYVdbcIZQvTuYlE-2qYQ1v8NnhUAceCfwPC21IEcQpyoBLbYP1qGptaun7D4gDHF2ofY_Nf2-88oWIX825GJKni-yY7DghgAIuRBiDLfhl0dq4IJ2BN9QEexNyFQ4ICzeeRbBsqAbts4QOaiuGDgwcD3fRgdt8LR3UqRd4ZHruU5s4EpcFVJx0Da_vf3AKA9dPm8CilHRNzErWm3qWdoP-k4XFMJDwtPGgPcUDoNJtDLlCduKdMw"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 px-gutter pb-12 relative z-10">
+<!-- Premium Profile Hub -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+<div class="lg:col-span-8 flex flex-col md:flex-row items-center gap-8 glass-panel p-10 rounded-[32px] relative overflow-hidden">
+<div class="absolute top-0 right-0 p-8">
+<div class="flex gap-2">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+<span class="text-[10px] font-label-sm tracking-widest text-primary uppercase">Profile Online</span>
+</div>
+</div>
+<div class="relative">
+<div class="w-40 h-40 rounded-full p-1.5 glowing-ring">
+<div class="w-full h-full rounded-full overflow-hidden border-2 border-surface">
+<img class="w-full h-full object-cover" data-alt="A close-up headshot of a futuristic scholar with glowing blue digital interfaces reflected in their eyes. The lighting is cinematic, highlighting the professional yet tech-forward personality. Deep navy and cyan tones dominate the atmospheric background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD72Vmb0uUMClP5Acedu6wnTqseXbnu1xuJfBne4MAM3K5idOyXNOtLNLunFrpbkcHyX5bTv_SGFwwCwMIi32CmamBwPvpWMfY-JdE7UNkLfEW_KvaGJv0z3Iexava6ZTheg7vQn0-mL5eK36SuhYoPavR5N1lSVnauPhffP3_efEg-yfLgNT1aNx8-2OfoIaRgyBmEnfthOjx_fDQNTbE1Cz2xqA7rjPsqgYLxUB_Eh79Btpo5mvYaxA"/>
+</div>
+</div>
+<div class="absolute -bottom-2 right-4 electric-flow px-3 py-1 rounded-full text-[10px] font-bold text-on-primary shadow-lg">
+                        LEVEL 42
+                    </div>
+</div>
+<div class="text-center md:text-left">
+<div class="flex flex-wrap justify-center md:justify-start items-center gap-3 mb-2">
+<h1 class="font-headline-lg text-headline-lg text-on-background">Alex Chen</h1>
+<span class="bg-secondary-container/20 text-secondary border border-secondary/30 px-3 py-0.5 rounded-full text-[12px] font-bold uppercase tracking-tighter">Elite Badge</span>
+</div>
+<p class="text-on-surface-variant mb-6 max-w-md">Quantum Computing Student &amp; Senior Research Lead. Optimized ScholarMate since 2023.</p>
+<div class="flex flex-wrap gap-4 justify-center md:justify-start">
+<div class="glass-panel px-4 py-2 rounded-xl flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">auto_awesome</span>
+<span class="text-xs font-bold">128 AI Credits</span>
+</div>
+<div class="glass-panel px-4 py-2 rounded-xl flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-sm">military_tech</span>
+<span class="text-xs font-bold">14 Academic Awards</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Subscription Status Card -->
+<div class="lg:col-span-4 glass-panel p-8 rounded-[32px] relative overflow-hidden group">
+<div class="absolute inset-0 shimmer-gradient opacity-20 group-hover:opacity-40 transition-opacity"></div>
+<div class="relative z-10 flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<span class="bg-primary/20 text-primary px-3 py-1 rounded-lg text-[10px] font-bold tracking-widest">CURRENT PLAN</span>
+<span class="material-symbols-outlined text-primary">verified</span>
+</div>
+<h2 class="text-3xl font-display-xl font-extrabold text-on-surface mb-2 tracking-tight">Pro Scholar</h2>
+<p class="text-on-surface-variant text-sm mb-8">Full access to advanced AI tracking and premium cloud syncing.</p>
+<div class="mt-auto space-y-4">
+<div class="flex justify-between text-xs font-bold">
+<span>Next billing date</span>
+<span class="text-primary">Oct 12, 2024</span>
+</div>
+<button class="w-full py-3 rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 transition-colors font-bold text-sm">
+                            Manage Subscription
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Settings Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Security Section -->
+<section class="glass-panel p-8 rounded-[32px]">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-2xl bg-error-container/20 border border-error/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-error">security</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-on-surface">Security</h3>
+<p class="text-xs text-on-surface-variant">Manage your privacy and protection.</p>
+</div>
+</div>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-bold text-sm">Two-Factor Authentication</p>
+<p class="text-xs text-on-surface-variant">Adds an extra layer of protection</p>
+</div>
+<button class="relative w-12 h-6 bg-secondary rounded-full toggle-active p-1 flex items-center justify-end transition-all">
+<div class="w-4 h-4 bg-white rounded-full"></div>
+</button>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="font-bold text-sm">Face Recognition Login</p>
+<p class="text-xs text-on-surface-variant">Biometric entry for faster access</p>
+</div>
+<button class="relative w-12 h-6 bg-white/10 rounded-full p-1 flex items-center justify-start transition-all hover:bg-white/20">
+<div class="w-4 h-4 bg-on-surface-variant rounded-full"></div>
+</button>
+</div>
+<button class="w-full text-left p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/40 transition-colors group">
+<div class="flex justify-between items-center">
+<span class="text-sm font-bold">Change Password</span>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+</button>
+</div>
+</section>
+<!-- AI Preferences Section -->
+<section class="glass-panel p-8 rounded-[32px]">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-2xl bg-primary-container/20 border border-primary/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">psychology</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-on-surface">AI Preferences</h3>
+<p class="text-xs text-on-surface-variant">Customize your academic assistant.</p>
+</div>
+</div>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between mb-4">
+<p class="text-sm font-bold">Assistance Intensity</p>
+<span class="text-primary text-xs font-bold">Pro-Active</span>
+</div>
+<input class="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-primary" max="100" min="0" type="range" value="75"/>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="font-bold text-sm">Voice Analysis</p>
+<p class="text-xs text-on-surface-variant">Summarize lectures in real-time</p>
+</div>
+<button class="relative w-12 h-6 bg-secondary rounded-full toggle-active p-1 flex items-center justify-end transition-all">
+<div class="w-4 h-4 bg-white rounded-full"></div>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 rounded-2xl bg-white/5 border-2 border-primary/50 text-center cursor-pointer">
+<p class="text-[10px] text-primary font-bold uppercase tracking-widest mb-1">Current Model</p>
+<p class="text-sm font-bold">GPT-4 Turbo</p>
+</div>
+<div class="p-4 rounded-2xl bg-white/5 border border-white/10 text-center cursor-pointer hover:bg-white/10 transition-colors">
+<p class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest mb-1">Available</p>
+<p class="text-sm font-bold">Claude 3 Opus</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Theme Customization Section -->
+<section class="glass-panel p-8 rounded-[32px]">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-2xl bg-secondary-container/20 border border-secondary/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">palette</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-on-surface">Visual Theme</h3>
+<p class="text-xs text-on-surface-variant">Aesthetic and interface controls.</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 mb-8">
+<div class="aspect-square rounded-2xl bg-surface border-2 border-primary p-2 flex flex-col justify-between">
+<div class="w-6 h-6 rounded-full electric-flow shadow-glow"></div>
+<p class="text-[10px] font-bold text-primary">Lumina</p>
+</div>
+<div class="aspect-square rounded-2xl bg-[#0a0a0a] border border-white/10 p-2 flex flex-col justify-between hover:bg-white/5 transition-colors cursor-pointer">
+<div class="w-6 h-6 rounded-full bg-white/20"></div>
+<p class="text-[10px] font-bold text-on-surface-variant">Obsidian</p>
+</div>
+<div class="aspect-square rounded-2xl bg-[#f8fafc] border border-white/10 p-2 flex flex-col justify-between hover:bg-white/5 transition-colors cursor-pointer">
+<div class="w-6 h-6 rounded-full bg-primary/40"></div>
+<p class="text-[10px] font-bold text-surface">Frost</p>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<p class="text-sm font-bold">Glassmorphism Intensity</p>
+<span class="text-xs text-on-surface-variant">80%</span>
+</div>
+<input class="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-secondary" max="100" min="0" type="range" value="80"/>
+</div>
+</section>
+<!-- Notifications Section -->
+<section class="glass-panel p-8 rounded-[32px]">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-2xl bg-tertiary-container/20 border border-tertiary/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">notifications_active</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-on-surface">Notifications</h3>
+<p class="text-xs text-on-surface-variant">Set your alert rhythm.</p>
+</div>
+</div>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-bold text-sm">Smart Summary Emails</p>
+<p class="text-xs text-on-surface-variant">Weekly academic progress digests</p>
+</div>
+<button class="relative w-12 h-6 bg-secondary rounded-full toggle-active p-1 flex items-center justify-end transition-all">
+<div class="w-4 h-4 bg-white rounded-full"></div>
+</button>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="font-bold text-sm">Deep Focus Reminders</p>
+<p class="text-xs text-on-surface-variant">Silent push during study hours</p>
+</div>
+<button class="relative w-12 h-6 bg-white/10 rounded-full p-1 flex items-center justify-start transition-all hover:bg-white/20">
+<div class="w-4 h-4 bg-on-surface-variant rounded-full"></div>
+</button>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="font-bold text-sm">Scholarship Deadlines</p>
+<p class="text-xs text-on-surface-variant">Alerts 7 days before closing</p>
+</div>
+<button class="relative w-12 h-6 bg-secondary rounded-full toggle-active p-1 flex items-center justify-end transition-all">
+<div class="w-4 h-4 bg-white rounded-full"></div>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Danger Zone -->
+<div class="mt-12 flex justify-center">
+<button class="flex items-center gap-2 px-8 py-3 rounded-2xl border border-error/30 text-error hover:bg-error/10 transition-colors font-bold text-sm group">
+<span class="material-symbols-outlined text-sm group-hover:rotate-12 transition-transform">logout</span>
+                Sign Out from All Devices
+            </button>
+</div>
+</main>
+<script>
+        // Simple micro-interactions for toggles
+        document.querySelectorAll('button[class*="relative w-12"]').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const isOff = toggle.classList.contains('bg-white/10');
+                if (isOff) {
+                    toggle.classList.remove('bg-white/10');
+                    toggle.classList.add('bg-secondary', 'toggle-active');
+                    toggle.classList.replace('justify-start', 'justify-end');
+                    toggle.querySelector('div').classList.replace('bg-on-surface-variant', 'bg-white');
+                } else {
+                    toggle.classList.add('bg-white/10');
+                    toggle.classList.remove('bg-secondary', 'toggle-active');
+                    toggle.classList.replace('justify-end', 'justify-start');
+                    toggle.querySelector('div').classList.replace('bg-white', 'bg-on-surface-variant');
+                }
+            });
+        });
+
+        // Mouse Parallax for Background Glows
+        document.addEventListener('mousemove', (e) => {
+            const glows = document.querySelectorAll('.fixed .rounded-full');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            glows.forEach((glow, index) => {
+                const speed = (index + 1) * 20;
+                glow.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        });
+    </script>
+</body></html>
